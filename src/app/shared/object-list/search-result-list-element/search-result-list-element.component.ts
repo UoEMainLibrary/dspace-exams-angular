@@ -10,6 +10,7 @@ import { Metadata } from '../../../core/shared/metadata.utils';
 import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
 import { APP_CONFIG, AppConfig } from '../../../../config/app-config.interface';
 
+
 @Component({
   selector: 'ds-search-result-list-element',
   template: ``
