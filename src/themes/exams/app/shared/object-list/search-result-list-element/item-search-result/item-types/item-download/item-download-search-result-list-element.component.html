@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="meta-container col-sm-9">
+        <ds-truncatable [id]="dso.id" *ngIf="object !== undefined && object !== null">
+            <span *ngIf="dso.firstMetadataValue('dc.coverage.temporal')">
+                <a *ngIf="linkType != linkTypes.None" [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'" [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
+                    [routerLink]="[itemPageRoute]" class="meta-title lead item-list-title dont-break-out"
+                    [innerHTML]="dso.firstMetadataValue('dc.title') + ' (' + dso.firstMetadataValue('dc.coverage.temporal') +')'"></a>
+            </span>
+            <span *ngIf="firstMetadataValue('dc.description.version') === 'Resit'"
+                class="meta-version"
+                [innerHTML]="firstMetadataValue('dc.description.version')">
+            </span>
+            <span *ngIf="linkType == linkTypes.None" class="lead item-list-title dont-break-out"
+                    [innerHTML]="dsoTitle"></span>
+            <span class="text-muted">
+                <ds-truncatable-part [id]="dso.id" [minLines]="1" class="meta-details">
+                    <span *ngIf="dso.firstMetadataValue('dc.title')" class="item-list-authors">
+                        <a *ngIf="linkType != linkTypes.None" [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'" [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
+                            href="/search?query={{firstMetadataValue('dc.title')}}" class="meta-link lead item-list-title dont-break-out"
+                            >All papers from this course title</a>
+                    </span>
+                    <span *ngIf="dso.firstMetadataValue('dc.identifier')" class="item-list-authors">
+                        <a *ngIf="linkType != linkTypes.None" [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'" [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
+                            href="/search?query={{firstMetadataValue('dc.identifier')}}" class="meta-link lead item-list-title dont-break-out"
+                            [innerHTML]="firstMetadataValue('dc.identifier')"></a>
+                    </span>
+                </ds-truncatable-part>
+            </span>
+        </ds-truncatable>
+    </div>
+    <div *ngIf="dso.firstMetadataValue('dc.format.original') !== undefined &&
+            dso.firstMetadataValue('dc.format.original').includes('pdf'); 
+            else unavailable" class="dwnld-container col-sm-3"> 
+        <a href="{{dso.firstMetadataValue('dc.format.original')}}">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>
+        <ds-themed-file-download-link [bitstream]="file" [item]="item">
+            {{"item.page.filesection.download" | translate}}
+        </ds-themed-file-download-link>
+        <!-- <a [routerLink]="(bitstreamPath$| async)?.routerLink" class="dont-break-out" [queryParams]="(bitstreamPath$| async)?.queryParams" [target]="isBlank ? '_blank': '_self'" [ngClass]="cssClasses">
+            <span *ngIf="!(canDownload$ |async)" class="pr-1"><i class="fas fa-lock"></i></span>
+            <ng-container *ngTemplateOutlet="content"></ng-container>
+          </a> -->
+    </div>
+    <ng-template #unavailable>
+        <div class="unavail-container col-sm-3"> 
+            <a routerLink="/info/unavailable">Paper Unavailable <i class="fa fa-ban" aria-hidden="true"></i></a>
+        </div>
+    </ng-template>
+</div>
