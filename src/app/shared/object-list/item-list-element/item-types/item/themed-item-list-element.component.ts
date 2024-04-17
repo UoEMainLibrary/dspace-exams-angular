@@ -8,7 +8,7 @@ import { ItemListElementComponent } from './item-list-element.component';
 @Component({
   selector: 'ds-themed-item-list-element',
   styleUrls: [],
-  templateUrl: '../shared/theme-support/themed.component.html',
+  templateUrl: '../../../../../shared/theme-support/themed.component.html',
 })
 export class ThemedItemListElementComponent extends ThemedComponent<ItemListElementComponent> {
   protected getComponentName(): string {

@@ -1,8 +1,8 @@
 import { Component } from '@angular/core';
-import { ViewMode } from '../../../../../../../../app/core/shared/view-mode.model';
-import { listableObjectComponent } from '../../../../../../../../app/shared/object-collection/shared/listable-object/listable-object.decorator';
-import { Item } from '../../../../../../../../app/core/shared/item.model';
-import { ItemListElementComponent as BaseComponent } from '../../../../../../../../app/shared/object-list/item-list-element/item-types/item/item-list-element.component';
+// import { ViewMode } from '../../../../../../app/core/shared/view-mode.model';
+// import { listableObjectComponent } from '../../../../../../app/shared/object-collection/shared/listable-object/listable-object.decorator';
+// import { Item } from '../../../../../../app/core/shared/item.model';
+import { ItemListElementComponent as BaseComponent } from '../../../../../../app/shared/object-list/item-list-element/item-types/item/item-list-element.component';
 
 @Component({
   selector: 'ds-item-list-element',

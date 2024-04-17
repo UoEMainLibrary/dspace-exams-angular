@@ -8,7 +8,7 @@ import { ItemSearchResultListElementComponent } from './item-search-result-list-
 @Component({
   selector: 'ds-themed-item-search-result-list-element',
   styleUrls: [],
-  templateUrl: '../shared/theme-support/themed.component.html',
+  templateUrl: '../../../../../../shared/theme-support/themed.component.html',
 })
 export class ThemedItemSearchResultListElementComponent extends ThemedComponent<ItemSearchResultListElementComponent> {
   protected getComponentName(): string {

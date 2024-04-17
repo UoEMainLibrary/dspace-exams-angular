@@ -8,7 +8,7 @@ import { ItemDownloadSearchResultListElementComponent } from './item-download-se
 @Component({
   selector: 'ds-themed-item-download-search-result-list-element',
   styleUrls: [],
-  templateUrl: '../shared/theme-support/themed.component.html',
+  templateUrl: '../../../../../../shared/theme-support/themed.component.html',
 })
 export class ThemedItemDownloadSearchResultListElementComponent extends ThemedComponent<ItemDownloadSearchResultListElementComponent<any, any>> {
   protected getComponentName(): string {
