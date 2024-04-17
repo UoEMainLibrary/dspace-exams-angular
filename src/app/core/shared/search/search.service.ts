@@ -70,12 +70,12 @@ export class SearchService implements OnDestroy {
   /**
    * The ResponseParsingService constructor name
    */
-  private parser: GenericConstructor<ResponseParsingService> = SearchResponseParsingService;
+  public parser: GenericConstructor<ResponseParsingService> = SearchResponseParsingService;
 
   /**
    * The RestRequest constructor name
    */
-  private request: GenericConstructor<RestRequest> = GetRequest;
+  public request: GenericConstructor<RestRequest> = GetRequest;
 
   /**
    * Subscription to unsubscribe from
@@ -85,12 +85,12 @@ export class SearchService implements OnDestroy {
   /**
    * Instance of SearchDataService to forward data service methods to
    */
-  private searchDataService: SearchDataService;
+  public searchDataService: SearchDataService;
 
   constructor(
     private routeService: RouteService,
     protected requestService: RequestService,
-    private rdb: RemoteDataBuildService,
+    public rdb: RemoteDataBuildService,
     private halService: HALEndpointService,
     private dspaceObjectService: DSpaceObjectDataService,
     private paginationService: PaginationService,
