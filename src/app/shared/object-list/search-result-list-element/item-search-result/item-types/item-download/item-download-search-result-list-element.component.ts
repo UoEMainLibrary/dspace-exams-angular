@@ -114,7 +114,6 @@ export class ItemDownloadSearchResultListElementComponent <T extends SearchResul
 
   // Added for download link
   @Input() item: Item;
-  file: any; // add this
   bitstreams$: BehaviorSubject<Bitstream[]>;
   originals$: Observable<RemoteData<PaginatedList<Bitstream>>>;
   licenses$: Observable<RemoteData<PaginatedList<Bitstream>>>;

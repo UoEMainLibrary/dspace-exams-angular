@@ -50,9 +50,9 @@ import { StartsWithTextComponent } from './app/shared/starts-with/text/starts-wi
 import {
   PublicationSidebarSearchListElementComponent
 } from './app/shared/object-list/sidebar-search-list-element/item-types/publication-sidebar-search-list-element.component';
-import {
-  ItemSearchResultListElementComponent
-} from './app/shared/object-list/search-result-list-element/item-search-result/item-types/item/item-search-result-list-element.component';
+// import {
+//   ItemSearchResultListElementComponent
+// } from './app/shared/object-list/search-result-list-element/item-search-result/item-types/item/item-search-result-list-element.component';
 import { TopLevelCommunityListComponent } from './app/home-page/top-level-community-list/top-level-community-list.component';
 
 
@@ -73,7 +73,7 @@ const ENTRY_COMPONENTS = [
   StartsWithDateComponent,
   StartsWithTextComponent,
   PublicationSidebarSearchListElementComponent,
-  ItemSearchResultListElementComponent,
+  // ItemSearchResultListElementComponent,
   TopLevelCommunityListComponent,
 ];
 

@@ -40,8 +40,8 @@ import { followLink } from 'src/app/shared/utils/follow-link-config.model';
 import { hasValue } from 'src/app/shared/empty.util';
 import { getItemPageRoute } from 'src/app/item-page/item-page-routing-paths';
 
-@listableObjectComponent('PublicationSearchResult', ViewMode.ListElement, Context.Any, 'custom')
-@listableObjectComponent(ItemSearchResult, ViewMode.ListElement, Context.Any, 'custom')
+// @listableObjectComponent('PublicationSearchResult', ViewMode.ListElement, Context.Any, 'custom')
+// @listableObjectComponent(ItemSearchResult, ViewMode.ListElement, Context.Any, 'custom')
 @Component({
   selector: 'ds-item-download-search-result-list-element',
   styleUrls: ['./item-download-search-result-list-element.component.scss'],
