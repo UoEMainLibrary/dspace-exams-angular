@@ -1,0 +1,87 @@
+<div class="card" [@focusShadow]="(isCollapsed$ | async)?'blur':'focus'">
+    <div class="position-absolute ml-1">
+        <ng-content></ng-content>
+    </div>
+    <a *ngIf="linkType != linkTypes.None" [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'" [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null" [routerLink]="[itemPageRoute]"
+        class="card-img-top full-width" [attr.title]="'search.results.view-result' | translate">
+        <div>
+            <ds-themed-thumbnail [thumbnail]="dso?.thumbnail | async" [limitWidth]="false">
+            </ds-themed-thumbnail>
+        </div>
+    </a>
+    <span *ngIf="linkType == linkTypes.None" class="card-img-top full-width">
+        <div>
+            <ds-themed-thumbnail [thumbnail]="dso?.thumbnail | async" [limitWidth]="false">
+            </ds-themed-thumbnail>
+        </div>
+    </span>
+    <div class="card-body meta-container">
+        <!-- <ds-themed-badges *ngIf="showLabel" [object]="dso" [context]="context" [showAccessStatus]="true"></ds-themed-badges> -->
+        <ds-truncatable [id]="dso.id">
+            <ds-truncatable-part [id]="dso.id" [minLines]="5">
+                <a class="card-title meta-title"
+                    [innerHTML]="dsoTitle + ' (' + dso.firstMetadataValue('dc.coverage.temporal') +')'"
+                    [routerLink]="[itemPageRoute]"></a>
+            </ds-truncatable-part>
+            <div class="grid-padding"></div>
+            <ds-truncatable-part [id]="dso.id" [minLines]="1">
+                <span *ngIf="firstMetadataValue('dc.description.version') === 'Resit'" class="meta-version"
+                    [innerHTML]="firstMetadataValue('dc.description.version')">
+                </span>
+            </ds-truncatable-part>
+            <div class="grid-padding"></div>
+            <ds-truncatable-part [id]="dso.id" [minLines]="3">
+                <span *ngIf="dso.firstMetadataValue('dc.title')" class="item-list-authors">
+                    <a *ngIf="linkType != linkTypes.None"
+                        [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'"
+                        [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
+                        href="/search?query={{firstMetadataValue('dc.title')}}"
+                        class="meta-link lead item-list-title dont-break-out">All papers from this course title</a>
+                </span>
+            </ds-truncatable-part>
+            <div class="grid-padding"></div>
+            <ds-truncatable-part [id]="dso.id" [minLines]="3">
+                <span *ngIf="dso.firstMetadataValue('dc.identifier')" class="item-list-authors">
+                    <a *ngIf="linkType != linkTypes.None"
+                        [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'"
+                        [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
+                        href="/search?query={{firstMetadataValue('dc.identifier')}}"
+                        class="meta-link lead item-list-title dont-break-out"
+                        [innerHTML]="firstMetadataValue('dc.identifier')"></a>
+                </span>
+            </ds-truncatable-part>
+            <div class="grid-padding"></div>
+            <!--
+            <ds-truncatable-part [id]="dso.id" [minLines]="1" *ngIf="dso.hasMetadata(['dc.contributor.author', 'dc.creator', 'dc.contributor.*'])">
+                <p class="item-authors card-text text-muted">
+                    <span *ngIf="dso.hasMetadata('dc.date.issued')" class="item-date">{{firstMetadataValue('dc.date.issued')}}</span>
+                    <span *ngFor="let author of allMetadataValues(['dc.contributor.author', 'dc.creator', 'dc.contributor.*']);">,
+                        <span [innerHTML]="author"></span>
+                    </span>
+                </p>
+            </ds-truncatable-part>
+            <ds-truncatable-part *ngIf="dso.hasMetadata('dc.description.abstract')" [id]="dso.id" [minLines]="3">
+                <p class="item-abstract card-text">
+                    <span [innerHTML]="firstMetadataValue('dc.description.abstract')"></span>
+                </p>
+            </ds-truncatable-part> -->
+        </ds-truncatable>
+        <!-- <div *ngIf="linkType != linkTypes.None" class="text-center">
+            <a [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'" [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null" [routerLink]="[itemPageRoute]"
+                class="lead btn btn-primary viewButton">{{ 'search.results.view-result' | translate}}</a>
+        </div> -->
+
+        <!-- custom download link -->
+        <div *ngIf="dso.firstMetadataValue('dc.format.original') !== undefined &&
+            dso.firstMetadataValue('dc.format.original').includes('pdf');
+            else unavailable" class="dwnld-container col-sm-3">
+            <a [routerLink]="[examPaperLink]">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>
+        </div>
+        <ng-template #unavailable>
+            <div class="unavail-container col-sm-3">
+                <a routerLink="/info/unavailable">Paper Unavailable <i class="fa fa-ban" aria-hidden="true"></i></a>
+            </div>
+        </ng-template>
+    </div>
+    <ng-content></ng-content>
+</div>

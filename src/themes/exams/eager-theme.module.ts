@@ -54,6 +54,7 @@ import {
   ItemSearchResultListElementComponent
 } from './app/shared/object-list/search-result-list-element/item-search-result/item-types/item/item-search-result-list-element.component';
 import { TopLevelCommunityListComponent } from './app/home-page/top-level-community-list/top-level-community-list.component';
+import { ItemSearchResultGridElementComponent } from './app/shared/object-grid/search-result-grid-element/item-search-result/item/item-search-result-grid-element.component';
 
 
 /**
@@ -75,6 +76,7 @@ const ENTRY_COMPONENTS = [
   PublicationSidebarSearchListElementComponent,
   ItemSearchResultListElementComponent,
   TopLevelCommunityListComponent,
+  ItemSearchResultGridElementComponent,
 ];
 
 const DECLARATIONS = [
