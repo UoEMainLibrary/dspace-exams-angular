@@ -74,11 +74,11 @@
         <!-- custom download link -->
         <div *ngIf="dso.firstMetadataValue('dc.format.original') !== undefined &&
             dso.firstMetadataValue('dc.format.original').includes('pdf');
-            else unavailable" class="dwnld-container col-sm-3">
+            else unavailable" class="dwnld-container">
             <a [routerLink]="[examPaperLink]">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>
         </div>
         <ng-template #unavailable>
-            <div class="unavail-container col-sm-3">
+            <div class="unavail-container">
                 <a routerLink="/info/unavailable">Paper Unavailable <i class="fa fa-ban" aria-hidden="true"></i></a>
             </div>
         </ng-template>
