@@ -72,8 +72,7 @@
         </div> -->
 
         <!-- custom download link -->
-        <div *ngIf="dso.firstMetadataValue('dc.format.original') !== undefined &&
-            dso.firstMetadataValue('dc.format.original').includes('pdf');
+        <div *ngIf="examPaperLink !== undefined;
             else unavailable" class="dwnld-container">
             <a [routerLink]="[examPaperLink]">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>
         </div>
