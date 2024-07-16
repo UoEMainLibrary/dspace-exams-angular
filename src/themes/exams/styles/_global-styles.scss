@@ -40,5 +40,9 @@ span.fas.fa-list, span.fas.fa-th-large {
     color: #fff;
 }
 
+.facet-filter, .setting-option {
+    border: 1px solid #186599!important;
+}
+
 // imports the base global style
 @import '../../../styles/_global-styles.scss';

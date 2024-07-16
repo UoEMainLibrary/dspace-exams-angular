@@ -1468,7 +1468,7 @@
 
   "dso-selector.set-scope.community.head": "Select a search scope",
 
-  "dso-selector.set-scope.community.button": "Search all of DSpace",
+  "dso-selector.set-scope.community.button": "Search all past exams papers",
 
   "dso-selector.set-scope.community.or-divider": "or",
 
@@ -1832,7 +1832,7 @@
 
   "home.breadcrumbs": "Exam Papers",
 
-  "home.search-form.placeholder": "Search the repository ...",
+  "home.search-form.placeholder": "Course title/course code  ...",
 
   "home.title": "Exam Papers",
 
@@ -2844,7 +2844,7 @@
 
   "menu.section.browse_community_by_title": "By Title",
 
-  "menu.section.browse_global": "All of DSpace",
+  "menu.section.browse_global": "All past exam papers",
 
   "menu.section.browse_global_by_author": "By Author",
 
@@ -3062,7 +3062,7 @@
 
   "mydspace.view-btn": "View",
 
-  "nav.browse.header": "All of DSpace",
+  "nav.browse.header": "All opast exam papers",
 
   "nav.community-browse.header": "By Community",
 
@@ -3646,7 +3646,7 @@
 
   "search.breadcrumbs": "Search",
 
-  "search.search-form.placeholder": "Search the repository ...",
+  "search.search-form.placeholder": "Course title/course code ...",
 
   "search.filters.applied.f.author": "School",
 
@@ -3878,7 +3878,7 @@
 
   "search.form.search_dspace": "All repository",
 
-  "search.form.scope.all": "All of DSpace",
+  "search.form.scope.all": "All past exam papers",
 
   "search.results.head": "Search Results",
 
