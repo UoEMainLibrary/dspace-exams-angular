@@ -39,6 +39,14 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
   examPaperLink = '';
 
   /**
+   * Search strings to be used for 'all papers from this course title link
+   * searchString is root seach url
+   * queryString is the query string to be appended to root search url
+   */
+  searchString = '/search';
+  queryString: string; 
+
+  /**
    * Constrctor added to initiate components required for download link
    */
   public constructor(protected truncatableService: TruncatableService,
@@ -64,6 +72,15 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
         });
       } catch (error) {
         // do nothing if no bitstreams are found
+      }
+
+      // Attempt to get item title and format queryString replacing/removing special characters
+      try{
+        this.queryString = this.dso.firstMetadataValue('dc.title').replace('-', ' ');
+        this.queryString = '\"' + this.queryString.replace(/[^\w\s]/gi, '') + '\"';
+      }
+      catch (error) {
+        // do nothing if no title is found
       }
   }
 

@@ -16,12 +16,14 @@
                 <ds-truncatable-part [id]="dso.id" [minLines]="1" class="meta-details">
                     <span *ngIf="dso.firstMetadataValue('dc.title')" class="item-list-authors">
                         <a *ngIf="linkType != linkTypes.None" [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'" [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
-                            href="/search?query={{firstMetadataValue('dc.title')}}" class="meta-link lead item-list-title dont-break-out"
+                            [routerLink]="[searchString]"
+                            [queryParams]="{query:queryString}" 
+                            class="meta-link lead item-list-title dont-break-out"
                             >All papers from this course title</a>
                     </span>
                     <span *ngIf="dso.firstMetadataValue('dc.identifier')" class="item-list-authors">
                         <a *ngIf="linkType != linkTypes.None" [target]="(linkType == linkTypes.ExternalLink) ? '_blank' : '_self'" [attr.rel]="(linkType == linkTypes.ExternalLink) ? 'noopener noreferrer' : null"
-                            href="/search?query={{firstMetadataValue('dc.identifier')}}" class="meta-link lead item-list-title dont-break-out"
+                            href="/search?query=%22{{firstMetadataValue('dc.identifier')}}%22" class="meta-link lead item-list-title dont-break-out"
                             [innerHTML]="firstMetadataValue('dc.identifier')"></a>
                     </span>
                 </ds-truncatable-part>
