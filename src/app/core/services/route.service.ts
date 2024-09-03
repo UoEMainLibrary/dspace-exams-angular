@@ -191,6 +191,15 @@ export class RouteService {
   }
 
   /**
+   * Return the search url, retrieves url from history and returns two stages
+   */
+  public getRootSearchUrl(): Observable<string> {
+    return this.getHistory().pipe(
+      map((history: string[]) => history[history.length - 3] || '')
+    );
+  }
+
+  /**
    * Add a parameter to the current route
    * @param key   The parameter name
    * @param value The parameter value
