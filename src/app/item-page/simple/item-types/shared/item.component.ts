@@ -8,6 +8,14 @@ import { getDSpaceQuery, isIiifEnabled, isIiifSearchEnabled } from './item-iiif-
 import { filter, map, take } from 'rxjs/operators';
 import { Router } from '@angular/router';
 
+import { isAuthenticated } from '../../../../core/auth/selectors';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../../app.reducer';
+import { AuthorizationDataService } from '../../../../core/data/feature-authorization/authorization-data.service';
+import { FeatureID } from '../../../../core/data/feature-authorization/feature-id';
+
+
+
 @Component({
   selector: 'ds-item',
   template: ''
@@ -51,8 +59,21 @@ export class ItemComponent implements OnInit {
 
   mediaViewer;
 
+  /**
+   * Whether user is authenticated.
+   * @type {Observable<string>}
+   */
+  public isAuthenticated: Observable<boolean>;
+
+  /**
+   * Whether the current user is an admin or not
+   */
+  isAdmin$: Observable<boolean>;
+
   constructor(protected routeService: RouteService,
-              protected router: Router) {
+              protected router: Router,
+              public store: Store<AppState>,
+              protected authorizationService: AuthorizationDataService,) {
     this.mediaViewer = environment.mediaViewer;
   }
 
@@ -72,6 +93,9 @@ export class ItemComponent implements OnInit {
   ngOnInit(): void {
 
     this.itemPageRoute = getItemPageRoute(this.object);
+    // check if user is authenticated, used to hide/show back button
+    this.isAuthenticated = this.store.pipe(select(isAuthenticated));
+    this.isAdmin$ = this.authorizationService.isAuthorized(FeatureID.AdministratorOf);
     // hide/show the back button
     this.showBackButton = this.routeService.getPreviousUrl().pipe(
       filter(url => this.previousRoute.test(url)),
@@ -84,5 +108,7 @@ export class ItemComponent implements OnInit {
     if (this.iiifSearchEnabled) {
       this.iiifQuery$ = getDSpaceQuery(this.object, this.routeService);
     }
+
+    
   }
 }
