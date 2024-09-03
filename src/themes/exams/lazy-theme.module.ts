@@ -163,8 +163,10 @@ import { AccessibilityComponent} from './app/info/accessibility/accessibility.co
 import { FaqsComponent } from './app/info/faqs/faqs.component';
 import { HelpComponent } from './app/info/help/help.component';
 import { UnavailableComponent } from './app/info/unavailable/unavailable.component';
+import { SearchComponent } from './app/shared/search/search.component';
 
 const DECLARATIONS = [
+  SearchComponent,
   AboutComponent,
   AccessibilityComponent,
   FaqsComponent,
