@@ -2,7 +2,7 @@
      value: (!(sidebarVisible | async) ? 'hidden' : (slideSidebarOver | async) ? 'shown' : 'expanded'),
      params: {collapsedSidebarWidth: (collapsedSidebarWidth | async), totalSidebarWidth: (totalSidebarWidth | async)}
     }">
-  <ds-themed-admin-sidebar></ds-themed-admin-sidebar>
+  <ds-themed-admin-sidebar *ngIf="isAdmin$ | async"></ds-themed-admin-sidebar>
   <div class="inner-wrapper">
     <ds-system-wide-alert-banner></ds-system-wide-alert-banner>
     <ds-themed-header-navbar-wrapper></ds-themed-header-navbar-wrapper>

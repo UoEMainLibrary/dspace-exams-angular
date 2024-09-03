@@ -21,6 +21,9 @@ import { MenuID } from '../shared/menu/menu-id.model';
 import { getPageInternalServerErrorRoute } from '../app-routing-paths';
 import { hasValueOperator } from '../shared/empty.util';
 
+import { AuthorizationDataService } from '../core/data/feature-authorization/authorization-data.service';
+import { FeatureID } from '../core/data/feature-authorization/feature-id';
+
 @Component({
   selector: 'ds-root',
   templateUrl: './root.component.html',
@@ -46,6 +49,11 @@ export class RootComponent implements OnInit {
    */
   @Input() shouldShowRouteLoader: boolean;
 
+  /**
+   * Whether the current user is an admin or not
+   */
+  isAdmin$: Observable<boolean>;
+
   constructor(
     @Inject(NativeWindowService) private _window: NativeWindowRef,
     private translate: TranslateService,
@@ -56,7 +64,8 @@ export class RootComponent implements OnInit {
     private router: Router,
     private cssService: CSSVariableService,
     private menuService: MenuService,
-    private windowService: HostWindowService
+    private windowService: HostWindowService,
+    protected authorizationService: AuthorizationDataService,
   ) {
     this.notificationOptions = environment.notifications;
   }
@@ -77,5 +86,7 @@ export class RootComponent implements OnInit {
     if (this.router.url === getPageInternalServerErrorRoute()) {
       this.shouldShowRouteLoader = false;
     }
+
+    this.isAdmin$ = this.authorizationService.isAuthorized(FeatureID.AdministratorOf);
   }
 }
