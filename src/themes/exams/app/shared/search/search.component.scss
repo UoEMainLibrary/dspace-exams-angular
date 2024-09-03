@@ -1,0 +1,25 @@
+@include media-breakpoint-down(md) {
+  .container {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+::ng-deep .search-controls {
+    margin-bottom: var(--bs-spacer);
+}
+
+.search-form-container {
+  display: flex;
+  width: 100%;
+}
+ds-themed-search-form {
+  width: 85%;
+}
+#reset-search {
+  margin-left: 10px;
+  padding-top: 5px;
+  font-size: 18px;
+  font-weight: bold;
+  white-space: nowrap;
+}
