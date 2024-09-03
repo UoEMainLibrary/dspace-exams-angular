@@ -60,6 +60,8 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
    */
   bitstream: Bitstream;
 
+  item: Item;
+
   /**
    * The originally selected format
    */
@@ -148,6 +150,22 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
     id: 'description',
     name: 'description',
     rows: 10
+  });
+
+  /**
+   * The Dynamic Input Model for the file's format
+   */
+  formatOriginalModel = new DsDynamicInputModel({
+    hasSelectableMetadata: false, metadataFields: [], repeatable: false, submissionId: '',
+    id: 'formatOriginal',
+    name: 'formatOriginal',
+    required: true,
+    validators: {
+      required: null
+    },
+    errorMessages: {
+      required: 'You must provide a file name for the bitstream'
+    }
   });
 
   /**
@@ -245,7 +263,7 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
   /**
    * All input models in a simple array for easier iterations
    */
-  inputModels = [this.fileNameModel, this.primaryBitstreamModel, this.descriptionModel, this.selectedFormatModel,
+  inputModels = [this.fileNameModel, this.primaryBitstreamModel, this.descriptionModel, this.formatOriginalModel, this.selectedFormatModel,
     this.newFormatModel];
 
   /**
@@ -269,6 +287,16 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
       group: [
         this.descriptionModel
       ]
+    }),
+    new DynamicFormGroupModel({
+      id: 'formatOriginalContainer',
+      group: [
+        this.formatOriginalModel
+      ]
+    }, {
+      grid: {
+        host: 'form-row'
+      }
     }),
     new DynamicFormGroupModel({
       id: 'formatContainer',
@@ -303,6 +331,11 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
         host: 'col-12 d-inline-block'
       }
     },
+    formatOriginal: {
+      grid: {
+        host: 'col-12 d-inline-block'
+      }
+    },
     embargo: {
       grid: {
         host: 'col-12 d-inline-block'
@@ -324,6 +357,11 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
       }
     },
     descriptionContainer: {
+      grid: {
+        host: 'row'
+      }
+    },
+    formatOriginalContainer: {
       grid: {
         host: 'row'
       }
@@ -473,6 +511,10 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
       },
       descriptionContainer: {
         description: bitstream.firstMetadataValue('dc.description')
+      },
+      formatOriginalContainer: {
+        // formatOriginal: bitstream.name.split(' ').join('_')
+        formatOriginal: bitstream.firstMetadataValue('dc.format.original')
       },
       formatContainer: {
         newFormat: hasValue(bitstream.firstMetadata('dc.format')) ? bitstream.firstMetadata('dc.format').value : undefined
@@ -680,6 +722,7 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
     } else {
       Metadata.setFirstValue(newMetadata, 'dc.description', rawForm.descriptionContainer.description);
     }
+    Metadata.setFirstValue(newMetadata, 'dc.format.original', rawForm.formatOriginalContainer.formatOriginal);
     if (this.isIIIF) {
       // It's helpful to remove these metadata elements entirely when the form value is empty.
       // This avoids potential issues on the REST side and makes it possible to do things like
@@ -711,6 +754,19 @@ export class EditBitstreamPageComponent implements OnInit, OnDestroy {
     }
     updatedBitstream.metadata = newMetadata;
     return updatedBitstream;
+  }
+
+  /**
+   * Parse form data to an updated item object
+   * @param rawForm   Raw form data
+   */
+  bitstreamMetaToItem(rawForm): Item {
+    const updatedItem = cloneDeep(this.item);
+    const newMetadata = updatedItem.metadata;
+    Metadata.setFirstValue(newMetadata, 'dc.format.original', rawForm.formatOriginalContainer.formatOriginal);
+
+    updatedItem.metadata = newMetadata;
+    return updatedItem;
   }
 
   /**
