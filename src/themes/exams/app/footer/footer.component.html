@@ -13,11 +13,18 @@
                         Accessibility
                     </a>
                 </div>
-                <div class="col-sm-4 footer-right">
+                <div *ngIf="!(isAuthenticated | async); else logOut" class="col-sm-4 footer-right">
                     <a title="" alt="" href="/login">
                         Admin Login <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
                     </a>
                 </div>
+                <ng-template #logOut>
+                    <div class="col-sm-4 footer-right">
+                        <a title="" alt="" href="/logout">
+                            Admin Logout <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </ng-template>
             </div>
             <div alt="Exam Papers disclaimer" class="footer-disclaimer" id="footer-left">
                 <p>
