@@ -2844,7 +2844,7 @@
 
   "menu.section.browse_community_by_title": "By Title",
 
-  "menu.section.browse_global": "All past exam papers",
+  "menu.section.browse_global": "All Papers",
 
   "menu.section.browse_global_by_author": "By Author",
 
@@ -3660,7 +3660,7 @@
 
   "search.filters.applied.f.entityType": "Item Type",
 
-  "search.filters.applied.f.has_content_in_original_bundle": "Has files",
+  "search.filters.applied.f.has_content_in_original_bundle": "Has paper",
 
   "search.filters.applied.f.itemtype": "Type",
 
@@ -3746,7 +3746,7 @@
 
   "search.filters.filter.expand": "Expand filter",
 
-  "search.filters.filter.has_content_in_original_bundle.head": "Has files",
+  "search.filters.filter.has_content_in_original_bundle.head": "Has paper",
 
   "search.filters.filter.itemtype.head": "Type",
 
@@ -3878,7 +3878,7 @@
 
   "search.form.search_dspace": "All repository",
 
-  "search.form.scope.all": "All past exam papers",
+  "search.form.scope.all": "All Papers",
 
   "search.results.head": "Search Results",
 
