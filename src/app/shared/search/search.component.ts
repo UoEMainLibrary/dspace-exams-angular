@@ -510,8 +510,10 @@ export class SearchComponent implements OnInit {
    */
   private getSearchLink(): string {
     if (this.inPlaceSearch) {
+      (window as any).lastSearchLink = this.inPlaceSearch;
       return currentPath(this.router);
     }
+    (window as any).lastSearchLink = this.service.getSearchLink();
     return this.service.getSearchLink();
   }
 
