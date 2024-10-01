@@ -19,9 +19,9 @@ import { AuthorizationDataService } from '../../core/data/feature-authorization/
 import { ServerResponseService } from '../../core/services/server-response.service';
 import { SignpostingDataService } from '../../core/data/signposting-data.service';
 import { LinkHeadService } from '../../core/services/link-head.service';
-import { RouteService } from 'src/app/core/services/route.service';
 
-// import { getItemPageRoute } from '../item-page-routing-paths';
+/** added for the back button */
+import { RouteService } from 'src/app/core/services/route.service';
 
 
 /**
@@ -44,9 +44,11 @@ export class FullItemPageComponent extends ItemPageComponent implements OnInit, 
 
   metadata$: Observable<MetadataMap>;
 
+  /**
+   * added to display the back button
+   */
   previousRoute = /^(\/search|\/browse|\/collections|\/admin\/search|\/mydspace)/;
   showBackButton: Observable<boolean>;
-  // itemPageRoute: string;
   
   /**
    * True when the itemRD has been originated from its workspaceite/workflowitem, false otherwise.
@@ -55,21 +57,21 @@ export class FullItemPageComponent extends ItemPageComponent implements OnInit, 
 
   subs = [];
 
-  constructor(
-    protected route: ActivatedRoute,
-    protected router: Router,
-    protected items: ItemDataService,
-    protected authService: AuthService,
-    protected authorizationService: AuthorizationDataService,
-    protected location: Location,
-    protected responseService: ServerResponseService,
-    protected signpostingDataService: SignpostingDataService,
-    protected linkHeadService: LinkHeadService,
-    protected routeService: RouteService,
-    @Inject(PLATFORM_ID) protected platformId: string,
-  ) {
-    super(route, router, items, authService, authorizationService, responseService, signpostingDataService, linkHeadService, platformId);
-  }
+    constructor(
+      protected route: ActivatedRoute,
+      protected router: Router,
+      protected items: ItemDataService,
+      protected authService: AuthService,
+      protected authorizationService: AuthorizationDataService,
+      protected location: Location,
+      protected responseService: ServerResponseService,
+      protected signpostingDataService: SignpostingDataService,
+      protected linkHeadService: LinkHeadService,
+      protected routeService: RouteService,
+      @Inject(PLATFORM_ID) protected platformId: string,
+    ) {
+      super(route, router, items, authService, authorizationService, responseService, signpostingDataService, linkHeadService, platformId);
+    }
 
   back = () => {
     this.routeService.getRootSearchUrl().pipe(
