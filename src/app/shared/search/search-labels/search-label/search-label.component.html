@@ -2,5 +2,5 @@
    [routerLink]="searchLink"
    [queryParams]="(removeParameters | async)" queryParamsHandling="merge">
     {{('search.filters.applied.' + key) | translate}}: {{'search.filters.' + filterName + '.' + value | translate: {default: normalizeFilterValue(value)} }}
-    <span> ×</span>
+    <span class="filter-span"> ×</span>
 </a>
