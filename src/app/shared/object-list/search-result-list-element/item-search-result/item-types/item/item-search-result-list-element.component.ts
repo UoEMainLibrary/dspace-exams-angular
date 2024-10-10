@@ -36,7 +36,7 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
   /**
    * Exam paper link.
    */
-  examPaperLink = '';
+  examPaperLink: string;
 
   /**
    * Search strings to be used for 'all papers from this course title link
