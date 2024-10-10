@@ -3660,7 +3660,7 @@
 
   "search.filters.applied.f.entityType": "Item Type",
 
-  "search.filters.applied.f.has_content_in_original_bundle": "Has paper",
+  "search.filters.applied.f.has_content_in_original_bundle": "Paper available",
 
   "search.filters.applied.f.itemtype": "Type",
 
@@ -3746,7 +3746,7 @@
 
   "search.filters.filter.expand": "Expand filter",
 
-  "search.filters.filter.has_content_in_original_bundle.head": "Has paper",
+  "search.filters.filter.has_content_in_original_bundle.head": "Paper Available",
 
   "search.filters.filter.itemtype.head": "Type",
 
