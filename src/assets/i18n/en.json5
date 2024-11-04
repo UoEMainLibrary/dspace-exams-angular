@@ -708,6 +708,12 @@
 
   "bitstream.edit.form.selectedFormat.unknown": "Format not in list",
 
+  // Custom
+  "bitstream.edit.form.formatOriginal.label": "Bitstream Filename",
+
+  "bitstream.edit.form.formatOriginal.hint": "You must provide a file name for the bitstream.",
+  // Custom end
+
   "bitstream.edit.notifications.error.format.title": "An error occurred saving the bitstream's format",
 
   "bitstream.edit.notifications.error.primaryBitstream.title": "An error occurred saving the primary bitstream",
