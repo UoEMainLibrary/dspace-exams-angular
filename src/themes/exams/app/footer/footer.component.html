@@ -1,0 +1,40 @@
+<footer class="text-lg-start">
+    <div class="container">
+        <div class="footer">
+            <div class="row">
+                <div class="col-sm-8 footer-left">
+                    <a alt="Link to the Univeristy of Edinburgh's privacy and coookie policies" target="_blank" title="Link to the Univeristy of Edinburgh's privacy and coookie policies" href="https://www.ed.ac.uk/about/website/privacy">
+                        Privacy &amp; Cookies
+                    </a>
+                    <a alt="Link to the Univeristy of Edinburgh's take down policy" title="Link to the Univeristy of Edinburgh's take down policy" href="">
+                        Takedown Policy
+                    </a>
+                    <a alt="Link to the Exam Papers accessibilty statement" title="Link to the Exam Papers accessibilty statement" routerLink="/info/accessibility">
+                        Accessibility
+                    </a>
+                </div>
+                <div *ngIf="!(isAuthenticated | async); else logOut" class="col-sm-4 footer-right">
+                    <a title="" alt="" href="/login">
+                        Admin Login <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                    </a>
+                </div>
+                <ng-template #logOut>
+                    <div class="col-sm-4 footer-right">
+                        <a title="" alt="" href="/logout">
+                            Admin Logout <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                        </a>
+                    </div>
+                </ng-template>
+            </div>
+            <div alt="Exam Papers disclaimer" class="footer-disclaimer" id="footer-left">
+                <p>
+                    The University of Edinburgh is a charitable body, registered in Scotland, with registration number SC005336, VAT Registration Number GB 592 9507 00,
+                    and is acknowledged by the UK authorities as a <a alt="Link to UK government recognised university charitable body check site" target="_blank" title="External link to UK Government Recognised Degrees site" href="https://www.gov.uk/recognised-uk-degrees"> “Recognised Body”</a> which has been granted degree awarding powers.
+                </p>
+                <p>
+                    Unless explicitly stated otherwise, all material is copyright © 2019 <a target="_blank" alt="Link to the Univeristy of Edinburgh's homepage" title="External link to the University of Edinburgh's home page" href="http://www.ed.ac.uk">University of Edinburgh</a>.
+                </p>
+            </div>
+        </div>
+    </div>
+</footer>

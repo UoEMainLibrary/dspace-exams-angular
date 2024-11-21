@@ -1,15 +1,10 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { ProcessDetailFieldComponent } from './process-detail-field.component';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { VarDirective } from '../../../shared/utils/var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { VarDirective } from '../../../shared/utils/var.directive';
-import { ProcessDetailFieldComponent } from './process-detail-field.component';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('ProcessDetailFieldComponent', () => {
   let component: ProcessDetailFieldComponent;
@@ -21,9 +16,11 @@ describe('ProcessDetailFieldComponent', () => {
     title = 'fake.title.message';
 
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), RouterTestingModule.withRoutes([]), ProcessDetailFieldComponent, VarDirective],
-      providers: [],
-      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [ProcessDetailFieldComponent, VarDirective],
+      imports: [TranslateModule.forRoot(), RouterTestingModule.withRoutes([])],
+      providers: [
+      ],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
@@ -35,7 +32,7 @@ describe('ProcessDetailFieldComponent', () => {
   });
 
   it('should display the given title', () => {
-    const header = fixture.debugElement.query(By.css('h2')).nativeElement;
+    const header = fixture.debugElement.query(By.css('h4')).nativeElement;
     expect(header.textContent).toContain(title);
   });
 });

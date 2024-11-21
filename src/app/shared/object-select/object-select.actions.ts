@@ -1,7 +1,6 @@
 /* eslint-disable max-classes-per-file */
-import { Action } from '@ngrx/store';
-
 import { type } from '../ngrx/type';
+import { Action } from '@ngrx/store';
 
 export const ObjectSelectionActionTypes = {
   INITIAL_DESELECT: type('dspace/object-select/INITIAL_DESELECT'),
@@ -9,7 +8,7 @@ export const ObjectSelectionActionTypes = {
   SELECT: type('dspace/object-select/SELECT'),
   DESELECT: type('dspace/object-select/DESELECT'),
   SWITCH: type('dspace/object-select/SWITCH'),
-  RESET: type('dspace/object-select/RESET'),
+  RESET: type('dspace/object-select/RESET')
 };
 
 export class ObjectSelectionAction implements Action {

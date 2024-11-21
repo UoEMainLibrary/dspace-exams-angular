@@ -1,26 +1,12 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { Process } from '../processes/process.model';
 import { ActivatedRoute } from '@angular/router';
-import { Observable } from 'rxjs';
-import {
-  map,
-  switchMap,
-} from 'rxjs/operators';
-
-import { LinkService } from '../../core/cache/builders/link.service';
 import { ProcessDataService } from '../../core/data/processes/process-data.service';
 import { getFirstSucceededRemoteDataPayload } from '../../core/shared/operators';
+import { Observable } from 'rxjs';
+import { map, switchMap } from 'rxjs/operators';
+import { LinkService } from '../../core/cache/builders/link.service';
 import { followLink } from '../../shared/utils/follow-link-config.model';
-import { HasValuePipe } from '../../shared/utils/has-value.pipe';
-import { VarDirective } from '../../shared/utils/var.directive';
-import { ProcessFormComponent } from '../form/process-form.component';
-import { Process } from '../processes/process.model';
 import { Script } from '../scripts/script.model';
 
 /**
@@ -30,8 +16,6 @@ import { Script } from '../scripts/script.model';
   selector: 'ds-new-process',
   templateUrl: './new-process.component.html',
   styleUrls: ['./new-process.component.scss'],
-  standalone: true,
-  imports: [NgIf, VarDirective, ProcessFormComponent, AsyncPipe, HasValuePipe],
 })
 export class NewProcessComponent implements OnInit {
   /**
@@ -56,7 +40,7 @@ export class NewProcessComponent implements OnInit {
       this.script$ = this.fromExisting$.pipe(
         map((process: Process) => this.linkService.resolveLink<Process>(process, followLink('script'))),
         switchMap((process: Process) => process.script),
-        getFirstSucceededRemoteDataPayload(),
+        getFirstSucceededRemoteDataPayload()
       );
     }
   }

@@ -1,13 +1,12 @@
-import { moveItemInArray } from '@angular/cdk/drag-drop';
-import { Injectable } from '@angular/core';
 import { MoveOperation } from 'fast-json-patch';
-
+import { Injectable } from '@angular/core';
+import { moveItemInArray } from '@angular/cdk/drag-drop';
 import { hasValue } from '../../shared/empty.util';
 
 /**
  * A class to determine move operations between two arrays
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ArrayMoveChangeAnalyzer<T> {
 
   /**

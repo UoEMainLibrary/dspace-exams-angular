@@ -1,21 +1,8 @@
-import { inject } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  CanActivateFn,
-  RouterStateSnapshot,
-} from '@angular/router';
-import {
-  select,
-  Store,
-} from '@ngrx/store';
+import { Injectable } from '@angular/core';
+import { CanActivate } from '@angular/router';
+import { select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  take,
-} from 'rxjs/operators';
-
+import { distinctUntilChanged, filter, map, take } from 'rxjs/operators';
 import { AppState } from '../../app.reducer';
 import { isAuthenticationBlocking } from './selectors';
 
@@ -24,16 +11,24 @@ import { isAuthenticationBlocking } from './selectors';
  * route until the authentication status has loaded.
  * To ensure all rest requests get the correct auth header.
  */
-export const authBlockingGuard: CanActivateFn = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot,
-  store: Store<AppState> = inject(Store<AppState>),
-): Observable<boolean> => {
-  return store.pipe(select(isAuthenticationBlocking)).pipe(
-    map((isBlocking: boolean) => isBlocking === false),
-    distinctUntilChanged(),
-    filter((finished: boolean) => finished === true),
-    take(1),
-  );
-};
+@Injectable({
+  providedIn: 'root'
+})
+export class AuthBlockingGuard implements CanActivate {
 
+  constructor(private store: Store<AppState>) {
+  }
+
+  /**
+   * True when the authentication isn't blocking everything
+   */
+  canActivate(): Observable<boolean> {
+    return this.store.pipe(select(isAuthenticationBlocking)).pipe(
+      map((isBlocking: boolean) => isBlocking === false),
+      distinctUntilChanged(),
+      filter((finished: boolean) => finished === true),
+      take(1),
+    );
+  }
+
+}

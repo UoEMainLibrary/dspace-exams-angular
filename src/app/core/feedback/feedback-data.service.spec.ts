@@ -1,15 +1,14 @@
-import { Store } from '@ngrx/store';
-
-import { getMockRequestService } from '../../shared/mocks/request.service.mock';
-import { NotificationsService } from '../../shared/notifications/notifications.service';
-import { HALEndpointServiceStub } from '../../shared/testing/hal-endpoint-service.stub';
-import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
-import { CoreState } from '../core-state.model';
-import { testCreateDataImplementation } from '../data/base/create-data.spec';
+import { FeedbackDataService } from './feedback-data.service';
 import { HALLink } from '../shared/hal-link.model';
 import { Item } from '../shared/item.model';
-import { FeedbackDataService } from './feedback-data.service';
+import { HALEndpointServiceStub } from '../../shared/testing/hal-endpoint-service.stub';
+import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
+import { getMockRequestService } from '../../shared/mocks/request.service.mock';
+import { NotificationsService } from '../../shared/notifications/notifications.service';
+import { Store } from '@ngrx/store';
 import { Feedback } from './models/feedback.model';
+import { CoreState } from '../core-state.model';
+import { testCreateDataImplementation } from '../data/base/create-data.spec';
 
 describe('FeedbackDataService', () => {
   let service: FeedbackDataService;
@@ -26,7 +25,7 @@ describe('FeedbackDataService', () => {
   const feedbackPayload = Object.assign(new Feedback(), {
     email: 'test@email.com',
     message: 'message',
-    page: '/home',
+    page: '/home'
   });
 
 
@@ -36,7 +35,7 @@ describe('FeedbackDataService', () => {
     bundleHALLink.href = bundleLink;
     item = new Item();
     item._links = {
-      bundles: bundleHALLink,
+      bundles: bundleHALLink
     };
     requestService = getMockRequestService();
     halService = new HALEndpointServiceStub('url') as any;
@@ -49,7 +48,7 @@ describe('FeedbackDataService', () => {
       },
       getObjectBySelfLink: () => {
         /* empty */
-      },
+      }
     } as any;
     store = {} as Store<CoreState>;
     return new FeedbackDataService(

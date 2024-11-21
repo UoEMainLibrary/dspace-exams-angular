@@ -1,9 +1,6 @@
 import { InjectionToken } from '@angular/core';
 
-export const NativeWindowService = new InjectionToken('NativeWindowService', {
-  providedIn: 'root',
-  factory: NativeWindowFactory,
-});
+export const NativeWindowService = new InjectionToken('NativeWindowService');
 
 export class NativeWindowRef {
   get nativeWindow(): any {

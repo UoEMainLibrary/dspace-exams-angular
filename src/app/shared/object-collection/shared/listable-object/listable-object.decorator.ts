@@ -1,16 +1,11 @@
-import { InjectionToken } from '@angular/core';
-
-import { ThemeConfig } from '../../../../../config/theme.config';
-import { environment } from '../../../../../environments/environment';
-import { Context } from '../../../../core/shared/context.model';
-import { GenericConstructor } from '../../../../core/shared/generic-constructor';
 import { ViewMode } from '../../../../core/shared/view-mode.model';
-import {
-  hasNoValue,
-  hasValue,
-  isNotEmpty,
-} from '../../../empty.util';
+import { Context } from '../../../../core/shared/context.model';
+import { hasNoValue, hasValue, isNotEmpty } from '../../../empty.util';
+import { GenericConstructor } from '../../../../core/shared/generic-constructor';
 import { ListableObject } from '../listable-object.model';
+import { environment } from '../../../../../environments/environment';
+import { ThemeConfig } from '../../../../../config/theme.model';
+import { InjectionToken } from '@angular/core';
 
 export const DEFAULT_VIEW_MODE = ViewMode.ListElement;
 export const DEFAULT_CONTEXT = Context.Any;
@@ -39,7 +34,7 @@ export const DEFAULT_THEME = '*';
  * - { level: 1, relevancy: 1 } is less relevant than { level: 2, relevancy: 0 }
  * - { level: 1, relevancy: 1 } is more relevant than null
  */
-export class MatchRelevancy {
+class MatchRelevancy {
   constructor(public match: any,
               public level: number,
               public relevancy: number) {
@@ -68,7 +63,7 @@ export class MatchRelevancy {
  */
 export const GET_THEME_CONFIG_FOR_FACTORY = new InjectionToken<(str) => ThemeConfig>('getThemeConfigFor', {
   providedIn: 'root',
-  factory: () => getThemeConfigFor,
+  factory: () => getThemeConfigFor
 });
 
 const map = new Map();
@@ -138,7 +133,7 @@ export function getListableObjectComponent(types: (string | GenericConstructor<L
  * @param defaults        the default values to use for each level, in case no value is found for the key at that index
  * @returns matchAndLevel a {@link MatchRelevancy} object containing the match and its level of relevancy
  */
-export function getMatch(typeMap: Map<any, any>, keys: any[], defaults: any[]): MatchRelevancy {
+function getMatch(typeMap: Map<any, any>, keys: any[], defaults: any[]): MatchRelevancy {
   let currentMap = typeMap;
   let level = -1;
   let relevancy = 0;

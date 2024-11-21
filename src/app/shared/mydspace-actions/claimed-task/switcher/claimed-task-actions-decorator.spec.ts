@@ -1,8 +1,5 @@
-/* eslint-disable max-classes-per-file */
-import {
-  getComponentByWorkflowTaskOption,
-  rendersWorkflowTaskOption,
-} from './claimed-task-actions-decorator';
+  /* eslint-disable max-classes-per-file */
+import { getComponentByWorkflowTaskOption, rendersWorkflowTaskOption } from './claimed-task-actions-decorator';
 
 describe('ClaimedTaskActions decorator function', () => {
   const option1 = 'test_option_1';
@@ -29,13 +26,13 @@ describe('ClaimedTaskActions decorator function', () => {
   describe('If there\'s an exact match', () => {
     it('should return the matching class', () => {
       const component = getComponentByWorkflowTaskOption(option1);
-      expect(component).toEqual(Test1Action as any);
+      expect(component).toEqual(Test1Action);
 
       const component2 = getComponentByWorkflowTaskOption(option2);
-      expect(component2).toEqual(Test2Action as any);
+      expect(component2).toEqual(Test2Action);
 
       const component3 = getComponentByWorkflowTaskOption(option3);
-      expect(component3).toEqual(Test3Action as any);
+      expect(component3).toEqual(Test3Action);
     });
   });
 

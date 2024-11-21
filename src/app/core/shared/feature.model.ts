@@ -1,12 +1,7 @@
-import {
-  autoserialize,
-  deserialize,
-  inheritSerialization,
-} from 'cerialize';
-
 import { typedObject } from '../cache/builders/build-decorators';
-import { DSpaceObject } from './dspace-object.model';
+import { autoserialize, deserialize, inheritSerialization } from 'cerialize';
 import { FEATURE } from './feature.resource-type';
+import { DSpaceObject } from './dspace-object.model';
 import { HALLink } from './hal-link.model';
 
 /**

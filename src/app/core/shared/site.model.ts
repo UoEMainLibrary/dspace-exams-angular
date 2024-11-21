@@ -1,5 +1,4 @@
 import { inheritSerialization } from 'cerialize';
-
 import { typedObject } from '../cache/builders/build-decorators';
 import { DSpaceObject } from './dspace-object.model';
 import { SITE } from './site.resource-type';

@@ -1,17 +1,13 @@
+import { DsoVersioningModalService } from './dso-versioning-modal.service';
 import { waitForAsync } from '@angular/core/testing';
-import {
-  EMPTY,
-  of as observableOf,
-} from 'rxjs';
-
-import { buildPaginatedList } from '../../../core/data/paginated-list.model';
+import { createSuccessfulRemoteDataObject$ } from '../../remote-data.utils';
+import { Version } from '../../../core/shared/version.model';
 import { Item } from '../../../core/shared/item.model';
 import { MetadataMap } from '../../../core/shared/metadata.models';
-import { PageInfo } from '../../../core/shared/page-info.model';
-import { Version } from '../../../core/shared/version.model';
 import { createRelationshipsObservable } from '../../../item-page/simple/item-types/shared/item.component.spec';
-import { createSuccessfulRemoteDataObject$ } from '../../remote-data.utils';
-import { DsoVersioningModalService } from './dso-versioning-modal.service';
+import { buildPaginatedList } from '../../../core/data/paginated-list.model';
+import { PageInfo } from '../../../core/shared/page-info.model';
+import { EMPTY, of as observableOf } from 'rxjs';
 
 describe('DsoVersioningModalService', () => {
   let service: DsoVersioningModalService;
@@ -29,24 +25,24 @@ describe('DsoVersioningModalService', () => {
     relationships: createRelationshipsObservable(),
     _links: {
       self: {
-        href: 'item-href',
+        href: 'item-href'
       },
       version: {
-        href: 'version-href',
-      },
-    },
+        href: 'version-href'
+      }
+    }
   });
 
   beforeEach(waitForAsync(() => {
     modalService = jasmine.createSpyObj('modalService', {
-      open: { componentInstance: { firstVersion: {}, versionNumber: {}, createVersionEvent: EMPTY } },
+      open: {componentInstance: {firstVersion: {}, versionNumber: {}, createVersionEvent: EMPTY}}
     });
     versionService = jasmine.createSpyObj('versionService', {
       findByHref: createSuccessfulRemoteDataObject$<Version>(new Version()),
     });
     versionHistoryService = jasmine.createSpyObj('versionHistoryService', {
       createVersion: createSuccessfulRemoteDataObject$<Version>(new Version()),
-      hasDraftVersion$: observableOf(false),
+      hasDraftVersion$: observableOf(false)
     });
     itemVersionShared = jasmine.createSpyObj('itemVersionShared', ['notifyCreateNewVersion']);
     router = jasmine.createSpyObj('router', ['navigateByUrl']);
@@ -60,7 +56,7 @@ describe('DsoVersioningModalService', () => {
       itemVersionShared,
       router,
       workspaceItemDataService,
-      itemService,
+      itemService
     );
   }));
   describe('when onCreateNewVersion() is called', () => {

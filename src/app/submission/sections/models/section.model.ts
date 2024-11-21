@@ -1,24 +1,11 @@
-import {
-  Component,
-  Inject,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import {
-  Observable,
-  Subscription,
-} from 'rxjs';
-import {
-  filter,
-  startWith,
-} from 'rxjs/operators';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 
-import {
-  hasValue,
-  isNotUndefined,
-} from '../../../shared/empty.util';
-import { SectionsService } from '../sections.service';
+import { Observable, Subscription } from 'rxjs';
+import { filter, startWith } from 'rxjs/operators';
+
 import { SectionDataObject } from './section-data.model';
+import { SectionsService } from '../sections.service';
+import { hasValue, isNotUndefined } from '../../../shared/empty.util';
 
 export interface SectionDataModel {
   sectionData: SectionDataObject;
@@ -29,7 +16,7 @@ export interface SectionDataModel {
  */
 @Component({
   selector: 'ds-section-model',
-  template: '',
+  template: ''
 })
 export abstract class SectionModelComponent implements OnDestroy, OnInit, SectionDataModel {
   protected abstract sectionService: SectionsService;

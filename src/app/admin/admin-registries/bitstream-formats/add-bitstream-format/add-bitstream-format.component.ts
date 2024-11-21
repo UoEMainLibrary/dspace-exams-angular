@@ -1,17 +1,12 @@
-import { Component } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-
-import { BitstreamFormatDataService } from '../../../../core/data/bitstream-format-data.service';
-import { RemoteData } from '../../../../core/data/remote-data';
+import { Component } from '@angular/core';
 import { BitstreamFormat } from '../../../../core/shared/bitstream-format.model';
-import { getFirstCompletedRemoteData } from '../../../../core/shared/operators';
+import { BitstreamFormatDataService } from '../../../../core/data/bitstream-format-data.service';
 import { NotificationsService } from '../../../../shared/notifications/notifications.service';
+import { TranslateService } from '@ngx-translate/core';
 import { getBitstreamFormatsModuleRoute } from '../../admin-registries-routing-paths';
-import { FormatFormComponent } from '../format-form/format-form.component';
+import { RemoteData } from '../../../../core/data/remote-data';
+import { getFirstCompletedRemoteData } from '../../../../core/shared/operators';
 
 /**
  * This component renders the page to create a new bitstream format.
@@ -19,11 +14,6 @@ import { FormatFormComponent } from '../format-form/format-form.component';
 @Component({
   selector: 'ds-add-bitstream-format',
   templateUrl: './add-bitstream-format.component.html',
-  imports: [
-    FormatFormComponent,
-    TranslateModule,
-  ],
-  standalone: true,
 })
 export class AddBitstreamFormatComponent {
 
@@ -45,16 +35,16 @@ export class AddBitstreamFormatComponent {
     this.bitstreamFormatDataService.createBitstreamFormat(bitstreamFormat).pipe(
       getFirstCompletedRemoteData(),
     ).subscribe((response: RemoteData<BitstreamFormat>) => {
-      if (response.hasSucceeded) {
-        this.notificationService.success(this.translateService.get('admin.registries.bitstream-formats.create.success.head'),
-          this.translateService.get('admin.registries.bitstream-formats.create.success.content'));
-        this.router.navigate([getBitstreamFormatsModuleRoute()]);
-        this.bitstreamFormatDataService.clearBitStreamFormatRequests().subscribe();
-      } else {
-        this.notificationService.error(this.translateService.get('admin.registries.bitstream-formats.create.failure.head'),
-          this.translateService.get('admin.registries.bitstream-formats.create.failure.content'));
+        if (response.hasSucceeded) {
+          this.notificationService.success(this.translateService.get('admin.registries.bitstream-formats.create.success.head'),
+            this.translateService.get('admin.registries.bitstream-formats.create.success.content'));
+          this.router.navigate([getBitstreamFormatsModuleRoute()]);
+          this.bitstreamFormatDataService.clearBitStreamFormatRequests().subscribe();
+        } else {
+          this.notificationService.error(this.translateService.get('admin.registries.bitstream-formats.create.failure.head'),
+            this.translateService.get('admin.registries.bitstream-formats.create.failure.content'));
+        }
       }
-    },
     );
   }
 }

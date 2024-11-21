@@ -1,33 +1,22 @@
-import {
-  Component,
-  Injector,
-  OnInit,
-} from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import {
-  Observable,
-  of,
-} from 'rxjs';
-import {
-  map,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs/operators';
+import { Component, Injector, OnInit } from '@angular/core';
 
-import { IdentifiableDataService } from '../../core/data/base/identifiable-data.service';
+import { map, switchMap, take, tap } from 'rxjs/operators';
+
 import { RemoteData } from '../../core/data/remote-data';
-import { RequestService } from '../../core/data/request.service';
 import { DSpaceObject } from '../../core/shared/dspace-object.model';
-import { getFirstCompletedRemoteData } from '../../core/shared/operators';
 import { ResourceType } from '../../core/shared/resource-type';
-import { SearchService } from '../../core/shared/search/search.service';
-import { ProcessTaskResponse } from '../../core/tasks/models/process-task-response';
 import { NotificationOptions } from '../notifications/models/notification-options.model';
 import { NotificationsService } from '../notifications/notifications.service';
+import { TranslateService } from '@ngx-translate/core';
+import { RequestService } from '../../core/data/request.service';
+import { SearchService } from '../../core/shared/search/search.service';
+import { Observable, of } from 'rxjs';
+import { ProcessTaskResponse } from '../../core/tasks/models/process-task-response';
+import { getFirstCompletedRemoteData } from '../../core/shared/operators';
 import { getSearchResultFor } from '../search/search-result-element-decorator';
 import { MyDSpaceActionsComponent } from './mydspace-actions';
+import { IdentifiableDataService } from '../../core/data/base/identifiable-data.service';
 
 /**
  * Abstract class for all different representations of mydspace actions
@@ -83,7 +72,7 @@ export abstract class MyDSpaceReloadableActionsComponent<T extends DSpaceObject,
               (reloadedObject) => {
                 this.processing$.next(false);
                 this.handleReloadableActionResponse(res.hasSucceeded, reloadedObject);
-              }),
+              })
           );
         } else {
           this.processing$.next(false);
@@ -104,7 +93,7 @@ export abstract class MyDSpaceReloadableActionsComponent<T extends DSpaceObject,
   handleReloadableActionResponse(result: boolean, reloadedObject: DSpaceObject): void {
     if (result) {
       if (reloadedObject) {
-        this.processCompleted.emit({ result, reloadedObject });
+        this.processCompleted.emit({result, reloadedObject});
       } else {
         this.reload();
       }
@@ -131,7 +120,7 @@ export abstract class MyDSpaceReloadableActionsComponent<T extends DSpaceObject,
   convertReloadedObject(dso: DSpaceObject): DSpaceObject {
     const constructor = getSearchResultFor((dso as any).constructor);
     const reloadedObject = Object.assign(new constructor(), dso, {
-      indexableObject: dso,
+      indexableObject: dso
     });
     return reloadedObject;
   }
@@ -149,7 +138,7 @@ export abstract class MyDSpaceReloadableActionsComponent<T extends DSpaceObject,
           return of(res);
         }
       })).pipe(map((dso) => {
-      return dso ? this.convertReloadedObject(dso) : dso;
+          return dso ? this.convertReloadedObject(dso) : dso;
     }));
   }
 

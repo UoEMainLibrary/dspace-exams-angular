@@ -1,5 +1,5 @@
-import { hasValue } from '../empty.util';
 import { ResponsiveColumnSizes } from './responsive-column-sizes';
+import { hasValue } from '../empty.util';
 
 /**
  * A helper class storing the sizes in which to render a table

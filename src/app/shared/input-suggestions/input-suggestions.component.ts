@@ -1,9 +1,4 @@
 import {
-  AsyncPipe,
-  NgClass,
-  NgFor,
-} from '@angular/common';
-import {
   Component,
   ElementRef,
   EventEmitter,
@@ -13,27 +8,15 @@ import {
   QueryList,
   SimpleChanges,
   ViewChild,
-  ViewChildren,
+  ViewChildren
 } from '@angular/core';
-import {
-  ControlValueAccessor,
-  FormsModule,
-} from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
 import { BehaviorSubject } from 'rxjs';
-
-import {
-  hasValue,
-  isNotEmpty,
-} from '../empty.util';
-import { ClickOutsideDirective } from '../utils/click-outside.directive';
-import { DebounceDirective } from '../utils/debounce.directive';
+import { hasValue, isNotEmpty } from '../empty.util';
+import { ControlValueAccessor } from '@angular/forms';
 
 @Component({
   selector: 'ds-input-suggestions',
   templateUrl: './input-suggestions.component.html',
-  standalone: true,
-  imports: [FormsModule, ClickOutsideDirective, DebounceDirective, NgClass, NgFor, AsyncPipe, TranslateModule],
 })
 
 /**

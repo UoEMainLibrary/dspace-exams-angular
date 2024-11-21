@@ -1,34 +1,14 @@
-import { DOCUMENT } from '@angular/common';
-import {
-  Inject,
-  Injectable,
-  Renderer2,
-  RendererFactory2,
-} from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  EMPTY,
-  Observable,
-  of,
-} from 'rxjs';
-import {
-  map,
-  switchMap,
-  take,
-  tap,
-} from 'rxjs/operators';
-
+import { Inject, Injectable, Renderer2, RendererFactory2 } from '@angular/core';
+import { getFirstCompletedRemoteData } from '../shared/operators';
+import { ConfigurationProperty } from '../shared/configuration-property.model';
 import { isNotEmpty } from '../../shared/empty.util';
+import { DOCUMENT } from '@angular/common';
 import { ConfigurationDataService } from '../data/configuration-data.service';
 import { RemoteData } from '../data/remote-data';
+import { map, switchMap, take } from 'rxjs/operators';
+import { BehaviorSubject, combineLatest, Observable, of } from 'rxjs';
 import { CookieService } from '../services/cookie.service';
-import {
-  NativeWindowRef,
-  NativeWindowService,
-} from '../services/window.service';
-import { ConfigurationProperty } from '../shared/configuration-property.model';
-import { getFirstCompletedRemoteData } from '../shared/operators';
+import { NativeWindowRef, NativeWindowService } from '../services/window.service';
 
 export const CAPTCHA_COOKIE = '_GRECAPTCHA';
 export const CAPTCHA_NAME = 'google-recaptcha';
@@ -36,7 +16,7 @@ export const CAPTCHA_NAME = 'google-recaptcha';
 /**
  * A GoogleRecaptchaService used to send action and get a token from REST
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class GoogleRecaptchaService {
 
   private renderer: Renderer2;
@@ -84,14 +64,16 @@ export class GoogleRecaptchaService {
       getFirstCompletedRemoteData(),
       map((res: RemoteData<ConfigurationProperty>) => {
         return res.hasSucceeded && res.payload && isNotEmpty(res.payload.values) && res.payload.values[0].toLowerCase() === 'true';
-      }),
+      })
     );
-    registrationVerification$.pipe(
-      switchMap((registrationVerification: boolean) => registrationVerification ? this.loadRecaptchaProperties() : EMPTY),
-    ).subscribe();
+    registrationVerification$.subscribe(registrationVerification => {
+      if (registrationVerification) {
+        this.loadRecaptchaProperties();
+      }
+    });
   }
 
-  loadRecaptchaProperties(): Observable<any> {
+  loadRecaptchaProperties() {
     const recaptchaKeyRD$ = this.configService.findByPropertyName('google.recaptcha.key.site').pipe(
       getFirstCompletedRemoteData(),
     );
@@ -101,42 +83,40 @@ export class GoogleRecaptchaService {
     const recaptchaModeRD$ = this.configService.findByPropertyName('google.recaptcha.mode').pipe(
       getFirstCompletedRemoteData(),
     );
-    return combineLatest([recaptchaVersionRD$, recaptchaModeRD$, recaptchaKeyRD$]).pipe(
-      tap(([recaptchaVersionRD, recaptchaModeRD, recaptchaKeyRD]) => {
+    combineLatest([recaptchaVersionRD$, recaptchaModeRD$, recaptchaKeyRD$]).subscribe(([recaptchaVersionRD, recaptchaModeRD, recaptchaKeyRD]) => {
 
-        if (
-          this.cookieService.get('klaro-anonymous') && this.cookieService.get('klaro-anonymous')[CAPTCHA_NAME] &&
-          recaptchaKeyRD.hasSucceeded && recaptchaVersionRD.hasSucceeded &&
-          isNotEmpty(recaptchaVersionRD.payload?.values) && isNotEmpty(recaptchaKeyRD.payload?.values)
-        ) {
-          const key = recaptchaKeyRD.payload?.values[0];
-          const version = recaptchaVersionRD.payload?.values[0];
-          this.captchaKeySubject$.next(key);
-          this.captchaVersionSubject$.next(version);
+      if (
+        this.cookieService.get('klaro-anonymous') && this.cookieService.get('klaro-anonymous')[CAPTCHA_NAME] &&
+        recaptchaKeyRD.hasSucceeded && recaptchaVersionRD.hasSucceeded &&
+        isNotEmpty(recaptchaVersionRD.payload?.values) && isNotEmpty(recaptchaKeyRD.payload?.values)
+      ) {
+        const key = recaptchaKeyRD.payload?.values[0];
+        const version = recaptchaVersionRD.payload?.values[0];
+        this.captchaKeySubject$.next(key);
+        this.captchaVersionSubject$.next(version);
 
-          let captchaUrl;
-          switch (version) {
-            case 'v3':
-              if (recaptchaKeyRD.hasSucceeded && isNotEmpty(recaptchaKeyRD.payload?.values)) {
-                captchaUrl = this.buildCaptchaUrl(key);
-                this.captchaModeSubject$.next('invisible');
-              }
-              break;
-            case 'v2':
-              if (recaptchaModeRD.hasSucceeded && isNotEmpty(recaptchaModeRD.payload?.values)) {
-                captchaUrl = this.buildCaptchaUrl();
-                this.captchaModeSubject$.next(recaptchaModeRD.payload?.values[0]);
-              }
-              break;
-            default:
-            // TODO handle error
-          }
-          if (captchaUrl) {
-            this.loadScript(captchaUrl);
-          }
+        let captchaUrl;
+        switch (version) {
+          case 'v3':
+            if (recaptchaKeyRD.hasSucceeded && isNotEmpty(recaptchaKeyRD.payload?.values)) {
+              captchaUrl = this.buildCaptchaUrl(key);
+              this.captchaModeSubject$.next('invisible');
+            }
+            break;
+          case 'v2':
+            if (recaptchaModeRD.hasSucceeded && isNotEmpty(recaptchaModeRD.payload?.values)) {
+              captchaUrl = this.buildCaptchaUrl();
+              this.captchaModeSubject$.next(recaptchaModeRD.payload?.values[0]);
+            }
+            break;
+          default:
+          // TODO handle error
         }
-      }),
-    );
+        if (captchaUrl) {
+          this.loadScript(captchaUrl);
+        }
+      }
+    });
   }
 
   /**
@@ -145,7 +125,7 @@ export class GoogleRecaptchaService {
    */
   public getRecaptchaToken(action) {
     return this.captchaKey().pipe(
-      switchMap((key) => grecaptcha.execute(key, { action: action })),
+      switchMap((key) => grecaptcha.execute(key, {action: action}))
     );
   }
 
@@ -190,7 +170,7 @@ export class GoogleRecaptchaService {
   }
 
   refreshCaptchaScript = () => {
-    this.loadRecaptchaProperties().subscribe();
+    this.loadRecaptchaProperties();
   };
 
 }

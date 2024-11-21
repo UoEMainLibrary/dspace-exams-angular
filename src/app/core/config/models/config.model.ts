@@ -1,12 +1,8 @@
-import {
-  autoserialize,
-  deserialize,
-} from 'cerialize';
-
-import { CacheableObject } from '../../cache/cacheable-object.model';
+import { autoserialize, deserialize } from 'cerialize';
 import { HALLink } from '../../shared/hal-link.model';
 import { ResourceType } from '../../shared/resource-type';
 import { excludeFromEquals } from '../../utilities/equals.decorators';
+import { CacheableObject } from '../../cache/cacheable-object.model';
 
 export abstract class ConfigObject implements CacheableObject {
 

@@ -1,20 +1,12 @@
 import { TestBed } from '@angular/core/testing';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-} from '@angular/router';
-import { cold } from 'jasmine-marbles';
-import {
-  Observable,
-  of as observableOf,
-  Subject,
-} from 'rxjs';
 
+import { BreadcrumbsService } from './breadcrumbs.service';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
+import { Observable, of as observableOf, Subject } from 'rxjs';
+import { BreadcrumbConfig } from './breadcrumb/breadcrumb-config.model';
 import { BreadcrumbsProviderService } from '../core/breadcrumbs/breadcrumbsProviderService';
 import { Breadcrumb } from './breadcrumb/breadcrumb.model';
-import { BreadcrumbConfig } from './breadcrumb/breadcrumb-config.model';
-import { BreadcrumbsService } from './breadcrumbs.service';
+import { cold } from 'jasmine-marbles';
 
 class TestBreadcrumbsService implements BreadcrumbsProviderService<string> {
   getBreadcrumbs(key: string, url: string): Observable<Breadcrumb[]> {
@@ -88,8 +80,8 @@ describe('BreadcrumbsService', () => {
       const route1 = {
         snapshot: {
           data: { breadcrumb: breadcrumbConfigA },
-          routeConfig: { resolve: { breadcrumb: {} } },
-        },
+          routeConfig: { resolve: { breadcrumb: {} } }
+        }
       };
 
       const expectation1 = [
@@ -102,7 +94,7 @@ describe('BreadcrumbsService', () => {
       const route2 = {
         snapshot: {
           data: { breadcrumb: breadcrumbConfigA },
-          routeConfig: { resolve: { breadcrumb: {} } },
+          routeConfig: { resolve: { breadcrumb: {} } }
         },
         firstChild: {
           snapshot: {
@@ -112,10 +104,10 @@ describe('BreadcrumbsService', () => {
           firstChild: {
             snapshot: {
               data: { breadcrumb: breadcrumbConfigB },
-              routeConfig: { resolve: { breadcrumb: {} } },
-            },
-          },
-        },
+              routeConfig: { resolve: { breadcrumb: {} } }
+            }
+          }
+        }
       };
 
       const expectation2 = [
@@ -137,8 +129,8 @@ describe('BreadcrumbsService', () => {
               breadcrumb: breadcrumbConfigA,
               showBreadcrumbs: false, // explicitly hide breadcrumbs
             },
-            routeConfig: { resolve: { breadcrumb: {} } },
-          },
+            routeConfig: { resolve: { breadcrumb: {} } }
+          }
         };
 
         changeActivatedRoute(route1);
@@ -150,8 +142,8 @@ describe('BreadcrumbsService', () => {
               breadcrumb: breadcrumbConfigA,
               showBreadcrumbs: true, // explicitly show breadcrumbs
             },
-            routeConfig: { resolve: { breadcrumb: {} } },
-          },
+            routeConfig: { resolve: { breadcrumb: {} } }
+          }
         };
 
         changeActivatedRoute(route2);
@@ -166,8 +158,8 @@ describe('BreadcrumbsService', () => {
             data: {
               // no breadcrumbs set - always hide
             },
-            routeConfig: { resolve: { breadcrumb: {} } },
-          },
+            routeConfig: { resolve: { breadcrumb: {} } }
+          }
         };
 
         changeActivatedRoute(route1);

@@ -1,17 +1,15 @@
 import { Injectable } from '@angular/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
+
+import { Observable, of as observableOf } from 'rxjs';
 import { distinctUntilChanged } from 'rxjs/operators';
 
-import { CollectionDataService } from '../data/collection-data.service';
 import { RoleType } from './role-types';
+import { CollectionDataService } from '../data/collection-data.service';
 
 /**
  * A service that provides methods to identify user role.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class RoleService {
 
   /**
@@ -27,7 +25,7 @@ export class RoleService {
    */
   isSubmitter(): Observable<boolean> {
     return this.collectionService.hasAuthorizedCollection().pipe(
-      distinctUntilChanged(),
+      distinctUntilChanged()
     );
   }
 

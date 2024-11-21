@@ -1,15 +1,8 @@
-import {
-  CollectionViewer,
-  DataSource,
-} from '@angular/cdk/collections';
+import { CollectionViewer, DataSource } from '@angular/cdk/collections';
 import { FlatTreeControl } from '@angular/cdk/tree';
-import {
-  BehaviorSubject,
-  merge,
-  Observable,
-} from 'rxjs';
-import { map } from 'rxjs/operators';
 
+import { BehaviorSubject, merge, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { VocabularyTreeFlattener } from './vocabulary-tree-flattener';
 
 /**
@@ -43,7 +36,7 @@ export class VocabularyTreeFlatDataSource<T, F> extends DataSource<F> {
     const changes = [
       collectionViewer.viewChange,
       this._treeControl.expansionModel.changed,
-      this._flattenedData,
+      this._flattenedData
     ];
     return merge<any>(...changes).pipe(map((): F[] => {
       this._expandedData.next(

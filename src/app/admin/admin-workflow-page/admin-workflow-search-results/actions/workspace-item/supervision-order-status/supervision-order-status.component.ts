@@ -1,36 +1,14 @@
-import {
-  AsyncPipe,
-  NgFor,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
-import { NgbTooltipModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
-import {
-  BehaviorSubject,
-  from,
-  Observable,
-} from 'rxjs';
-import {
-  map,
-  mergeMap,
-  reduce,
-} from 'rxjs/operators';
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core';
 
-import { DSONameService } from '../../../../../../core/breadcrumbs/dso-name.service';
-import { RemoteData } from '../../../../../../core/data/remote-data';
+import { BehaviorSubject, from, Observable } from 'rxjs';
+import { map, mergeMap, reduce } from 'rxjs/operators';
+
+import { SupervisionOrder } from '../../../../../../core/supervision-order/models/supervision-order.model';
 import { Group } from '../../../../../../core/eperson/models/group.model';
 import { getFirstCompletedRemoteData } from '../../../../../../core/shared/operators';
-import { SupervisionOrder } from '../../../../../../core/supervision-order/models/supervision-order.model';
 import { isNotEmpty } from '../../../../../../shared/empty.util';
-import { VarDirective } from '../../../../../../shared/utils/var.directive';
+import { RemoteData } from '../../../../../../core/data/remote-data';
+import { DSONameService } from '../../../../../../core/breadcrumbs/dso-name.service';
 
 export interface SupervisionOrderListEntry {
   supervisionOrder: SupervisionOrder;
@@ -40,9 +18,7 @@ export interface SupervisionOrderListEntry {
 @Component({
   selector: 'ds-supervision-order-status',
   templateUrl: './supervision-order-status.component.html',
-  styleUrls: ['./supervision-order-status.component.scss'],
-  standalone: true,
-  imports: [VarDirective, NgIf, NgFor, NgbTooltipModule, AsyncPipe, TranslateModule],
+  styleUrls: ['./supervision-order-status.component.scss']
 })
 export class SupervisionOrderStatusComponent implements OnChanges {
 
@@ -85,13 +61,13 @@ export class SupervisionOrderStatusComponent implements OnChanges {
           if (sogRD.hasSucceeded) {
             const entry: SupervisionOrderListEntry = {
               supervisionOrder: so,
-              group: sogRD.payload,
+              group: sogRD.payload
             };
             return entry;
           } else {
             return null;
           }
-        }),
+        })
       )),
       reduce((acc: SupervisionOrderListEntry[], value: any) => {
         if (isNotEmpty(value)) {

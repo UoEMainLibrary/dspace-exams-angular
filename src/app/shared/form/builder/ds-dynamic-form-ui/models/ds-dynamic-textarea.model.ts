@@ -1,13 +1,5 @@
-import {
-  DYNAMIC_FORM_CONTROL_TYPE_TEXTAREA,
-  DynamicFormControlLayout,
-  serializable,
-} from '@ng-dynamic-forms/core';
-
-import {
-  DsDynamicInputModel,
-  DsDynamicInputModelConfig,
-} from './ds-dynamic-input.model';
+import { DYNAMIC_FORM_CONTROL_TYPE_TEXTAREA, DynamicFormControlLayout, serializable } from '@ng-dynamic-forms/core';
+import { DsDynamicInputModel, DsDynamicInputModelConfig } from './ds-dynamic-input.model';
 
 export interface DsDynamicTextAreaModelConfig extends DsDynamicInputModelConfig {
   cols?: number;

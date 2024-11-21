@@ -1,13 +1,7 @@
-import {
-  Directive,
-  EventEmitter,
-  HostListener,
-  Output,
-} from '@angular/core';
+import { Directive, EventEmitter, HostListener, Output } from '@angular/core';
 
 @Directive({
-  selector: '[dsDragClick]',
-  standalone: true,
+  selector: '[dsDragClick]'
 })
 
 /**

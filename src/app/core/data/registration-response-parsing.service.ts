@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
-
-import { ParsedResponse } from '../cache/response.models';
+import {
+  ParsedResponse
+} from '../cache/response.models';
 import { RawRestResponse } from '../dspace-rest/raw-rest-response.model';
-import { Registration } from '../shared/registration.model';
 import { ResponseParsingService } from './parsing.service';
+import { Registration } from '../shared/registration.model';
 import { RestRequest } from './rest-request.model';
 
 @Injectable({

@@ -1,20 +1,7 @@
-import {
-  AsyncPipe,
-  NgClass,
-  NgForOf,
-  NgIf,
-} from '@angular/common';
 import { Component } from '@angular/core';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-  RouterOutlet,
-} from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-
-import { Collection } from '../../core/shared/collection.model';
+import { ActivatedRoute, Router } from '@angular/router';
 import { EditComColPageComponent } from '../../shared/comcol/comcol-forms/edit-comcol-page/edit-comcol-page.component';
+import { Collection } from '../../core/shared/collection.model';
 import { getCollectionPageRoute } from '../collection-page-routing-paths';
 
 /**
@@ -22,24 +9,14 @@ import { getCollectionPageRoute } from '../collection-page-routing-paths';
  */
 @Component({
   selector: 'ds-edit-collection',
-  templateUrl: '../../shared/comcol/comcol-forms/edit-comcol-page/edit-comcol-page.component.html',
-  imports: [
-    RouterLink,
-    TranslateModule,
-    NgClass,
-    NgForOf,
-    RouterOutlet,
-    NgIf,
-    AsyncPipe,
-  ],
-  standalone: true,
+  templateUrl: '../../shared/comcol/comcol-forms/edit-comcol-page/edit-comcol-page.component.html'
 })
 export class EditCollectionPageComponent extends EditComColPageComponent<Collection> {
   type = 'collection';
 
   public constructor(
     protected router: Router,
-    protected route: ActivatedRoute,
+    protected route: ActivatedRoute
   ) {
     super(router, route);
   }

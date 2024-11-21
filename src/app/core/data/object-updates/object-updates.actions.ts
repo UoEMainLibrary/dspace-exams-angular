@@ -1,12 +1,11 @@
 /* eslint-disable max-classes-per-file */
-import { Action } from '@ngrx/store';
-
 import { type } from '../../../shared/ngrx/type';
+import { Action } from '@ngrx/store';
 import { INotification } from '../../../shared/notifications/models/notification.model';
-import { GenericConstructor } from '../../shared/generic-constructor';
-import { FieldChangeType } from './field-change-type.model';
-import { Identifiable } from './identifiable.model';
 import { PatchOperationService } from './patch-operation-service/patch-operation.service';
+import { GenericConstructor } from '../../shared/generic-constructor';
+import { Identifiable } from './identifiable.model';
+import { FieldChangeType } from './field-change-type.model';
 
 /**
  * The list of ObjectUpdatesAction type definitions
@@ -21,7 +20,7 @@ export const ObjectUpdatesActionTypes = {
   REINSTATE: type('dspace/core/cache/object-updates/REINSTATE'),
   REMOVE: type('dspace/core/cache/object-updates/REMOVE'),
   REMOVE_ALL: type('dspace/core/cache/object-updates/REMOVE_ALL'),
-  REMOVE_FIELD: type('dspace/core/cache/object-updates/REMOVE_FIELD'),
+  REMOVE_FIELD: type('dspace/core/cache/object-updates/REMOVE_FIELD')
 };
 
 
@@ -50,7 +49,7 @@ export class InitializeFieldsAction implements Action {
     url: string,
     fields: Identifiable[],
     lastModified: Date,
-    patchOperationService?: GenericConstructor<PatchOperationService>,
+    patchOperationService?: GenericConstructor<PatchOperationService>
   ) {
     this.payload = { url, fields, lastModified, patchOperationService };
   }
@@ -114,7 +113,7 @@ export class SelectVirtualMetadataAction implements Action {
     uuid: string,
     select: boolean,
   ) {
-    this.payload = { url, source, uuid, select: select };
+    this.payload = { url, source, uuid, select: select};
   }
 }
 
@@ -194,7 +193,7 @@ export class DiscardObjectUpdatesAction implements Action {
   constructor(
     url: string,
     notification: INotification,
-    discardAll = false,
+    discardAll = false
   ) {
     this.payload = { url, notification, discardAll };
   }
@@ -216,7 +215,7 @@ export class ReinstateObjectUpdatesAction implements Action {
    *    the unique url of the page for which the changes should be reinstated
    */
   constructor(
-    url: string,
+    url: string
   ) {
     this.payload = { url };
   }
@@ -238,7 +237,7 @@ export class RemoveObjectUpdatesAction implements Action {
    *    the unique url of the page for which the changes should be removed
    */
   constructor(
-    url: string,
+    url: string
   ) {
     this.payload = { url };
   }
@@ -270,7 +269,7 @@ export class RemoveFieldUpdateAction implements Action {
    */
   constructor(
     url: string,
-    uuid: string,
+    uuid: string
   ) {
     this.payload = { url, uuid };
   }

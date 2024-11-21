@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { ThemedComponent } from '../../shared/theme-support/themed.component';
 import { EndUserAgreementComponent } from './end-user-agreement.component';
 
@@ -7,11 +6,9 @@ import { EndUserAgreementComponent } from './end-user-agreement.component';
  * Themed wrapper for EndUserAgreementComponent
  */
 @Component({
-  selector: 'ds-end-user-agreement',
+  selector: 'ds-themed-end-user-agreement',
   styleUrls: [],
   templateUrl: '../../shared/theme-support/themed.component.html',
-  standalone: true,
-  imports: [EndUserAgreementComponent],
 })
 export class ThemedEndUserAgreementComponent extends ThemedComponent<EndUserAgreementComponent> {
 

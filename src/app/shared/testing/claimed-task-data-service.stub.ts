@@ -1,11 +1,7 @@
-import {
-  EMPTY,
-  Observable,
-} from 'rxjs';
-
-import { RemoteData } from '../../core/data/remote-data';
-import { ClaimedTask } from '../../core/tasks/models/claimed-task-object.model';
+import { Observable, EMPTY } from 'rxjs';
 import { ProcessTaskResponse } from '../../core/tasks/models/process-task-response';
+import { ClaimedTask } from '../../core/tasks/models/claimed-task-object.model';
+import { RemoteData } from '../../core/data/remote-data';
 
 export class ClaimedTaskDataServiceStub {
 

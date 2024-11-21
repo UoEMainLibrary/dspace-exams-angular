@@ -1,21 +1,15 @@
-import {
-  Component,
-  Input,
-} from '@angular/core';
-
-import { SortOptions } from '../../../core/cache/models/sort-options.model';
+import { Component, Input } from '@angular/core';
 import { ThemedComponent } from '../../theme-support/themed.component';
 import { SearchSettingsComponent } from './search-settings.component';
+import { SortOptions } from '../../../core/cache/models/sort-options.model';
 
 /**
  * Themed wrapper for SearchSettingsComponent
  */
 @Component({
-  selector: 'ds-search-settings',
+  selector: 'ds-themed-search-settings',
   styleUrls: [],
   templateUrl: '../../theme-support/themed.component.html',
-  standalone: true,
-  imports: [SearchSettingsComponent],
 })
 export class ThemedSearchSettingsComponent extends ThemedComponent<SearchSettingsComponent> {
   @Input() currentSortOption: SortOptions;

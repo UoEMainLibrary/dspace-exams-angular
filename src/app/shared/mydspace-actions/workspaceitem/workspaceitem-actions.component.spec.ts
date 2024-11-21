@@ -1,49 +1,32 @@
-import {
-  ChangeDetectionStrategy,
-  Injector,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-import {
-  NgbModal,
-  NgbModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { AuthService } from '../../../core/auth/auth.service';
-import { AuthorizationDataService } from '../../../core/data/feature-authorization/authorization-data.service';
-import { RequestService } from '../../../core/data/request.service';
 import { EPerson } from '../../../core/eperson/models/eperson.model';
-import { Item } from '../../../core/shared/item.model';
-import { SearchService } from '../../../core/shared/search/search.service';
-import { WorkspaceItem } from '../../../core/submission/models/workspaceitem.model';
-import { WorkspaceitemDataService } from '../../../core/submission/workspaceitem-data.service';
-import { getMockRequestService } from '../../mocks/request.service.mock';
-import { getMockSearchService } from '../../mocks/search-service.mock';
+import { ChangeDetectionStrategy, Injector, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { Router } from '@angular/router';
+import { By } from '@angular/platform-browser';
+
+import { of as observableOf } from 'rxjs';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
 import { TranslateLoaderMock } from '../../mocks/translate-loader.mock';
 import { NotificationsService } from '../../notifications/notifications.service';
+import { NotificationsServiceStub } from '../../testing/notifications-service.stub';
+import { RouterStub } from '../../testing/router.stub';
+import { Item } from '../../../core/shared/item.model';
+import { WorkspaceItem } from '../../../core/submission/models/workspaceitem.model';
+import { WorkspaceitemActionsComponent } from './workspaceitem-actions.component';
+import { WorkspaceitemDataService } from '../../../core/submission/workspaceitem-data.service';
 import {
   createFailedRemoteDataObject$,
   createSuccessfulRemoteDataObject,
-  createSuccessfulRemoteDataObject$,
+  createSuccessfulRemoteDataObject$
 } from '../../remote-data.utils';
-import { ActivatedRouteStub } from '../../testing/active-router.stub';
-import { NotificationsServiceStub } from '../../testing/notifications-service.stub';
-import { RouterStub } from '../../testing/router.stub';
-import { WorkspaceitemActionsComponent } from './workspaceitem-actions.component';
+import { RequestService } from '../../../core/data/request.service';
+import { getMockRequestService } from '../../mocks/request.service.mock';
+import { getMockSearchService } from '../../mocks/search-service.mock';
+import { SearchService } from '../../../core/shared/search/search.service';
+import { AuthService } from '../../../core/auth/auth.service';
+import { AuthorizationDataService } from '../../../core/data/feature-authorization/authorization-data.service';
 
 let component: WorkspaceitemActionsComponent;
 let fixture: ComponentFixture<WorkspaceitemActionsComponent>;
@@ -54,7 +37,7 @@ let authorizationService;
 let authService;
 
 const mockDataService = jasmine.createSpyObj('WorkspaceitemDataService', {
-  delete: jasmine.createSpy('delete'),
+  delete: jasmine.createSpy('delete')
 });
 
 const searchService = getMockSearchService();
@@ -67,28 +50,28 @@ const item = Object.assign(new Item(), {
     'dc.title': [
       {
         language: 'en_US',
-        value: 'This is just another title',
-      },
+        value: 'This is just another title'
+      }
     ],
     'dc.type': [
       {
         language: null,
-        value: 'Article',
-      },
+        value: 'Article'
+      }
     ],
     'dc.contributor.author': [
       {
         language: 'en_US',
-        value: 'Smith, Donald',
-      },
+        value: 'Smith, Donald'
+      }
     ],
     'dc.date.issued': [
       {
         language: null,
-        value: '2015-06-26',
-      },
-    ],
-  },
+        value: '2015-06-26'
+      }
+    ]
+  }
 });
 const rd = createSuccessfulRemoteDataObject(item);
 mockObject = Object.assign(new WorkspaceItem(), { item: observableOf(rd), id: '1234', uuid: '1234' });
@@ -169,25 +152,25 @@ const ePersonMock: EPerson = Object.assign(new EPerson(), {
 });
 
 authService = jasmine.createSpyObj('authService', {
-  getAuthenticatedUserFromStore: jasmine.createSpy('getAuthenticatedUserFromStore'),
+  getAuthenticatedUserFromStore: jasmine.createSpy('getAuthenticatedUserFromStore')
 });
 
 describe('WorkspaceitemActionsComponent', () => {
   beforeEach(waitForAsync(async () => {
     authorizationService = jasmine.createSpyObj('authorizationService', {
-      isAuthorized: observableOf(true),
+      isAuthorized: observableOf(true)
     });
-    await TestBed.configureTestingModule({
+   await TestBed.configureTestingModule({
       imports: [
         NgbModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: TranslateLoaderMock,
-          },
-        }),
-        WorkspaceitemActionsComponent,
+            useClass: TranslateLoaderMock
+          }
+        })
       ],
+      declarations: [WorkspaceitemActionsComponent],
       providers: [
         Injector,
         { provide: NotificationsService, useValue: new NotificationsServiceStub() },
@@ -195,14 +178,13 @@ describe('WorkspaceitemActionsComponent', () => {
         { provide: WorkspaceitemDataService, useValue: mockDataService },
         { provide: SearchService, useValue: searchService },
         { provide: RequestService, useValue: requestServce },
-        { provide: AuthService, useValue: authService },
-        { provide: AuthorizationDataService, useValue: authorizationService },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        NgbModal,
+        { provide: AuthService, useValue:  authService },
+        { provide: AuthorizationDataService, useValue: authorizationService},
+        NgbModal
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(WorkspaceitemActionsComponent, {
-      set: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 

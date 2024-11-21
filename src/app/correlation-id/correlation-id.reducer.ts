@@ -1,8 +1,4 @@
-import {
-  CorrelationIdAction,
-  CorrelationIDActionTypes,
-  SetCorrelationIdAction,
-} from './correlation-id.actions';
+import { CorrelationIdAction, CorrelationIDActionTypes, SetCorrelationIdAction } from './correlation-id.actions';
 
 const initialState = null;
 

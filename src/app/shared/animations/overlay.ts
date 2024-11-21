@@ -1,10 +1,4 @@
-import {
-  animate,
-  state,
-  style,
-  transition,
-  trigger,
-} from '@angular/animations';
+import { animate, state, transition, trigger, style } from '@angular/animations';
 
 export const overlay = trigger('overlay', [
 
@@ -12,5 +6,5 @@ export const overlay = trigger('overlay', [
 
   state('hide', style({ opacity: 0 })),
 
-  transition('show <=> hide', animate(250)),
+  transition('show <=> hide', animate(250))
 ]);

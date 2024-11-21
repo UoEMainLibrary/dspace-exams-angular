@@ -1,74 +1,35 @@
 import { CommonModule } from '@angular/common';
-import {
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  fakeAsync,
-  flush,
-  inject,
-  TestBed,
-  tick,
-  waitForAsync,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import {
-  BrowserModule,
-  By,
-} from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, fakeAsync, flush, inject, TestBed, tick, waitForAsync } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { BrowserModule, By } from '@angular/platform-browser';
+import { Router } from '@angular/router';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-
-import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
+import { Observable, of as observableOf } from 'rxjs';
 import { RestResponse } from '../../../../core/cache/response.models';
-import {
-  buildPaginatedList,
-  PaginatedList,
-} from '../../../../core/data/paginated-list.model';
+import { buildPaginatedList, PaginatedList } from '../../../../core/data/paginated-list.model';
 import { RemoteData } from '../../../../core/data/remote-data';
 import { EPersonDataService } from '../../../../core/eperson/eperson-data.service';
 import { GroupDataService } from '../../../../core/eperson/group-data.service';
 import { EPerson } from '../../../../core/eperson/models/eperson.model';
 import { Group } from '../../../../core/eperson/models/group.model';
-import { PaginationService } from '../../../../core/pagination/pagination.service';
 import { PageInfo } from '../../../../core/shared/page-info.model';
-import { ContextHelpDirective } from '../../../../shared/context-help.directive';
 import { FormBuilderService } from '../../../../shared/form/builder/form-builder.service';
-import { DSONameServiceMock } from '../../../../shared/mocks/dso-name.service.mock';
-import { getMockFormBuilderService } from '../../../../shared/mocks/form-builder-service.mock';
-import { RouterMock } from '../../../../shared/mocks/router.mock';
-import { getMockTranslateService } from '../../../../shared/mocks/translate.service.mock';
 import { NotificationsService } from '../../../../shared/notifications/notifications.service';
-import { PaginationComponent } from '../../../../shared/pagination/pagination.component';
-import { createSuccessfulRemoteDataObject$ } from '../../../../shared/remote-data.utils';
-import { ActivatedRouteStub } from '../../../../shared/testing/active-router.stub';
-import {
-  EPersonMock,
-  EPersonMock2,
-} from '../../../../shared/testing/eperson.mock';
-import { GroupMock } from '../../../../shared/testing/group-mock';
-import { NotificationsServiceStub } from '../../../../shared/testing/notifications-service.stub';
-import { PaginationServiceStub } from '../../../../shared/testing/pagination-service.stub';
-import { TranslateLoaderMock } from '../../../../shared/testing/translate-loader.mock';
+import { GroupMock, GroupMock2 } from '../../../../shared/testing/group-mock';
 import { MembersListComponent } from './members-list.component';
-
-// todo: optimize imports
+import { EPersonMock, EPersonMock2 } from '../../../../shared/testing/eperson.mock';
+import { createSuccessfulRemoteDataObject$ } from '../../../../shared/remote-data.utils';
+import { getMockTranslateService } from '../../../../shared/mocks/translate.service.mock';
+import { getMockFormBuilderService } from '../../../../shared/mocks/form-builder-service.mock';
+import { TranslateLoaderMock } from '../../../../shared/testing/translate-loader.mock';
+import { NotificationsServiceStub } from '../../../../shared/testing/notifications-service.stub';
+import { RouterMock } from '../../../../shared/mocks/router.mock';
+import { PaginationService } from '../../../../core/pagination/pagination.service';
+import { PaginationServiceStub } from '../../../../shared/testing/pagination-service.stub';
+import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
+import { DSONameServiceMock } from '../../../../shared/mocks/dso-name.service.mock';
 
 describe('MembersListComponent', () => {
   let component: MembersListComponent;
@@ -78,26 +39,28 @@ describe('MembersListComponent', () => {
   let ePersonDataServiceStub: any;
   let groupsDataServiceStub: any;
   let activeGroup;
+  let allEPersons: EPerson[];
+  let allGroups: Group[];
   let epersonMembers: EPerson[];
-  let epersonNonMembers: EPerson[];
+  let subgroupMembers: Group[];
   let paginationService;
 
   beforeEach(waitForAsync(() => {
     activeGroup = GroupMock;
     epersonMembers = [EPersonMock2];
-    epersonNonMembers = [EPersonMock];
+    subgroupMembers = [GroupMock2];
+    allEPersons = [EPersonMock, EPersonMock2];
+    allGroups = [GroupMock, GroupMock2];
     ePersonDataServiceStub = {
       activeGroup: activeGroup,
       epersonMembers: epersonMembers,
-      epersonNonMembers: epersonNonMembers,
-      // This method is used to get all the current members
+      subgroupMembers: subgroupMembers,
       findListByHref(_href: string): Observable<RemoteData<PaginatedList<EPerson>>> {
         return createSuccessfulRemoteDataObject$(buildPaginatedList<EPerson>(new PageInfo(), groupsDataServiceStub.getEPersonMembers()));
       },
-      // This method is used to search across *non-members*
-      searchNonMembers(query: string, group: string): Observable<RemoteData<PaginatedList<EPerson>>> {
+      searchByScope(scope: string, query: string): Observable<RemoteData<PaginatedList<EPerson>>> {
         if (query === '') {
-          return createSuccessfulRemoteDataObject$(buildPaginatedList(new PageInfo(), epersonNonMembers));
+          return createSuccessfulRemoteDataObject$(buildPaginatedList(new PageInfo(), allEPersons));
         }
         return createSuccessfulRemoteDataObject$(buildPaginatedList(new PageInfo(), []));
       },
@@ -107,26 +70,29 @@ describe('MembersListComponent', () => {
       clearLinkRequests() {
         // empty
       },
+      getEPeoplePageRouterLink(): string {
+        return '/access-control/epeople';
+      }
     };
     groupsDataServiceStub = {
       activeGroup: activeGroup,
       epersonMembers: epersonMembers,
-      epersonNonMembers: epersonNonMembers,
+      subgroupMembers: subgroupMembers,
+      allGroups: allGroups,
       getActiveGroup(): Observable<Group> {
         return observableOf(activeGroup);
       },
       getEPersonMembers() {
         return this.epersonMembers;
       },
-      addMemberToGroup(parentGroup, epersonToAdd: EPerson): Observable<RestResponse> {
-        // Add eperson to list of members
-        this.epersonMembers = [...this.epersonMembers, epersonToAdd];
-        // Remove eperson from list of non-members
-        this.epersonNonMembers.forEach( (eperson: EPerson, index: number) => {
-          if (eperson.id === epersonToAdd.id) {
-            this.epersonNonMembers.splice(index, 1);
-          }
-        });
+      searchGroups(query: string): Observable<RemoteData<PaginatedList<Group>>> {
+        if (query === '') {
+          return createSuccessfulRemoteDataObject$(buildPaginatedList(new PageInfo(), this.allGroups));
+        }
+        return createSuccessfulRemoteDataObject$(buildPaginatedList(new PageInfo(), []));
+      },
+      addMemberToGroup(parentGroup, eperson: EPerson): Observable<RestResponse> {
+        this.epersonMembers = [...this.epersonMembers, eperson];
         return observableOf(new RestResponse(true, 200, 'Success'));
       },
       clearGroupsRequests() {
@@ -139,16 +105,16 @@ describe('MembersListComponent', () => {
         return '/access-control/groups/' + group.id;
       },
       deleteMemberFromGroup(parentGroup, epersonToDelete: EPerson): Observable<RestResponse> {
-        // Remove eperson from list of members
-        this.epersonMembers.forEach( (eperson: EPerson, index: number) => {
-          if (eperson.id === epersonToDelete.id) {
-            this.epersonMembers.splice(index, 1);
+        this.epersonMembers = this.epersonMembers.find((eperson: EPerson) => {
+          if (eperson.id !== epersonToDelete.id) {
+            return eperson;
           }
         });
-        // Add eperson to list of non-members
-        this.epersonNonMembers = [...this.epersonNonMembers, epersonToDelete];
+        if (this.epersonMembers === undefined) {
+          this.epersonMembers = [];
+        }
         return observableOf(new RestResponse(true, 200, 'Success'));
-      },
+      }
     };
     builderService = getMockFormBuilderService();
     translateService = getMockTranslateService();
@@ -159,9 +125,11 @@ describe('MembersListComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: TranslateLoaderMock,
-          },
-        }), MembersListComponent],
+            useClass: TranslateLoaderMock
+          }
+        }),
+      ],
+      declarations: [MembersListComponent],
       providers: [MembersListComponent,
         { provide: EPersonDataService, useValue: ePersonDataServiceStub },
         { provide: GroupDataService, useValue: groupsDataServiceStub },
@@ -170,16 +138,9 @@ describe('MembersListComponent', () => {
         { provide: Router, useValue: new RouterMock() },
         { provide: PaginationService, useValue: paginationService },
         { provide: DSONameService, useValue: new DSONameServiceMock() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(MembersListComponent, {
-        remove: {
-          imports: [PaginationComponent, ContextHelpDirective],
-        },
-      })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -199,37 +160,13 @@ describe('MembersListComponent', () => {
     expect(comp).toBeDefined();
   }));
 
-  describe('current members list', () => {
-    it('should show list of eperson members of current active group', () => {
-      const epersonIdsFound = fixture.debugElement.queryAll(By.css('#ePeopleMembersOfGroup tr td:first-child'));
-      expect(epersonIdsFound.length).toEqual(1);
-      epersonMembers.map((eperson: EPerson) => {
-        expect(epersonIdsFound.find((foundEl) => {
-          return (foundEl.nativeElement.textContent.trim() === eperson.uuid);
-        })).toBeTruthy();
-      });
-    });
-
-    it('should show a delete button next to each member', () => {
-      const epersonsFound = fixture.debugElement.queryAll(By.css('#ePeopleMembersOfGroup tbody tr'));
-      epersonsFound.map((foundEPersonRowElement: DebugElement) => {
-        const addButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-plus'));
-        const deleteButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-trash-alt'));
-        expect(addButton).toBeNull();
-        expect(deleteButton).not.toBeNull();
-      });
-    });
-
-    describe('if first delete button is pressed', () => {
-      beforeEach(() => {
-        spyOn(component, 'search').and.callThrough();
-        const deleteButton: DebugElement = fixture.debugElement.query(By.css('#ePeopleMembersOfGroup tbody .fa-trash-alt'));
-        deleteButton.nativeElement.click();
-        fixture.detectChanges();
-      });
-      it('should trigger the search to add the user back to the search table', () => {
-        expect(component.search).toHaveBeenCalled();
-      });
+  it('should show list of eperson members of current active group', () => {
+    const epersonIdsFound = fixture.debugElement.queryAll(By.css('#ePeopleMembersOfGroup tr td:first-child'));
+    expect(epersonIdsFound.length).toEqual(1);
+    epersonMembers.map((eperson: EPerson) => {
+      expect(epersonIdsFound.find((foundEl) => {
+        return (foundEl.nativeElement.textContent.trim() === eperson.uuid);
+      })).toBeTruthy();
     });
   });
 
@@ -237,40 +174,76 @@ describe('MembersListComponent', () => {
     describe('when searching without query', () => {
       let epersonsFound: DebugElement[];
       beforeEach(fakeAsync(() => {
+        spyOn(component, 'isMemberOfGroup').and.callFake((ePerson: EPerson) => {
+          return observableOf(activeGroup.epersons.includes(ePerson));
+        });
         component.search({ scope: 'metadata', query: '' });
         tick();
         fixture.detectChanges();
         epersonsFound = fixture.debugElement.queryAll(By.css('#epersonsSearch tbody tr'));
+        // Stop using the fake spy function (because otherwise the clicking on the buttons will not change anything
+        // because they don't change the value of activeGroup.epersons)
+        jasmine.getEnv().allowRespy(true);
+        spyOn(component, 'isMemberOfGroup').and.callThrough();
       }));
 
-      it('should display only non-members of the group', () => {
-        const epersonIdsFound = fixture.debugElement.queryAll(By.css('#epersonsSearch tbody tr td:first-child'));
-        expect(epersonIdsFound.length).toEqual(1);
-        epersonNonMembers.map((eperson: EPerson) => {
-          expect(epersonIdsFound.find((foundEl) => {
-            return (foundEl.nativeElement.textContent.trim() === eperson.uuid);
-          })).toBeTruthy();
-        });
+      it('should display all epersons', () => {
+        expect(epersonsFound.length).toEqual(2);
       });
 
-      it('should display an add button next to non-members, not a delete button', () => {
-        epersonsFound.map((foundEPersonRowElement: DebugElement) => {
-          const addButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-plus'));
-          const deleteButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-trash-alt'));
-          expect(addButton).not.toBeNull();
-          expect(deleteButton).toBeNull();
+      describe('if eperson is already a eperson', () => {
+        it('should have delete button, else it should have add button', () => {
+          const memberIds: string[] = activeGroup.epersons.map((ePerson: EPerson) => ePerson.id);
+          epersonsFound.map((foundEPersonRowElement: DebugElement) => {
+            const epersonId: DebugElement = foundEPersonRowElement.query(By.css('td:first-child'));
+            const addButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-plus'));
+            const deleteButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-trash-alt'));
+            if (memberIds.includes(epersonId.nativeElement.textContent)) {
+              expect(addButton).toBeNull();
+              expect(deleteButton).not.toBeNull();
+            } else {
+              expect(deleteButton).toBeNull();
+              expect(addButton).not.toBeNull();
+            }
+          });
         });
       });
 
       describe('if first add button is pressed', () => {
-        beforeEach(() => {
-          spyOn(component, 'search').and.callThrough();
+        beforeEach(fakeAsync(() => {
           const addButton: DebugElement = fixture.debugElement.query(By.css('#epersonsSearch tbody .fa-plus'));
           addButton.nativeElement.click();
+          tick();
           fixture.detectChanges();
+        }));
+        it('then all the ePersons are member of the active group', () => {
+          epersonsFound = fixture.debugElement.queryAll(By.css('#epersonsSearch tbody tr'));
+          expect(epersonsFound.length).toEqual(2);
+          epersonsFound.map((foundEPersonRowElement: DebugElement) => {
+            const addButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-plus'));
+            const deleteButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-trash-alt'));
+            expect(addButton).toBeNull();
+            expect(deleteButton).not.toBeNull();
+          });
         });
-        it('should trigger the search to remove the user from the search table', () => {
-          expect(component.search).toHaveBeenCalled();
+      });
+
+      describe('if first delete button is pressed', () => {
+        beforeEach(fakeAsync(() => {
+          const deleteButton: DebugElement = fixture.debugElement.query(By.css('#epersonsSearch tbody .fa-trash-alt'));
+          deleteButton.nativeElement.click();
+          tick();
+          fixture.detectChanges();
+        }));
+        it('then no ePerson is member of the active group', () => {
+          epersonsFound = fixture.debugElement.queryAll(By.css('#epersonsSearch tbody tr'));
+          expect(epersonsFound.length).toEqual(2);
+          epersonsFound.map((foundEPersonRowElement: DebugElement) => {
+            const addButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-plus'));
+            const deleteButton: DebugElement = foundEPersonRowElement.query(By.css('td:last-child .fa-trash-alt'));
+            expect(deleteButton).toBeNull();
+            expect(addButton).not.toBeNull();
+          });
         });
       });
     });

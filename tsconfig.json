@@ -40,19 +40,12 @@
       "node",
       "jasmine"
     ],
-    "useDefineForClassFields": false,
-    "useUnknownInCatchVariables": true
+    "useDefineForClassFields": false
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,
     "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "extendedDiagnostics": {
-      // The categories to use for specific diagnostics.
-      "checks": {
-        "missingControlFlowDirective": "error"
-      },
-    }
+    "strictInputAccessModifiers": true
   },
   "exclude": [
     "cypress.config.ts"

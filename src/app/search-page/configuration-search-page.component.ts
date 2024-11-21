@@ -1,40 +1,19 @@
-import {
-  AsyncPipe,
-  NgIf,
-  NgTemplateOutlet,
-} from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Inject,
-} from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../config/app-config.interface';
+import { HostWindowService } from '../shared/host-window.service';
+import { SidebarService } from '../shared/sidebar/sidebar.service';
+import { SearchComponent } from '../shared/search/search.component';
+import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import { pushInOut } from '../shared/animations/push';
+import { SEARCH_CONFIG_SERVICE } from '../my-dspace-page/my-dspace-page.component';
+import { SearchConfigurationService } from '../core/shared/search/search-configuration.service';
 import { RouteService } from '../core/services/route.service';
 import { SearchService } from '../core/shared/search/search.service';
-import { SearchConfigurationService } from '../core/shared/search/search-configuration.service';
-import { SEARCH_CONFIG_SERVICE } from '../my-dspace-page/my-dspace-configuration.service';
-import { pushInOut } from '../shared/animations/push';
-import { HostWindowService } from '../shared/host-window.service';
-import { SearchComponent } from '../shared/search/search.component';
-import { SearchLabelsComponent } from '../shared/search/search-labels/search-labels.component';
-import { ThemedSearchResultsComponent } from '../shared/search/search-results/themed-search-results.component';
-import { ThemedSearchSidebarComponent } from '../shared/search/search-sidebar/themed-search-sidebar.component';
-import { ThemedSearchFormComponent } from '../shared/search-form/themed-search-form.component';
-import { PageWithSidebarComponent } from '../shared/sidebar/page-with-sidebar.component';
-import { SidebarService } from '../shared/sidebar/sidebar.service';
-import { ViewModeSwitchComponent } from '../shared/view-mode-switch/view-mode-switch.component';
+import { Router } from '@angular/router';
 
 /**
  * This component renders a search page using a configuration as input.
  */
 @Component({
-  selector: 'ds-base-configuration-search-page',
+  selector: 'ds-configuration-search-page',
   styleUrls: ['../shared/search/search.component.scss'],
   templateUrl: '../shared/search/search.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -42,11 +21,9 @@ import { ViewModeSwitchComponent } from '../shared/view-mode-switch/view-mode-sw
   providers: [
     {
       provide: SEARCH_CONFIG_SERVICE,
-      useClass: SearchConfigurationService,
-    },
-  ],
-  standalone: true,
-  imports: [NgIf, NgTemplateOutlet, PageWithSidebarComponent, ViewModeSwitchComponent, ThemedSearchResultsComponent, ThemedSearchSidebarComponent, ThemedSearchFormComponent, SearchLabelsComponent, AsyncPipe, TranslateModule],
+      useClass: SearchConfigurationService
+    }
+  ]
 })
 
 export class ConfigurationSearchPageComponent extends SearchComponent {
@@ -55,9 +32,7 @@ export class ConfigurationSearchPageComponent extends SearchComponent {
               protected windowService: HostWindowService,
               @Inject(SEARCH_CONFIG_SERVICE) public searchConfigService: SearchConfigurationService,
               protected routeService: RouteService,
-              protected router: Router,
-              @Inject(APP_CONFIG) protected appConfig: AppConfig,
-  ) {
-    super(service, sidebarService, windowService, searchConfigService, routeService, router, appConfig);
+              protected router: Router) {
+    super(service, sidebarService, windowService, searchConfigService, routeService, router);
   }
 }

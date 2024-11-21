@@ -6,12 +6,11 @@
  * http://www.dspace.org/license/
  */
 import { Observable } from 'rxjs';
-
 import { FollowLinkConfig } from '../../../shared/utils/follow-link-config.model';
-import { HALResource } from '../../shared/hal-resource.model';
+import { RemoteData } from '../remote-data';
 import { FindListOptions } from '../find-list-options.model';
 import { PaginatedList } from '../paginated-list.model';
-import { RemoteData } from '../remote-data';
+import { HALResource } from '../../shared/hal-resource.model';
 
 /**
  * An interface defining the minimum functionality needed for a data service to resolve HAL resources.

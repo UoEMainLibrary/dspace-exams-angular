@@ -1,24 +1,20 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-
+import { StatisticsPageComponent } from '../statistics-page/statistics-page.component';
+import { UsageReportDataService } from '../../core/statistics/usage-report-data.service';
+import { ActivatedRoute , Router} from '@angular/router';
 import { Collection } from '../../core/shared/collection.model';
-import { ThemedLoadingComponent } from '../../shared/loading/themed-loading.component';
-import { VarDirective } from '../../shared/utils/var.directive';
-import { StatisticsPageDirective } from '../statistics-page/statistics-page.directive';
-import { StatisticsTableComponent } from '../statistics-table/statistics-table.component';
+import { DSONameService } from '../../core/breadcrumbs/dso-name.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 /**
  * Component representing the statistics page for a collection.
  */
 @Component({
-  selector: 'ds-base-collection-statistics-page',
+  selector: 'ds-collection-statistics-page',
   templateUrl: '../statistics-page/statistics-page.component.html',
-  styleUrls: ['./collection-statistics-page.component.scss'],
-  standalone: true,
-  imports: [CommonModule, VarDirective, ThemedLoadingComponent, StatisticsTableComponent, TranslateModule],
+  styleUrls: ['./collection-statistics-page.component.scss']
 })
-export class CollectionStatisticsPageComponent extends StatisticsPageDirective<Collection> {
+export class CollectionStatisticsPageComponent extends StatisticsPageComponent<Collection> {
 
   /**
    * The report types to show on this statistics page.
@@ -29,4 +25,20 @@ export class CollectionStatisticsPageComponent extends StatisticsPageDirective<C
     'TopCountries',
     'TopCities',
   ];
+
+  constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected usageReportService: UsageReportDataService,
+    protected nameService: DSONameService,
+    protected authService: AuthService
+  ) {
+    super(
+      route,
+      router,
+      usageReportService,
+      nameService,
+      authService,
+    );
+  }
 }

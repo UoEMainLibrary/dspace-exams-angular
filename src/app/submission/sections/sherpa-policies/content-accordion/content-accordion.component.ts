@@ -1,14 +1,4 @@
-import {
-  NgForOf,
-  NgIf,
-  TitleCasePipe,
-} from '@angular/common';
-import {
-  Component,
-  Input,
-} from '@angular/core';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, Input } from '@angular/core';
 
 import { PermittedVersions } from '../../../../core/submission/models/sherpa-policies-details.model';
 
@@ -18,15 +8,7 @@ import { PermittedVersions } from '../../../../core/submission/models/sherpa-pol
 @Component({
   selector: 'ds-content-accordion',
   templateUrl: './content-accordion.component.html',
-  styleUrls: ['./content-accordion.component.scss'],
-  imports: [
-    NgForOf,
-    TranslateModule,
-    NgIf,
-    NgbCollapseModule,
-    TitleCasePipe,
-  ],
-  standalone: true,
+  styleUrls: ['./content-accordion.component.scss']
 })
 export class ContentAccordionComponent {
   /**

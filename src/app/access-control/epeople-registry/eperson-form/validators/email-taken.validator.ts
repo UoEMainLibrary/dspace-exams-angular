@@ -1,12 +1,9 @@
-import {
-  AbstractControl,
-  ValidationErrors,
-} from '@angular/forms';
+import { AbstractControl, ValidationErrors } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { EPersonDataService } from '../../../../core/eperson/eperson-data.service';
-import { getFirstSucceededRemoteData } from '../../../../core/shared/operators';
+import { getFirstSucceededRemoteData, } from '../../../../core/shared/operators';
 
 export class ValidateEmailNotTaken {
 
@@ -20,8 +17,8 @@ export class ValidateEmailNotTaken {
         .pipe(
           getFirstSucceededRemoteData(),
           map(res => {
-            return res.payload ? { emailTaken: true } : null;
-          }),
+            return !!res.payload ? { emailTaken: true } : null;
+          })
         );
     };
   }

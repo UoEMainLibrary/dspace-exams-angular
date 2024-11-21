@@ -1,49 +1,38 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { UntypedFormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import {
-  Store,
-  StoreModule,
-} from '@ngrx/store';
+
 import { provideMockStore } from '@ngrx/store/testing';
+import { Store, StoreModule } from '@ngrx/store';
 import { TranslateModule } from '@ngx-translate/core';
 
-import { storeModuleConfig } from '../../../../app.reducer';
+import { LogInPasswordComponent } from './log-in-password.component';
+import { EPerson } from '../../../../core/eperson/models/eperson.model';
+import { EPersonMock } from '../../../testing/eperson.mock';
 import { authReducer } from '../../../../core/auth/auth.reducer';
 import { AuthService } from '../../../../core/auth/auth.service';
+import { AuthServiceStub } from '../../../testing/auth-service.stub';
+import { storeModuleConfig } from '../../../../app.reducer';
 import { AuthMethod } from '../../../../core/auth/models/auth.method';
 import { AuthMethodType } from '../../../../core/auth/models/auth.method-type';
-import { AuthorizationDataService } from '../../../../core/data/feature-authorization/authorization-data.service';
 import { HardRedirectService } from '../../../../core/services/hard-redirect.service';
-import { getMockThemeService } from '../../../mocks/theme-service.mock';
-import { ActivatedRouteStub } from '../../../testing/active-router.stub';
-import { AuthServiceStub } from '../../../testing/auth-service.stub';
-import { AuthorizationDataServiceStub } from '../../../testing/authorization-service.stub';
-import { ThemeService } from '../../../theme-support/theme.service';
-import { LogInPasswordComponent } from './log-in-password.component';
+import { BrowserOnlyMockPipe } from '../../../testing/browser-only-mock.pipe';
 
 describe('LogInPasswordComponent', () => {
 
   let component: LogInPasswordComponent;
   let fixture: ComponentFixture<LogInPasswordComponent>;
   let page: Page;
+  let user: EPerson;
   let initialState: any;
   let hardRedirectService: HardRedirectService;
-  let themeService = getMockThemeService();
 
   beforeEach(() => {
+    user = EPersonMock;
+
     hardRedirectService = jasmine.createSpyObj('hardRedirectService', {
-      getCurrentRoute: {},
+      getCurrentRoute: {}
     });
 
     initialState = {
@@ -53,41 +42,41 @@ describe('LogInPasswordComponent', () => {
           loaded: false,
           blocking: false,
           loading: false,
-          authMethods: [],
-        },
-      },
+          authMethods: []
+        }
+      }
     };
   });
 
   beforeEach(waitForAsync(() => {
     // refine the test module by declaring the test component
-    void TestBed.configureTestingModule({
+    TestBed.configureTestingModule({
       imports: [
         FormsModule,
         ReactiveFormsModule,
         StoreModule.forRoot({ auth: authReducer }, storeModuleConfig),
-        TranslateModule.forRoot(),
+        TranslateModule.forRoot()
+      ],
+      declarations: [
         LogInPasswordComponent,
+        BrowserOnlyMockPipe,
       ],
       providers: [
         { provide: AuthService, useClass: AuthServiceStub },
-        { provide: AuthorizationDataService, useClass: AuthorizationDataServiceStub },
-        { provide: 'authMethodProvider', useValue: new AuthMethod(AuthMethodType.Password, 0) },
+        { provide: 'authMethodProvider', useValue: new AuthMethod(AuthMethodType.Password) },
         { provide: 'isStandalonePage', useValue: true },
         { provide: HardRedirectService, useValue: hardRedirectService },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        { provide: ThemeService, useValue: themeService },
         provideMockStore({ initialState }),
       ],
       schemas: [
-        CUSTOM_ELEMENTS_SCHEMA,
-      ],
+        CUSTOM_ELEMENTS_SCHEMA
+      ]
     })
       .compileComponents();
 
   }));
 
-  beforeEach(async () => {
+  beforeEach(() => {
     // create component and test fixture
     fixture = TestBed.createComponent(LogInPasswordComponent);
 
@@ -98,8 +87,10 @@ describe('LogInPasswordComponent', () => {
     page = new Page(component, fixture);
 
     // verify the fixture is stable (no pending tasks)
-    await fixture.whenStable();
-    page.addPageElements();
+    fixture.whenStable().then(() => {
+      page.addPageElements();
+    });
+
   });
 
   it('should create a FormGroup comprised of FormControls', () => {

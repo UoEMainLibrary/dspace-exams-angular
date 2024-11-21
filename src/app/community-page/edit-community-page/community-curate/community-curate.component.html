@@ -1,5 +1,5 @@
 <div class="container">
-    <h2>{{'community.curate.header' |translate:{community: (communityName$ |async)} }}</h2>
+    <h3>{{'community.curate.header' |translate:{community: (communityName$ |async)} }}</h3>
     <ds-curation-form
            [dsoHandle]="(dsoRD$|async)?.payload.handle"
     ></ds-curation-form>

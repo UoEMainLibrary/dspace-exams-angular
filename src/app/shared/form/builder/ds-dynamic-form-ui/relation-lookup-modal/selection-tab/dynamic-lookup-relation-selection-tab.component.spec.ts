@@ -1,35 +1,22 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-
-import {
-  buildPaginatedList,
-  PaginatedList,
-} from '../../../../../../core/data/paginated-list.model';
-import { RemoteData } from '../../../../../../core/data/remote-data';
-import { PaginationService } from '../../../../../../core/pagination/pagination.service';
-import { Item } from '../../../../../../core/shared/item.model';
 import { SearchConfigurationService } from '../../../../../../core/shared/search/search-configuration.service';
-import { ObjectCollectionComponent } from '../../../../../../shared/object-collection/object-collection.component';
-import { PageSizeSelectorComponent } from '../../../../../../shared/page-size-selector/page-size-selector.component';
-import { ItemSearchResult } from '../../../../../object-collection/shared/item-search-result.model';
-import { ListableObject } from '../../../../../object-collection/shared/listable-object.model';
-import { PaginationComponentOptions } from '../../../../../pagination/pagination-component-options.model';
-import { createSuccessfulRemoteDataObject$ } from '../../../../../remote-data.utils';
-import { PaginatedSearchOptions } from '../../../../../search/models/paginated-search-options.model';
-import { PaginationServiceStub } from '../../../../../testing/pagination-service.stub';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { VarDirective } from '../../../../../utils/var.directive';
+import { Observable, of as observableOf } from 'rxjs';
+import { PaginatedSearchOptions } from '../../../../../search/models/paginated-search-options.model';
+import { ItemSearchResult } from '../../../../../object-collection/shared/item-search-result.model';
+import { Item } from '../../../../../../core/shared/item.model';
 import { DsDynamicLookupRelationSelectionTabComponent } from './dynamic-lookup-relation-selection-tab.component';
+import { PaginationComponentOptions } from '../../../../../pagination/pagination-component-options.model';
+import { Router } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { RemoteData } from '../../../../../../core/data/remote-data';
+import { buildPaginatedList, PaginatedList } from '../../../../../../core/data/paginated-list.model';
+import { ListableObject } from '../../../../../object-collection/shared/listable-object.model';
+import { createSuccessfulRemoteDataObject$ } from '../../../../../remote-data.utils';
+import { PaginationService } from '../../../../../../core/pagination/pagination.service';
+import { PaginationServiceStub } from '../../../../../testing/pagination-service.stub';
 
 describe('DsDynamicLookupRelationSelectionTabComponent', () => {
   let component: DsDynamicLookupRelationSelectionTabComponent;
@@ -59,28 +46,23 @@ describe('DsDynamicLookupRelationSelectionTabComponent', () => {
   beforeEach(waitForAsync(() => {
     init();
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), DsDynamicLookupRelationSelectionTabComponent, VarDirective],
+      declarations: [DsDynamicLookupRelationSelectionTabComponent, VarDirective],
+      imports: [TranslateModule.forRoot()],
       providers: [
         {
           provide: SearchConfigurationService, useValue: {
-            paginatedSearchOptions: observableOf(pSearchOptions),
+            paginatedSearchOptions: observableOf(pSearchOptions)
           },
         },
         {
-          provide: Router, useValue: router,
+          provide: Router, useValue: router
         },
         {
-          provide: PaginationService, useValue: new PaginationServiceStub(),
-        },
+          provide: PaginationService, useValue: new PaginationServiceStub()
+        }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-      .overrideComponent(DsDynamicLookupRelationSelectionTabComponent, {
-        remove: {
-          imports: [ObjectCollectionComponent,
-            PageSizeSelectorComponent],
-        },
-      })
       .compileComponents();
   }));
 

@@ -1,12 +1,4 @@
-import {
-  NgForOf,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  Input,
-} from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, Input } from '@angular/core';
 
 import { Journal } from '../../../../core/submission/models/sherpa-policies-details.model';
 
@@ -16,13 +8,7 @@ import { Journal } from '../../../../core/submission/models/sherpa-policies-deta
 @Component({
   selector: 'ds-publication-information',
   templateUrl: './publication-information.component.html',
-  styleUrls: ['./publication-information.component.scss'],
-  imports: [
-    NgIf,
-    TranslateModule,
-    NgForOf,
-  ],
-  standalone: true,
+  styleUrls: ['./publication-information.component.scss']
 })
 export class PublicationInformationComponent {
   /**

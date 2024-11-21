@@ -1,16 +1,10 @@
 import { Injectable } from '@angular/core';
-import {
-  Actions,
-  createEffect,
-  ofType,
-  ROOT_EFFECTS_INIT,
-} from '@ngrx/effects';
+import { createEffect, Actions, ofType, ROOT_EFFECTS_INIT } from '@ngrx/effects';
 import { map } from 'rxjs/operators';
-
-import { getDefaultThemeConfig } from '../../../config/config.util';
-import { hasValue } from '../empty.util';
 import { SetThemeAction } from './theme.actions';
+import { hasValue } from '../empty.util';
 import { BASE_THEME_NAME } from './theme.constants';
+import { getDefaultThemeConfig } from '../../../config/config.util';
 
 @Injectable()
 export class ThemeEffects {
@@ -27,8 +21,8 @@ export class ThemeEffects {
         } else {
           return new SetThemeAction(BASE_THEME_NAME);
         }
-      }),
-    ),
+      })
+    )
   );
 
   constructor(

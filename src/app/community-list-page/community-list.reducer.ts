@@ -1,8 +1,4 @@
-import {
-  CommunityListActions,
-  CommunityListActionTypes,
-  CommunityListSaveAction,
-} from './community-list.actions';
+import { CommunityListActions, CommunityListActionTypes, CommunityListSaveAction } from './community-list.actions';
 import { FlatNode } from './flat-node.model';
 
 /**

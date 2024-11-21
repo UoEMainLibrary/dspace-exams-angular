@@ -1,7 +1,4 @@
-import {
-  HostWindowAction,
-  HostWindowActionTypes,
-} from '../host-window.actions';
+import { HostWindowAction, HostWindowActionTypes } from '../host-window.actions';
 
 export interface HostWindowState {
   width: number;
@@ -10,7 +7,7 @@ export interface HostWindowState {
 
 const initialState: HostWindowState = {
   width: null,
-  height: null,
+  height: null
 };
 
 export function hostWindowReducer(state = initialState, action: HostWindowAction): HostWindowState {

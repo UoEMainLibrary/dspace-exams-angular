@@ -1,45 +1,25 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import {
-  ActivatedRoute,
-  Data,
-  Router,
-} from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import {
-  combineLatest as observableCombineLatest,
-  Observable,
-  Subscription,
-} from 'rxjs';
-import {
-  first,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
-
-import { environment } from '../../../../environments/environment';
-import { ItemDataService } from '../../../core/data/item-data.service';
-import { FieldUpdate } from '../../../core/data/object-updates/field-update.model';
-import { FieldUpdates } from '../../../core/data/object-updates/field-updates.model';
-import { ObjectUpdatesService } from '../../../core/data/object-updates/object-updates.service';
-import { RemoteData } from '../../../core/data/remote-data';
+import { Component, OnInit, OnDestroy, Input } from '@angular/core';
+import { combineLatest as observableCombineLatest, Observable, Subscription } from 'rxjs';
 import { Item } from '../../../core/shared/item.model';
+import { ItemDataService } from '../../../core/data/item-data.service';
+import { ObjectUpdatesService } from '../../../core/data/object-updates/object-updates.service';
+import { ActivatedRoute, Router, Data } from '@angular/router';
+import { NotificationsService } from '../../../shared/notifications/notifications.service';
+import { TranslateService } from '@ngx-translate/core';
+import { first, map, switchMap, tap } from 'rxjs/operators';
+import { RemoteData } from '../../../core/data/remote-data';
+import { AbstractTrackableComponent } from '../../../shared/trackable/abstract-trackable.component';
+import { environment } from '../../../../environments/environment';
+import { getItemPageRoute } from '../../item-page-routing-paths';
 import { getAllSucceededRemoteData } from '../../../core/shared/operators';
 import { hasValue } from '../../../shared/empty.util';
-import { NotificationsService } from '../../../shared/notifications/notifications.service';
-import { AbstractTrackableComponent } from '../../../shared/trackable/abstract-trackable.component';
 import { ITEM_PAGE_LINKS_TO_FOLLOW } from '../../item.resolver';
-import { getItemPageRoute } from '../../item-page-routing-paths';
+import { FieldUpdate } from '../../../core/data/object-updates/field-update.model';
+import { FieldUpdates } from '../../../core/data/object-updates/field-updates.model';
 
 @Component({
   selector: 'ds-abstract-item-update',
-  template: '',
-  standalone: true,
+  template: ''
 })
 /**
  * Abstract component for managing object updates of an item
@@ -72,9 +52,9 @@ export class AbstractItemUpdateComponent extends AbstractTrackableComponent impl
     public router: Router,
     public notificationsService: NotificationsService,
     public translateService: TranslateService,
-    public route: ActivatedRoute,
+    public route: ActivatedRoute
   ) {
-    super(objectUpdatesService, notificationsService, translateService, router);
+    super(objectUpdatesService, notificationsService, translateService);
   }
 
   /**
@@ -94,14 +74,17 @@ export class AbstractItemUpdateComponent extends AbstractTrackableComponent impl
         switchMap((rd: RemoteData<Item>) => {
           return this.itemService.findByHref(rd.payload._links.self.href, true, true, ...ITEM_PAGE_LINKS_TO_FOLLOW);
         }),
-        getAllSucceededRemoteData(),
+        getAllSucceededRemoteData()
       ).subscribe((rd: RemoteData<Item>) => {
         this.setItem(rd.payload);
       });
     }
-    super.ngOnInit();
 
     this.discardTimeOut = environment.item.edit.undoTimeout;
+    this.url = this.router.url;
+    if (this.url.indexOf('?') > 0) {
+      this.url = this.url.substr(0, this.url.indexOf('?'));
+    }
     this.hasChanges().pipe(first()).subscribe((hasChanges) => {
       if (!hasChanges) {
         this.initializeOriginalFields();
@@ -193,7 +176,7 @@ export class AbstractItemUpdateComponent extends AbstractTrackableComponent impl
           this.notificationsService.warning(this.getNotificationTitle('outdated'), this.getNotificationContent('outdated'));
           this.initializeOriginalFields();
         }
-      },
+      }
     );
   }
 }

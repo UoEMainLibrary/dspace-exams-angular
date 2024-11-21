@@ -2,9 +2,8 @@
 /**
  * The list of NameVariantAction type definitions
  */
-import { Action } from '@ngrx/store';
-
 import { type } from '../../../../ngrx/type';
+import { Action } from '@ngrx/store';
 
 export const NameVariantActionTypes = {
   SET_NAME_VARIANT: type('dspace/name-variant/SET_NAME_VARIANT'),

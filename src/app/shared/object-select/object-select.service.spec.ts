@@ -1,6 +1,6 @@
+import { ObjectSelectService } from './object-select.service';
 import { Store } from '@ngrx/store';
-import { of } from 'rxjs';
-
+import { ObjectSelectionListState, ObjectSelectionsState } from './object-select.reducer';
 import { AppState } from '../../app.reducer';
 import {
   ObjectSelectionDeselectAction,
@@ -8,13 +8,9 @@ import {
   ObjectSelectionInitialSelectAction,
   ObjectSelectionResetAction,
   ObjectSelectionSelectAction,
-  ObjectSelectionSwitchAction,
+  ObjectSelectionSwitchAction
 } from './object-select.actions';
-import {
-  ObjectSelectionListState,
-  ObjectSelectionsState,
-} from './object-select.reducer';
-import { ObjectSelectService } from './object-select.service';
+import { of } from 'rxjs';
 
 describe('ObjectSelectService', () => {
   let service: ObjectSelectService;
@@ -26,21 +22,21 @@ describe('ObjectSelectService', () => {
     /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
     dispatch: {},
     /* eslint-enable no-empty,@typescript-eslint/no-empty-function */
-    select: of(true),
+    select: of(true)
   });
 
   const store: Store<ObjectSelectionsState> = jasmine.createSpyObj('store', {
     /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
     dispatch: {},
     /* eslint-enable no-empty,@typescript-eslint/no-empty-function */
-    select: of(true),
+    select: of(true)
   });
 
   const appStore: Store<AppState> = jasmine.createSpyObj('appStore', {
     /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
     dispatch: {},
     /* eslint-enable no-empty, @typescript-eslint/no-empty-function */
-    select: of(true),
+    select: of(true)
   });
 
   beforeEach(() => {

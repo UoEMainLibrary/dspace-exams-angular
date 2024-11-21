@@ -1,16 +1,10 @@
-import { NgFor } from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, Inject } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 
-import { hasValue } from '../../empty.util';
+import { renderStartsWithFor, StartsWithType } from '../starts-with-decorator';
 import { StartsWithAbstractComponent } from '../starts-with-abstract.component';
+import { hasValue } from '../../empty.util';
+import { PaginationService } from '../../../core/pagination/pagination.service';
 
 /**
  * A switchable component rendering StartsWith options for the type "Date".
@@ -19,11 +13,10 @@ import { StartsWithAbstractComponent } from '../starts-with-abstract.component';
 @Component({
   selector: 'ds-starts-with-date',
   styleUrls: ['./starts-with-date.component.scss'],
-  templateUrl: './starts-with-date.component.html',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgFor, TranslateModule],
+  templateUrl: './starts-with-date.component.html'
 })
-export class StartsWithDateComponent extends StartsWithAbstractComponent implements OnInit {
+@renderStartsWithFor(StartsWithType.date)
+export class StartsWithDateComponent extends StartsWithAbstractComponent {
 
   /**
    * A list of options for months to select from
@@ -40,6 +33,14 @@ export class StartsWithDateComponent extends StartsWithAbstractComponent impleme
    */
   startsWithYear: number;
 
+  public constructor(@Inject('startsWithOptions') public startsWithOptions: any[],
+                     @Inject('paginationId') public paginationId: string,
+                     protected paginationService: PaginationService,
+                     protected route: ActivatedRoute,
+                     protected router: Router) {
+    super(startsWithOptions, paginationId, paginationService, route, router);
+  }
+
   ngOnInit() {
     this.monthOptions = [
       'none',
@@ -54,7 +55,7 @@ export class StartsWithDateComponent extends StartsWithAbstractComponent impleme
       'september',
       'october',
       'november',
-      'december',
+      'december'
     ];
 
     super.ngOnInit();
@@ -130,6 +131,13 @@ export class StartsWithDateComponent extends StartsWithAbstractComponent impleme
     } else {
       this.startsWithYear = +startsWith;
     }
+  }
+
+  /**
+   * Get startsWithYear as a number;
+   */
+  getStartsWithYear() {
+    return this.startsWithYear;
   }
 
   /**

@@ -1,10 +1,4 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
-
+import { Component, Input, Output, EventEmitter } from '@angular/core';
 import { ThemedComponent } from '../theme-support/themed.component';
 import { SearchFormComponent } from './search-form.component';
 
@@ -12,11 +6,9 @@ import { SearchFormComponent } from './search-form.component';
  * Themed wrapper for {@link SearchFormComponent}
  */
 @Component({
-  selector: 'ds-search-form',
+  selector: 'ds-themed-search-form',
   styleUrls: [],
   templateUrl: '../../shared/theme-support/themed.component.html',
-  standalone: true,
-  imports: [SearchFormComponent],
 })
 export class ThemedSearchFormComponent extends ThemedComponent<SearchFormComponent> {
 
@@ -25,8 +17,6 @@ export class ThemedSearchFormComponent extends ThemedComponent<SearchFormCompone
   @Input() inPlaceSearch: boolean;
 
   @Input() scope: string;
-
-  @Input() hideScopeInUrl: boolean;
 
   @Input() currentUrl: string;
 
@@ -41,15 +31,7 @@ export class ThemedSearchFormComponent extends ThemedComponent<SearchFormCompone
   @Output() submitSearch: EventEmitter<any> = new EventEmitter();
 
   protected inAndOutputNames: (keyof SearchFormComponent & keyof this)[] = [
-    'query',
-    'inPlaceSearch',
-    'scope',
-    'hideScopeInUrl',
-    'currentUrl',
-    'large',
-    'brandColor',
-    'searchPlaceholder',
-    'showScopeSelector',
+    'query', 'inPlaceSearch', 'scope', 'currentUrl', 'large', 'brandColor', 'searchPlaceholder', 'showScopeSelector',
     'submitSearch',
   ];
 

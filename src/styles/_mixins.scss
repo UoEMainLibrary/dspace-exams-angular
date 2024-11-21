@@ -14,7 +14,7 @@
 
 @mixin dark-scrollbar() {
     &::-webkit-scrollbar {
-        width: var(--ds-dark-scrollbar-width);
+        width: 8px;
         height: 3px;
     }
     &::-webkit-scrollbar-button {

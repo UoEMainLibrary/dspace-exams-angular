@@ -3,9 +3,8 @@ export enum RequestEntryState {
   ResponsePending = 'ResponsePending',
   Error = 'Error',
   Success = 'Success',
-  ResponsePendingStale = 'ResponsePendingStale',
   ErrorStale = 'ErrorStale',
-  SuccessStale = 'SuccessStale',
+  SuccessStale = 'SuccessStale'
 }
 
 /**
@@ -43,21 +42,12 @@ export const isSuccessStale = (state: RequestEntryState) =>
  */
 export const isResponsePending = (state: RequestEntryState) =>
   state === RequestEntryState.ResponsePending;
-
 /**
- * Returns true if the given state is ResponsePendingStale, false otherwise
- */
-export const isResponsePendingStale = (state: RequestEntryState) =>
-  state === RequestEntryState.ResponsePendingStale;
-
-/**
- * Returns true if the given state is RequestPending, RequestPendingStale, ResponsePending, or
- * ResponsePendingStale, false otherwise
+ * Returns true if the given state is RequestPending or ResponsePending,
+ * false otherwise
  */
 export const isLoading = (state: RequestEntryState) =>
-  isRequestPending(state) ||
-  isResponsePending(state) ||
-  isResponsePendingStale(state);
+  isRequestPending(state) || isResponsePending(state);
 
 /**
  * If isLoading is true for the given state, this method returns undefined, we can't know yet.
@@ -92,10 +82,7 @@ export const hasCompleted = (state: RequestEntryState) =>
   !isLoading(state);
 
 /**
- * Returns true if the given state is isRequestPendingStale, isResponsePendingStale, SuccessStale or
- * ErrorStale, false otherwise
+ * Returns true if the given state is SuccessStale or ErrorStale, false otherwise
  */
 export const isStale = (state: RequestEntryState) =>
-  isResponsePendingStale(state) ||
-  isSuccessStale(state) ||
-  isErrorStale(state);
+  isSuccessStale(state) || isErrorStale(state);

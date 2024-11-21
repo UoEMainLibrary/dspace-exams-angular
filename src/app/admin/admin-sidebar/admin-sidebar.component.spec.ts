@@ -1,39 +1,26 @@
-import {
-  ChangeDetectionStrategy,
-  Injector,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
+import { ComponentFixture, fakeAsync, TestBed, tick, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { ActivatedRoute } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import {
-  NgbModal,
-  NgbModalRef,
-} from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { AuthService } from '../../core/auth/auth.service';
-import { AuthorizationDataService } from '../../core/data/feature-authorization/authorization-data.service';
+import { ChangeDetectionStrategy, Injector, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ScriptDataService } from '../../core/data/processes/script-data.service';
-import { Item } from '../../core/shared/item.model';
-import { MenuService } from '../../shared/menu/menu.service';
-import { getMockThemeService } from '../../shared/mocks/theme-service.mock';
-import { createSuccessfulRemoteDataObject } from '../../shared/remote-data.utils';
-import { CSSVariableService } from '../../shared/sass-helper/css-variable.service';
-import { AuthServiceStub } from '../../shared/testing/auth-service.stub';
-import { CSSVariableServiceStub } from '../../shared/testing/css-variable-service.stub';
-import { MenuServiceStub } from '../../shared/testing/menu-service.stub';
-import { ThemeService } from '../../shared/theme-support/theme.service';
 import { AdminSidebarComponent } from './admin-sidebar.component';
+import { MenuService } from '../../shared/menu/menu.service';
+import { MenuServiceStub } from '../../shared/testing/menu-service.stub';
+import { CSSVariableService } from '../../shared/sass-helper/css-variable.service';
+import { CSSVariableServiceStub } from '../../shared/testing/css-variable-service.stub';
+import { AuthServiceStub } from '../../shared/testing/auth-service.stub';
+import { AuthService } from '../../core/auth/auth.service';
+import { of as observableOf } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
+import { RouterTestingModule } from '@angular/router/testing';
+import { ActivatedRoute } from '@angular/router';
+import { AuthorizationDataService } from '../../core/data/feature-authorization/authorization-data.service';
+import createSpy = jasmine.createSpy;
+import { createSuccessfulRemoteDataObject } from '../../shared/remote-data.utils';
+import { Item } from '../../core/shared/item.model';
+import { ThemeService } from '../../shared/theme-support/theme.service';
+import { getMockThemeService } from '../../shared/mocks/theme-service.mock';
 
 describe('AdminSidebarComponent', () => {
   let comp: AdminSidebarComponent;
@@ -50,33 +37,28 @@ describe('AdminSidebarComponent', () => {
     lastModified: '2018',
     _links: {
       self: {
-        href: 'https://localhost:8000/items/fake-id',
-      },
-    },
+        href: 'https://localhost:8000/items/fake-id'
+      }
+    }
   });
 
 
   const routeStub = {
     data: observableOf({
-      dso: createSuccessfulRemoteDataObject(mockItem),
+      dso: createSuccessfulRemoteDataObject(mockItem)
     }),
-    children: [],
-  };
-
-  const mockNgbModal = {
-    open: jasmine.createSpy('open').and.returnValue(
-      { componentInstance: {}, closed: observableOf({}) } as NgbModalRef,
-    ),
+    children: []
   };
 
 
   beforeEach(waitForAsync(() => {
     authorizationService = jasmine.createSpyObj('authorizationService', {
-      isAuthorized: observableOf(true),
+      isAuthorized: observableOf(true)
     });
     scriptService = jasmine.createSpyObj('scriptService', { scriptWithNameExistsAndCanExecute: observableOf(true) });
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), NoopAnimationsModule, RouterTestingModule, AdminSidebarComponent],
+      imports: [TranslateModule.forRoot(), NoopAnimationsModule, RouterTestingModule],
+      declarations: [AdminSidebarComponent],
       providers: [
         Injector,
         { provide: ThemeService, useValue: getMockThemeService() },
@@ -87,13 +69,18 @@ describe('AdminSidebarComponent', () => {
         { provide: AuthorizationDataService, useValue: authorizationService },
         { provide: ScriptDataService, useValue: scriptService },
         { provide: ActivatedRoute, useValue: routeStub },
-        { provide: NgbModal, useValue: mockNgbModal },
+        {
+          provide: NgbModal, useValue: {
+            open: () => {/*comment*/
+            }
+          }
+        }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(AdminSidebarComponent, {
       set: {
         changeDetection: ChangeDetectionStrategy.Default,
-      },
+      }
     }).compileComponents();
   }));
 
@@ -156,10 +143,10 @@ describe('AdminSidebarComponent', () => {
   describe('when the collapse link is clicked', () => {
     beforeEach(() => {
       spyOn(menuService, 'toggleMenu');
-      const sidebarToggler = fixture.debugElement.query(By.css('#sidebar-collapse-toggle-container > a'));
+      const sidebarToggler = fixture.debugElement.query(By.css('#sidebar-collapse-toggle > a'));
       sidebarToggler.triggerEventHandler('click', {
         preventDefault: () => {/**/
-        },
+        }
       });
     });
 
@@ -174,7 +161,7 @@ describe('AdminSidebarComponent', () => {
       const sidebarToggler = fixture.debugElement.query(By.css('nav.navbar'));
       sidebarToggler.triggerEventHandler('mouseenter', {
         preventDefault: () => {/**/
-        },
+        }
       });
       tick(99);
       expect(menuService.expandMenuPreview).not.toHaveBeenCalled();
@@ -189,7 +176,7 @@ describe('AdminSidebarComponent', () => {
       const sidebarToggler = fixture.debugElement.query(By.css('nav.navbar'));
       sidebarToggler.triggerEventHandler('mouseleave', {
         preventDefault: () => {/**/
-        },
+        }
       });
       tick(399);
       expect(menuService.collapseMenuPreview).not.toHaveBeenCalled();

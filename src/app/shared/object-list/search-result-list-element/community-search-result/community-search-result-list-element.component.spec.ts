@@ -1,28 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import { of as observableOf } from 'rxjs';
-
-import { APP_CONFIG } from '../../../../../config/app-config.interface';
-import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
-import { Community } from '../../../../core/shared/community.model';
-import { DSONameServiceMock } from '../../../mocks/dso-name.service.mock';
-import { CommunitySearchResult } from '../../../object-collection/shared/community-search-result.model';
-import { ActivatedRouteStub } from '../../../testing/active-router.stub';
-import { TruncatableService } from '../../../truncatable/truncatable.service';
-import { TruncatePipe } from '../../../utils/truncate.pipe';
-import { getMockThemeService } from './../../../../shared/mocks/theme-service.mock';
-import { ThemeService } from './../../../../shared/theme-support/theme.service';
 import { CommunitySearchResultListElementComponent } from './community-search-result-list-element.component';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { of as observableOf } from 'rxjs';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { TruncatePipe } from '../../../utils/truncate.pipe';
+import { Community } from '../../../../core/shared/community.model';
+import { TruncatableService } from '../../../truncatable/truncatable.service';
+import { CommunitySearchResult } from '../../../object-collection/shared/community-search-result.model';
+import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
+import { DSONameServiceMock } from '../../../mocks/dso-name.service.mock';
+import { APP_CONFIG } from '../../../../../config/app-config.interface';
 
 let communitySearchResultListElementComponent: CommunitySearchResultListElementComponent;
 let fixture: ComponentFixture<CommunitySearchResultListElementComponent>;
@@ -38,10 +25,10 @@ mockCommunityWithAbstract.indexableObject = Object.assign(new Community(), {
     'dc.description.abstract': [
       {
         language: 'en_US',
-        value: 'Short description',
-      },
-    ],
-  },
+        value: 'Short description'
+      }
+    ]
+  }
 });
 
 const mockCommunityWithoutAbstract: CommunitySearchResult = new CommunitySearchResult();
@@ -51,32 +38,31 @@ mockCommunityWithoutAbstract.indexableObject = Object.assign(new Community(), {
     'dc.title': [
       {
         language: 'en_US',
-        value: 'Test title',
-      },
-    ],
-  },
+        value: 'Test title'
+      }
+    ]
+  }
 });
 
 const environmentUseThumbs = {
   browseBy: {
-    showThumbnails: true,
-  },
+    showThumbnails: true
+  }
 };
 
 describe('CommunitySearchResultListElementComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TruncatePipe, CommunitySearchResultListElementComponent],
+      declarations: [CommunitySearchResultListElementComponent, TruncatePipe],
       providers: [
         { provide: TruncatableService, useValue: truncatableServiceStub },
         { provide: DSONameService, useClass: DSONameServiceMock },
-        { provide: APP_CONFIG, useValue: environmentUseThumbs },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        { provide: ThemeService, useValue: getMockThemeService() },
+        { provide: APP_CONFIG, useValue: environmentUseThumbs }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(CommunitySearchResultListElementComponent, {
-      set: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 
@@ -113,8 +99,7 @@ describe('CommunitySearchResultListElementComponent', () => {
 
   describe('when environment is set to show thumbnail images', () => {
     it('should offset content', () => {
-      const offset: DebugElement = fixture.debugElement.query(By.css('.offset-md-2'));
-      expect(offset).not.toBeNull();
+      const offset = fixture.debugElement.query(By.css('offset-md-2'));
     });
   });
 });

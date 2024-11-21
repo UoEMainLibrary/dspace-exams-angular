@@ -1,28 +1,20 @@
+import { hasValue, isNotEmpty, isNotUndefined, isNull } from '../../shared/empty.util';
+
 import {
-  hasValue,
-  isNotEmpty,
-  isNotUndefined,
-  isNull,
-} from '../../shared/empty.util';
-import {
-  JsonPatchOperationModel,
-  JsonPatchOperationType,
-} from './json-patch.model';
-import {
-  CommitPatchOperationsAction,
-  DeletePendingJsonPatchOperationsAction,
-  FlushPatchOperationAction,
   FlushPatchOperationsAction,
+  PatchOperationsActions,
   JsonPatchOperationsActionTypes,
   NewPatchAddOperationAction,
   NewPatchCopyOperationAction,
   NewPatchMoveOperationAction,
   NewPatchRemoveOperationAction,
   NewPatchReplaceOperationAction,
-  PatchOperationsActions,
-  RollbacktPatchOperationsAction,
+  CommitPatchOperationsAction,
   StartTransactionPatchOperationsAction,
+  RollbacktPatchOperationsAction,
+  DeletePendingJsonPatchOperationsAction
 } from './json-patch-operations.actions';
+import { JsonPatchOperationModel, JsonPatchOperationType } from './json-patch.model';
 
 /**
  * An interface to represent JSON-PATCH Operation objects to execute
@@ -79,7 +71,7 @@ export function jsonPatchOperationsReducer(state = initialState, action: PatchOp
     }
 
     case JsonPatchOperationsActionTypes.FLUSH_JSON_PATCH_OPERATIONS: {
-      return flushOperations(state, action as FlushPatchOperationsAction);
+      return flushOperation(state, action as FlushPatchOperationsAction);
     }
 
     case JsonPatchOperationsActionTypes.NEW_JSON_PATCH_ADD_OPERATION: {
@@ -114,10 +106,6 @@ export function jsonPatchOperationsReducer(state = initialState, action: PatchOp
       return deletePendingOperations(state, action as DeletePendingJsonPatchOperationsAction);
     }
 
-    case JsonPatchOperationsActionTypes.FLUSH_JSON_PATCH_OPERATION: {
-      return flushOperation(state, action as FlushPatchOperationAction);
-    }
-
     default: {
       return state;
     }
@@ -140,8 +128,8 @@ function startTransactionPatchOperations(state: JsonPatchOperationsState, action
     return Object.assign({}, state, {
       [action.payload.resourceType]: Object.assign({}, state[ action.payload.resourceType ], {
         transactionStartTime: action.payload.startTime,
-        commitPending: true,
-      }),
+        commitPending: true
+      })
     });
   } else {
     return state;
@@ -163,8 +151,8 @@ function commitOperations(state: JsonPatchOperationsState, action: CommitPatchOp
     && state[ action.payload.resourceType ].commitPending) {
     return Object.assign({}, state, {
       [action.payload.resourceType]: Object.assign({}, state[ action.payload.resourceType ], {
-        commitPending: false,
-      }),
+        commitPending: false
+      })
     });
   } else {
     return state;
@@ -187,8 +175,8 @@ function rollbackOperations(state: JsonPatchOperationsState, action: RollbacktPa
     return Object.assign({}, state, {
       [action.payload.resourceType]: Object.assign({}, state[ action.payload.resourceType ], {
         transactionStartTime: null,
-        commitPending: false,
-      }),
+        commitPending: false
+      })
     });
   } else {
     return state;
@@ -207,39 +195,6 @@ function rollbackOperations(state: JsonPatchOperationsState, action: RollbacktPa
  */
 function deletePendingOperations(state: JsonPatchOperationsState, action: DeletePendingJsonPatchOperationsAction): JsonPatchOperationsState {
   return null;
-}
-
-/**
- * Flush one operation from JsonPatchOperationsState.
- *
- * @param state
- *    the current state
- * @param action
- *    an FlushPatchOperationsAction
- * @return JsonPatchOperationsState
- *    the new state.
- */
-function flushOperation(state: JsonPatchOperationsState, action: FlushPatchOperationAction): JsonPatchOperationsState {
-  const payload = action.payload;
-  if (state[payload.resourceType] && state[payload.resourceType].children) {
-    const body = state[payload.resourceType].children[payload.resourceId].body;
-    const operation = body.filter(operations => operations.operation.path === payload.path)[0];
-    const operationIndex = body.indexOf(operation);
-    const newBody = [...body];
-    newBody.splice(operationIndex, 1);
-
-    return Object.assign({}, state, {
-      [action.payload.resourceType]: Object.assign({}, {
-        children: {
-          [action.payload.resourceId]: {
-            body: newBody,
-          },
-        },
-      }),
-    });
-  } else {
-    return state;
-  }
 }
 
 /**
@@ -270,10 +225,10 @@ function newOperation(state: JsonPatchOperationsState, action): JsonPatchOperati
         children: Object.assign({}, state[ action.payload.resourceType ].children, {
           [action.payload.resourceId]: {
             body: newBody,
-          },
+          }
         }),
-        commitPending: isNotUndefined(state[ action.payload.resourceType ].commitPending) ? state[ action.payload.resourceType ].commitPending : false,
-      }),
+        commitPending: isNotUndefined(state[ action.payload.resourceType ].commitPending) ? state[ action.payload.resourceType ].commitPending : false
+      })
     });
   } else {
     return Object.assign({}, state, {
@@ -281,11 +236,11 @@ function newOperation(state: JsonPatchOperationsState, action): JsonPatchOperati
         children: {
           [action.payload.resourceId]: {
             body: newBody,
-          },
+          }
         },
         transactionStartTime: null,
-        commitPending: false,
-      }),
+        commitPending: false
+      })
     });
   }
 }
@@ -318,7 +273,7 @@ function hasValidBody(state: JsonPatchOperationsState, resourceType: any, resour
  * @return SubmissionObjectState
  *    the new state, with the section new validity status.
  */
-function flushOperations(state: JsonPatchOperationsState, action: FlushPatchOperationsAction): JsonPatchOperationsState {
+function flushOperation(state: JsonPatchOperationsState, action: FlushPatchOperationsAction): JsonPatchOperationsState {
   if (hasValue(state[ action.payload.resourceType ])) {
     let newChildren;
     if (isNotUndefined(action.payload.resourceId)) {
@@ -328,8 +283,8 @@ function flushOperations(state: JsonPatchOperationsState, action: FlushPatchOper
         newChildren = Object.assign({}, state[ action.payload.resourceType ].children, {
           [action.payload.resourceId]: {
             body: state[ action.payload.resourceType ].children[ action.payload.resourceId ].body
-              .filter((entry) => entry.timeCompleted > state[ action.payload.resourceType ].transactionStartTime),
-          },
+              .filter((entry) => entry.timeCompleted > state[ action.payload.resourceType ].transactionStartTime)
+          }
         });
       } else {
         newChildren = state[ action.payload.resourceType ].children;
@@ -342,8 +297,8 @@ function flushOperations(state: JsonPatchOperationsState, action: FlushPatchOper
           newChildren = Object.assign({}, newChildren, {
             [resourceId]: {
               body: newChildren[ resourceId ].body
-                .filter((entry) => entry.timeCompleted > state[ action.payload.resourceType ].transactionStartTime),
-            },
+                .filter((entry) => entry.timeCompleted > state[ action.payload.resourceType ].transactionStartTime)
+            }
           });
         });
     }
@@ -351,7 +306,7 @@ function flushOperations(state: JsonPatchOperationsState, action: FlushPatchOper
       [action.payload.resourceType]: Object.assign({}, state[ action.payload.resourceType ], {
         children: newChildren,
         transactionStartTime: null,
-      }),
+      })
     });
   } else {
     return state;
@@ -379,14 +334,14 @@ function addOperationToList(body: JsonPatchOperationObject[], actionType, target
       newBody.push(makeOperationEntry({
         op: JsonPatchOperationType.add,
         path: targetPath,
-        value: value,
+        value: value
       }));
       break;
     case JsonPatchOperationsActionTypes.NEW_JSON_PATCH_REPLACE_OPERATION:
       newBody.push(makeOperationEntry({
         op: JsonPatchOperationType.replace,
         path: targetPath,
-        value: value,
+        value: value
       }));
       break;
     case JsonPatchOperationsActionTypes.NEW_JSON_PATCH_REMOVE_OPERATION:
@@ -396,32 +351,7 @@ function addOperationToList(body: JsonPatchOperationObject[], actionType, target
       newBody.push(makeOperationEntry({ op: JsonPatchOperationType.move, from: fromPath, path: targetPath }));
       break;
   }
-  return dedupeOperationEntries(newBody);
-}
-
-/**
- * Dedupe operation entries by op and path. This prevents processing unnecessary patches in a single PATCH request.
- *
- * @param body JSON patch operation object entries
- * @returns deduped JSON patch operation object entries
- */
-function dedupeOperationEntries(body: JsonPatchOperationObject[]): JsonPatchOperationObject[] {
-  const ops = new Map<string, number>();
-  for (let i = body.length - 1; i >= 0; i--) {
-    const patch = body[i].operation;
-    const key = `${patch.op}-${patch.path}`;
-    if (!ops.has(key)) {
-      ops.set(key, i);
-    } else {
-      const entry = ops.get(key);
-      if (entry - 1 === i) {
-        body.splice(i, 1);
-        ops.set(key, i);
-      }
-    }
-  }
-
-  return body;
+  return newBody;
 }
 
 function makeOperationEntry(operation) {

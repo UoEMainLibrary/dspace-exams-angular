@@ -1,12 +1,8 @@
 // eslint-disable-next-line import/no-namespace
 import * as deepFreeze from 'deep-freeze';
 
-import {
-  TruncatableCollapseAction,
-  TruncatableExpandAction,
-  TruncatableToggleAction,
-} from './truncatable.actions';
 import { truncatableReducer } from './truncatable.reducer';
+import { TruncatableCollapseAction, TruncatableExpandAction, TruncatableToggleAction } from './truncatable.actions';
 
 const id1 = '123';
 const id2 = '456';
@@ -57,7 +53,6 @@ describe('truncatableReducer', () => {
 
     // no expect required, deepFreeze will ensure an exception is thrown if the state
     // is mutated, and any uncaught exception will cause the test to fail
-    expect().nothing();
   });
 
   it('should set filterCollapsed to false in response to the EXPAND action', () => {
@@ -76,10 +71,6 @@ describe('truncatableReducer', () => {
 
     const action = new TruncatableExpandAction(id1);
     truncatableReducer(state, action);
-
-    // no expect required, deepFreeze will ensure an exception is thrown if the state
-    // is mutated, and any uncaught exception will cause the test to fail
-    expect().nothing();
   });
 
   it('should flip the value of filterCollapsed in response to the TOGGLE action', () => {
@@ -101,9 +92,5 @@ describe('truncatableReducer', () => {
 
     const action = new TruncatableToggleAction(id2);
     truncatableReducer(state, action);
-
-    // no expect required, deepFreeze will ensure an exception is thrown if the state
-    // is mutated, and any uncaught exception will cause the test to fail
-    expect().nothing();
   });
 });

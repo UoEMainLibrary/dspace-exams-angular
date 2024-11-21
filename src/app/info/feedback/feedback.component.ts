@@ -1,13 +1,9 @@
 import { Component } from '@angular/core';
 
-import { ThemedFeedbackFormComponent } from './feedback-form/themed-feedback-form.component';
-
 @Component({
-  selector: 'ds-base-feedback',
+  selector: 'ds-feedback',
   templateUrl: './feedback.component.html',
-  styleUrls: ['./feedback.component.scss'],
-  standalone: true,
-  imports: [ThemedFeedbackFormComponent],
+  styleUrls: ['./feedback.component.scss']
 })
 /**
  * Component displaying the Feedback Statement

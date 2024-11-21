@@ -1,18 +1,7 @@
-import {
-  autoserialize,
-  autoserializeAs,
-  deserialize,
-  deserializeAs,
-} from 'cerialize';
-
-import {
-  hasNoValue,
-  hasValue,
-  isUndefined,
-} from '../../shared/empty.util';
+import { autoserialize, autoserializeAs, deserialize, deserializeAs } from 'cerialize';
+import { hasNoValue, hasValue, isUndefined } from '../../shared/empty.util';
 import { ListableObject } from '../../shared/object-collection/shared/listable-object.model';
 import { typedObject } from '../cache/builders/build-decorators';
-import { CacheableObject } from '../cache/cacheable-object.model';
 import { excludeFromEquals } from '../utilities/equals.decorators';
 import { DSPACE_OBJECT } from './dspace-object.resource-type';
 import { GenericConstructor } from './generic-constructor';
@@ -22,10 +11,11 @@ import {
   MetadataMapSerializer,
   MetadataValue,
   MetadataValueFilter,
-  MetadatumViewModel,
+  MetadatumViewModel
 } from './metadata.models';
 import { Metadata } from './metadata.utils';
 import { ResourceType } from './resource-type';
+import { CacheableObject } from '../cache/cacheable-object.model';
 
 /**
  * An abstract model class for a DSpaceObject.
@@ -73,7 +63,7 @@ export class DSpaceObject extends ListableObject implements CacheableObject {
    */
   set self(v: string) {
     this._links.self = {
-      href: v,
+      href: v
     };
   }
 

@@ -1,25 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { Store } from '@ngrx/store';
 import { TranslateService } from '@ngx-translate/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-
-import { APP_CONFIG } from '../../../../../../config/app-config.interface';
-import { environment } from '../../../../../../environments/environment';
-import { DSONameService } from '../../../../../core/breadcrumbs/dso-name.service';
+import { Observable, of as observableOf } from 'rxjs';
 import { RemoteDataBuildService } from '../../../../../core/cache/builders/remote-data-build.service';
 import { ObjectCacheService } from '../../../../../core/cache/object-cache.service';
 import { BitstreamDataService } from '../../../../../core/data/bitstream-data.service';
@@ -34,8 +20,6 @@ import { Bitstream } from '../../../../../core/shared/bitstream.model';
 import { HALEndpointService } from '../../../../../core/shared/hal-endpoint.service';
 import { Item } from '../../../../../core/shared/item.model';
 import { UUIDService } from '../../../../../core/shared/uuid.service';
-import { DSONameServiceMock } from '../../../../../shared/mocks/dso-name.service.mock';
-import { mockTruncatableService } from '../../../../../shared/mocks/mock-trucatable.service';
 import { NotificationsService } from '../../../../../shared/notifications/notifications.service';
 import { ItemSearchResult } from '../../../../../shared/object-collection/shared/item-search-result.model';
 import { SelectableListService } from '../../../../../shared/object-list/selectable-list/selectable-list.service';
@@ -43,6 +27,10 @@ import { createSuccessfulRemoteDataObject$ } from '../../../../../shared/remote-
 import { TruncatableService } from '../../../../../shared/truncatable/truncatable.service';
 import { TruncatePipe } from '../../../../../shared/utils/truncate.pipe';
 import { OrgUnitSearchResultListSubmissionElementComponent } from './org-unit-search-result-list-submission-element.component';
+import { DSONameService } from '../../../../../core/breadcrumbs/dso-name.service';
+import { DSONameServiceMock } from '../../../../../shared/mocks/dso-name.service.mock';
+import { APP_CONFIG } from '../../../../../../config/app-config.interface';
+import { environment } from '../../../../../../environments/environment';
 
 let personListElementComponent: OrgUnitSearchResultListSubmissionElementComponent;
 let fixture: ComponentFixture<OrgUnitSearchResultListSubmissionElementComponent>;
@@ -63,23 +51,23 @@ function init() {
           'dc.title': [
             {
               language: 'en_US',
-              value: 'This is just another title',
-            },
+              value: 'This is just another title'
+            }
           ],
           'organization.address.addressLocality': [
             {
               language: 'en_US',
-              value: 'Europe',
-            },
+              value: 'Europe'
+            }
           ],
           'organization.address.addressCountry': [
             {
               language: 'en_US',
-              value: 'Belgium',
-            },
-          ],
-        },
-      }),
+              value: 'Belgium'
+            }
+          ]
+        }
+      })
     });
   mockItemWithoutMetadata = Object.assign(
     new ItemSearchResult(),
@@ -90,16 +78,16 @@ function init() {
           'dc.title': [
             {
               language: 'en_US',
-              value: 'This is just another title',
-            },
-          ],
-        },
-      }),
+              value: 'This is just another title'
+            }
+          ]
+        }
+      })
     });
 
   nameVariant = 'Doe J.';
   mockRelationshipService = {
-    getNameVariant: () => observableOf(nameVariant),
+    getNameVariant: () => observableOf(nameVariant)
   };
 }
 
@@ -109,12 +97,12 @@ describe('OrgUnitSearchResultListSubmissionElementComponent', () => {
     const mockBitstreamDataService = {
       getThumbnailFor(item: Item): Observable<RemoteData<Bitstream>> {
         return createSuccessfulRemoteDataObject$(new Bitstream());
-      },
+      }
     };
     TestBed.configureTestingModule({
-      imports: [TruncatePipe, OrgUnitSearchResultListSubmissionElementComponent],
+      declarations: [OrgUnitSearchResultListSubmissionElementComponent, TruncatePipe],
       providers: [
-        { provide: TruncatableService, useValue: mockTruncatableService },
+        { provide: TruncatableService, useValue: {} },
         { provide: RelationshipDataService, useValue: mockRelationshipService },
         { provide: NotificationsService, useValue: {} },
         { provide: TranslateService, useValue: {} },
@@ -132,11 +120,12 @@ describe('OrgUnitSearchResultListSubmissionElementComponent', () => {
         { provide: DefaultChangeAnalyzer, useValue: {} },
         { provide: BitstreamDataService, useValue: mockBitstreamDataService },
         { provide: DSONameService, useClass: DSONameServiceMock },
-        { provide: APP_CONFIG, useValue: environment },
+        { provide: APP_CONFIG, useValue: environment }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(OrgUnitSearchResultListSubmissionElementComponent, {
-      add: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 

@@ -1,120 +1,106 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-  CanActivateFn,
-  RouterModule,
-  RouterStateSnapshot,
-} from '@angular/router';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-
-import { Item } from '../../core/shared/item.model';
+/* eslint-disable max-classes-per-file */
+import { ComponentFixture, fakeAsync, TestBed, waitForAsync } from '@angular/core/testing';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateLoaderMock } from '../../shared/mocks/translate-loader.mock';
-import { createSuccessfulRemoteDataObject } from '../../shared/remote-data.utils';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot, CanActivate, Router, RouterStateSnapshot, UrlTree } from '@angular/router';
 import { EditItemPageComponent } from './edit-item-page.component';
+import { Observable, of as observableOf } from 'rxjs';
+import { By } from '@angular/platform-browser';
+import { createSuccessfulRemoteDataObject } from '../../shared/remote-data.utils';
+import { Item } from '../../core/shared/item.model';
 
-describe('EditItemPageComponent', () => {
+describe('ItemPageComponent', () => {
   let comp: EditItemPageComponent;
   let fixture: ComponentFixture<EditItemPageComponent>;
 
-  const AcceptAllGuard: CanActivateFn = (
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> => {
-    return observableOf(true);
-  };
+  class AcceptAllGuard implements CanActivate {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      return observableOf(true);
+    }
+  }
 
-  const AcceptNoneGuard: CanActivateFn = (
-    route: ActivatedRouteSnapshot,
-    state: RouterStateSnapshot,
-  ): Observable<boolean> => {
-    return observableOf(false);
-  };
+  class AcceptNoneGuard implements CanActivate {
+    canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<boolean | UrlTree> | Promise<boolean | UrlTree> | boolean | UrlTree {
+      return observableOf(false);
+    }
+  }
 
-  const accessiblePages = ['accessible'];
-  const inaccessiblePages = ['inaccessible', 'inaccessibleDoubleGuard'];
+  const accesiblePages = ['accessible'];
+  const inaccesiblePages = ['inaccessible', 'inaccessibleDoubleGuard'];
   const mockRoute = {
     snapshot: {
       firstChild: {
         routeConfig: {
-          path: accessiblePages[0],
-        },
+          path: accesiblePages[0]
+        }
       },
       routerState: {
-        snapshot: undefined,
-      },
+        snapshot: undefined
+      }
     },
     routeConfig: {
       children: [
         {
-          path: accessiblePages[0],
-          canActivate: [AcceptAllGuard],
+          path: accesiblePages[0],
+          canActivate: [AcceptAllGuard]
         }, {
-          path: inaccessiblePages[0],
-          canActivate: [AcceptNoneGuard],
+          path: inaccesiblePages[0],
+          canActivate: [AcceptNoneGuard]
         }, {
-          path: inaccessiblePages[1],
-          canActivate: [AcceptAllGuard, AcceptNoneGuard],
+          path: inaccesiblePages[1],
+          canActivate: [AcceptAllGuard, AcceptNoneGuard]
         },
-      ],
+      ]
     },
-    data: observableOf({ dso: createSuccessfulRemoteDataObject(new Item()) }),
+    data: observableOf({dso: createSuccessfulRemoteDataObject(new Item())})
+  };
+
+  const mockRouter = {
+    routerState: {
+      snapshot: undefined
+    },
+    events: observableOf(undefined)
   };
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        RouterModule.forRoot([]),
-        TranslateModule.forRoot({
-          loader: {
-            provide: TranslateLoader,
-            useClass: TranslateLoaderMock,
-          },
-        }),
-        EditItemPageComponent,
-      ],
+      imports: [TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useClass: TranslateLoaderMock
+        }
+      })],
+      declarations: [EditItemPageComponent],
       providers: [
         { provide: ActivatedRoute, useValue: mockRoute },
+        { provide: Router, useValue: mockRouter },
+        AcceptAllGuard,
+        AcceptNoneGuard,
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(EditItemPageComponent, {
-      set: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 
   beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(EditItemPageComponent);
     comp = fixture.componentInstance;
-    // spyOn((comp as any).injector, 'get').and.callFake((a) => new a());
+    spyOn((comp as any).injector, 'get').and.callFake((a) => new a());
     fixture.detectChanges();
   }));
 
   describe('ngOnInit', () => {
     it('should enable tabs that the user can activate', fakeAsync(() => {
       const enabledItems = fixture.debugElement.queryAll(By.css('a.nav-link'));
-      expect(enabledItems.length).toBe(accessiblePages.length);
+      expect(enabledItems.length).toBe(accesiblePages.length);
     }));
 
     it('should disable tabs that the user can not activate', () => {
       const disabledItems = fixture.debugElement.queryAll(By.css('button.nav-link.disabled'));
-      expect(disabledItems.length).toBe(inaccessiblePages.length);
+      expect(disabledItems.length).toBe(inaccesiblePages.length);
     });
   });
 });

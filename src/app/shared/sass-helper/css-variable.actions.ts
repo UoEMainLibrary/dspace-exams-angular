@@ -1,8 +1,7 @@
 /* eslint-disable max-classes-per-file */
 import { Action } from '@ngrx/store';
-
-import { KeyValuePair } from '../key-value-pair.model';
 import { type } from '../ngrx/type';
+import { KeyValuePair } from '../key-value-pair.model';
 
 /**
  * For each action type in an action group, make a simple
@@ -26,7 +25,7 @@ export class AddCSSVariableAction implements Action {
   };
 
   constructor(name: string, value: string) {
-    this.payload = { name, value };
+    this.payload = {name, value};
   }
 }
 export class AddAllCSSVariablesAction implements Action {

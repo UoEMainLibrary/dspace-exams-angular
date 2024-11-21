@@ -1,20 +1,18 @@
 import { Injectable } from '@angular/core';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-} from 'rxjs/operators';
 
-import { WorkspaceitemSectionAccessesObject } from '../../../core/submission/models/workspaceitem-section-accesses.model';
+import { Observable } from 'rxjs';
+import { distinctUntilChanged, filter } from 'rxjs/operators';
+import { Store } from '@ngrx/store';
+
+import { SubmissionState } from '../../submission.reducers';
 import { isNotUndefined } from '../../../shared/empty.util';
 import { submissionSectionDataFromIdSelector } from '../../selectors';
-import { SubmissionState } from '../../submission.reducers';
+import { WorkspaceitemSectionAccessesObject } from '../../../core/submission/models/workspaceitem-section-accesses.model';
 
 /**
  * A service that provides methods to handle submission item's accesses condition state.
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class SectionAccessesService {
 
   /**

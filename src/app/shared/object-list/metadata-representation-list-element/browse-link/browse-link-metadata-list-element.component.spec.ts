@@ -1,86 +1,61 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-
-import { MetadataRepresentationType } from '../../../../core/shared/metadata-representation/metadata-representation.model';
-import { MetadatumRepresentation } from '../../../../core/shared/metadata-representation/metadatum/metadatum-representation.model';
-import { ValueListBrowseDefinition } from '../../../../core/shared/value-list-browse-definition.model';
-import { ActivatedRouteStub } from '../../../testing/active-router.stub';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import { BrowseLinkMetadataListElementComponent } from './browse-link-metadata-list-element.component';
+import { MetadatumRepresentation } from '../../../../core/shared/metadata-representation/metadatum/metadatum-representation.model';
 
 const mockMetadataRepresentation = Object.assign(new MetadatumRepresentation('type'), {
   key: 'dc.contributor.author',
-  value: 'Test Author',
-  browseDefinition: Object.assign(new ValueListBrowseDefinition(), {
-    id: 'author',
-  }),
-} as Partial<MetadatumRepresentation>);
+  value: 'Test Author'
+});
 
 const mockMetadataRepresentationWithUrl = Object.assign(new MetadatumRepresentation('type'), {
   key: 'dc.subject',
-  value: 'https://purl.org/test/subject',
-  browseDefinition: Object.assign(new ValueListBrowseDefinition(), {
-    id: 'subject',
-  }),
-} as Partial<MetadatumRepresentation>);
+  value: 'http://purl.org/test/subject'
+});
 
 describe('BrowseLinkMetadataListElementComponent', () => {
   let comp: BrowseLinkMetadataListElementComponent;
   let fixture: ComponentFixture<BrowseLinkMetadataListElementComponent>;
 
   beforeEach(waitForAsync(() => {
-    void TestBed.configureTestingModule({
-      imports: [BrowseLinkMetadataListElementComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-      ],
+    TestBed.configureTestingModule({
+      imports: [],
+      declarations: [BrowseLinkMetadataListElementComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(BrowseLinkMetadataListElementComponent, {
-      set: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 
-  beforeEach(() => {
+  beforeEach(waitForAsync(() => {
     fixture = TestBed.createComponent(BrowseLinkMetadataListElementComponent);
     comp = fixture.componentInstance;
-  });
+    comp.mdRepresentation = mockMetadataRepresentation;
+    fixture.detectChanges();
+  }));
 
-  describe('with normal metadata', () => {
-    beforeEach(() => {
-      comp.mdRepresentation = mockMetadataRepresentation;
-      spyOnProperty(comp.mdRepresentation, 'representationType', 'get').and.returnValue(MetadataRepresentationType.BrowseLink);
-      fixture.detectChanges();
-    });
-
+  waitForAsync(() => {
     it('should contain the value as a browse link', () => {
       expect(fixture.debugElement.nativeElement.textContent).toContain(mockMetadataRepresentation.value);
     });
-
     it('should NOT match isLink', () => {
-      expect(comp.isLink()).toBe(false);
+      expect(comp.isLink).toBe(false);
     });
   });
 
-  describe('with metadata wit an url', () => {
-    beforeEach(() => {
-      comp.mdRepresentation = mockMetadataRepresentationWithUrl;
-      spyOnProperty(comp.mdRepresentation, 'representationType', 'get').and.returnValue(MetadataRepresentationType.BrowseLink);
-      fixture.detectChanges();
-    });
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(BrowseLinkMetadataListElementComponent);
+    comp = fixture.componentInstance;
+    comp.mdRepresentation = mockMetadataRepresentationWithUrl;
+    fixture.detectChanges();
+  }));
 
+  waitForAsync(() => {
     it('should contain the value expected', () => {
       expect(fixture.debugElement.nativeElement.textContent).toContain(mockMetadataRepresentationWithUrl.value);
     });
-
     it('should match isLink', () => {
-      expect(comp.isLink()).toBe(true);
+      expect(comp.isLink).toBe(true);
     });
   });
 

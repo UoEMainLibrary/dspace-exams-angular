@@ -1,22 +1,21 @@
-import { Injectable } from '@angular/core';
-import { Operation } from 'fast-json-patch';
-
-import { hasValue } from '../../../../shared/empty.util';
+import { PatchOperationService } from './patch-operation.service';
 import { MetadatumViewModel } from '../../../shared/metadata.models';
-import { FieldChangeType } from '../field-change-type.model';
-import { FieldUpdates } from '../field-updates.model';
-import { MetadataPatchAddOperation } from './operations/metadata/metadata-patch-add-operation.model';
+import { Operation } from 'fast-json-patch';
+import { Injectable } from '@angular/core';
 import { MetadataPatchOperation } from './operations/metadata/metadata-patch-operation.model';
+import { hasValue } from '../../../../shared/empty.util';
+import { MetadataPatchAddOperation } from './operations/metadata/metadata-patch-add-operation.model';
 import { MetadataPatchRemoveOperation } from './operations/metadata/metadata-patch-remove-operation.model';
 import { MetadataPatchReplaceOperation } from './operations/metadata/metadata-patch-replace-operation.model';
-import { PatchOperationService } from './patch-operation.service';
+import { FieldUpdates } from '../field-updates.model';
+import { FieldChangeType } from '../field-change-type.model';
 
 /**
  * Service transforming {@link FieldUpdates} into {@link Operation}s for metadata values
  * This expects the fields within every {@link FieldUpdate} to be {@link MetadatumViewModel}s
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class MetadataPatchOperationService implements PatchOperationService {
 
@@ -76,7 +75,7 @@ export class MetadataPatchOperationService implements PatchOperationService {
       const metadatum = update.field as MetadatumViewModel;
       const val = {
         value: metadatum.value,
-        language: metadatum.language,
+        language: metadatum.language
       };
 
       let operation: MetadataPatchOperation;

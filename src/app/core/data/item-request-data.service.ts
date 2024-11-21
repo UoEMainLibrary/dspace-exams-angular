@@ -1,32 +1,20 @@
-import { HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  find,
-  map,
-} from 'rxjs/operators';
-
-import { RequestCopyEmail } from '../../request-copy/email-request-copy/request-copy-email.model';
-import {
-  hasValue,
-  isNotEmpty,
-} from '../../shared/empty.util';
+import { distinctUntilChanged, filter, find, map } from 'rxjs/operators';
 import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
-import { ObjectCacheService } from '../cache/object-cache.service';
-import { HttpOptions } from '../dspace-rest/dspace-rest.service';
 import { HALEndpointService } from '../shared/hal-endpoint.service';
-import { ItemRequest } from '../shared/item-request.model';
 import { getFirstCompletedRemoteData } from '../shared/operators';
+import { RemoteData } from './remote-data';
+import { PostRequest, PutRequest } from './request.models';
+import { RequestService } from './request.service';
+import { ItemRequest } from '../shared/item-request.model';
+import { hasValue, isNotEmpty } from '../../shared/empty.util';
+import { ObjectCacheService } from '../cache/object-cache.service';
+import { HttpHeaders } from '@angular/common/http';
+import { RequestCopyEmail } from '../../request-copy/email-request-copy/request-copy-email.model';
+import { HttpOptions } from '../dspace-rest/dspace-rest.service';
 import { sendRequest } from '../shared/request.operators';
 import { IdentifiableDataService } from './base/identifiable-data.service';
-import { RemoteData } from './remote-data';
-import {
-  PostRequest,
-  PutRequest,
-} from './request.models';
-import { RequestService } from './request.service';
 
 /**
  * A service responsible for fetching/sending data from/to the REST API on the itemrequests endpoint
@@ -72,11 +60,11 @@ export class ItemRequestDataService extends IdentifiableDataService<ItemRequest>
       map((href: string) => {
         const request = new PostRequest(requestId, href, itemRequest);
         this.requestService.send(request);
-      }),
+      })
     ).subscribe();
 
     return this.rdbService.buildFromRequestUUID<ItemRequest>(requestId).pipe(
-      getFirstCompletedRemoteData(),
+      getFirstCompletedRemoteData()
     );
   }
 

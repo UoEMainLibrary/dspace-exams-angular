@@ -1,19 +1,25 @@
-import { inject } from '@angular/core';
-import { CanActivateFn } from '@angular/router';
-import { of as observableOf } from 'rxjs';
-
-import { endUserAgreementGuard } from './end-user-agreement.guard';
+import { Injectable } from '@angular/core';
+import { AbstractEndUserAgreementGuard } from './abstract-end-user-agreement.guard';
+import { Observable, of as observableOf } from 'rxjs';
 import { EndUserAgreementService } from './end-user-agreement.service';
-
+import { Router } from '@angular/router';
 
 /**
- * Guard for preventing unauthorized access to certain pages
- * requiring the end user agreement to have been accepted in a cookie
+ * A guard redirecting users to the end agreement page when the user agreement cookie hasn't been accepted
  */
-export const endUserAgreementCookieGuard: CanActivateFn =
-  endUserAgreementGuard(
-    () => {
-      const endUserAgreementService = inject(EndUserAgreementService);
-      return observableOf(endUserAgreementService.isCookieAccepted());
-    },
-  );
+@Injectable()
+export class EndUserAgreementCookieGuard extends AbstractEndUserAgreementGuard {
+
+  constructor(protected endUserAgreementService: EndUserAgreementService,
+              protected router: Router) {
+    super(router);
+  }
+
+  /**
+   * True when the user agreement cookie has been accepted
+   */
+  hasAccepted(): Observable<boolean> {
+    return observableOf(this.endUserAgreementService.isCookieAccepted());
+  }
+
+}

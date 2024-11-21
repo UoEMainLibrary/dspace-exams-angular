@@ -1,28 +1,12 @@
-import {
-  HttpClient,
-  HttpErrorResponse,
-  HttpHeaders,
-  HttpParams,
-  HttpResponse,
-} from '@angular/common/http';
+import { Observable, throwError as observableThrowError } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 import { Injectable } from '@angular/core';
-import {
-  Observable,
-  throwError as observableThrowError,
-} from 'rxjs';
-import {
-  catchError,
-  map,
-} from 'rxjs/operators';
+import { HttpClient, HttpHeaders, HttpParams, HttpResponse } from '@angular/common/http';
 
-import {
-  hasNoValue,
-  isNotEmpty,
-} from '../../shared/empty.util';
-import { RequestError } from '../data/request-error.model';
-import { RestRequestMethod } from '../data/rest-request-method';
-import { DSpaceObject } from '../shared/dspace-object.model';
 import { RawRestResponse } from './raw-rest-response.model';
+import { RestRequestMethod } from '../data/rest-request-method';
+import { hasNoValue, hasValue, isNotEmpty } from '../../shared/empty.util';
+import { DSpaceObject } from '../shared/dspace-object.model';
 
 export const DEFAULT_CONTENT_TYPE = 'application/json; charset=utf-8';
 export interface HttpOptions {
@@ -56,19 +40,22 @@ export class DspaceRestService {
   get(absoluteURL: string): Observable<RawRestResponse> {
     const requestOptions = {
       observe: 'response' as any,
-      headers: new HttpHeaders({ 'Content-Type': DEFAULT_CONTENT_TYPE }),
+      headers: new HttpHeaders({'Content-Type': DEFAULT_CONTENT_TYPE})
     };
     return this.http.get(absoluteURL, requestOptions).pipe(
       map((res: HttpResponse<any>) => ({
         payload: res.body,
         statusCode: res.status,
-        statusText: res.statusText,
+        statusText: res.statusText
       })),
-      catchError((err: unknown) => observableThrowError(() => {
+      catchError((err) => {
         console.log('Error: ', err);
-        return this.handleHttpError(err);
-      })),
-    );
+        return observableThrowError({
+          statusCode: err.status,
+          statusText: err.statusText,
+          message: (hasValue(err.error) && isNotEmpty(err.error.message)) ? err.error.message : err.message
+        });
+      }));
   }
 
   /**
@@ -122,12 +109,19 @@ export class DspaceRestService {
         payload: res.body,
         headers: res.headers,
         statusCode: res.status,
-        statusText: res.statusText,
+        statusText: res.statusText
       })),
-      catchError((err: unknown) => observableThrowError(() => {
-        return this.handleHttpError(err);
-      })),
-    );
+      catchError((err) => {
+        if (hasValue(err.status)) {
+          return observableThrowError({
+            statusCode: err.status,
+            statusText: err.statusText,
+            message: (hasValue(err.error) && isNotEmpty(err.error.message)) ? err.error.message : err.message
+          });
+        } else {
+          return observableThrowError(err);
+        }
+      }));
   }
 
   /**
@@ -149,22 +143,6 @@ export class DspaceRestService {
       }
     }
     return form;
-  }
-
-  protected handleHttpError(err: unknown): unknown {
-    if (err instanceof HttpErrorResponse) {
-      const error = new RequestError(
-        (isNotEmpty(err?.error?.message)) ? err.error.message : err.message,
-      );
-
-      error.statusCode = err.status;
-      error.statusText = err.statusText;
-
-      return error;
-    } else {
-      console.error('Cannot construct RequestError from', err);
-      return err;
-    }
   }
 
 }

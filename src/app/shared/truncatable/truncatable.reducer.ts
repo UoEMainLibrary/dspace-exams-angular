@@ -1,7 +1,4 @@
-import {
-  TruncatableAction,
-  TruncatableActionTypes,
-} from './truncatable.actions';
+import { TruncatableAction, TruncatableActionTypes } from './truncatable.actions';
 
 /**
  * Interface that represents the state of a single truncatable
@@ -33,22 +30,22 @@ export function truncatableReducer(state = initialState, action: TruncatableActi
       return Object.assign({}, state, {
         [action.id]: {
           collapsed: true,
-        },
+        }
       });
     } case TruncatableActionTypes.EXPAND: {
       return Object.assign({}, state, {
         [action.id]: {
           collapsed: false,
-        },
+        }
       });
     } case TruncatableActionTypes.TOGGLE: {
       if (!state[action.id]) {
-        state[action.id] = { collapsed: false };
+        state[action.id] = {collapsed: false};
       }
       return Object.assign({}, state, {
         [action.id]: {
           collapsed: !state[action.id].collapsed,
-        },
+        }
       });
     }
     default: {

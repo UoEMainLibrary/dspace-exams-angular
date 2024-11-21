@@ -1,27 +1,23 @@
-<button (click)="skipToMainContent()" class="sr-only" id="skip-to-main-content">
-  {{ 'root.skip-to-content' | translate }}
-</button>
-
-<div class="outer-wrapper" [class.d-none]="shouldShowFullscreenLoader" [ngClass]="browserOsClasses.asObservable() | async" [@slideSidebarPadding]="{
-     value: ((isSidebarVisible$ | async) !== true ? 'hidden' : (slideSidebarOver$ | async) ? 'unpinned' : 'pinned'),
-     params: { collapsedWidth: (collapsedSidebarWidth$ | async), expandedWidth: (expandedSidebarWidth$ | async) }
+<div class="outer-wrapper" [class.d-none]="shouldShowFullscreenLoader" [@slideSidebarPadding]="{
+     value: (!(sidebarVisible | async) ? 'hidden' : (slideSidebarOver | async) ? 'shown' : 'expanded'),
+     params: {collapsedSidebarWidth: (collapsedSidebarWidth | async), totalSidebarWidth: (totalSidebarWidth | async)}
     }">
-  <ds-admin-sidebar [expandedSidebarWidth$]="expandedSidebarWidth$" [collapsedSidebarWidth$]="collapsedSidebarWidth$"></ds-admin-sidebar>
+  <ds-themed-admin-sidebar *ngIf="isAdmin$ | async"></ds-themed-admin-sidebar>
   <div class="inner-wrapper">
     <ds-system-wide-alert-banner></ds-system-wide-alert-banner>
-    <ds-header-navbar-wrapper></ds-header-navbar-wrapper>
-    <ds-breadcrumbs></ds-breadcrumbs>
-    <main class="my-cs" id="main-content">
+    <ds-themed-header-navbar-wrapper></ds-themed-header-navbar-wrapper>
+    <main class="main-content">
+      <ds-themed-breadcrumbs></ds-themed-breadcrumbs>
 
       <div class="container d-flex justify-content-center align-items-center h-100" *ngIf="shouldShowRouteLoader">
-        <ds-loading [showMessage]="false"></ds-loading>
+        <ds-themed-loading [showMessage]="false"></ds-themed-loading>
       </div>
       <div [class.d-none]="shouldShowRouteLoader">
         <router-outlet></router-outlet>
       </div>
     </main>
 
-    <ds-footer></ds-footer>
+    <ds-themed-footer></ds-themed-footer>
   </div>
 </div>
 
@@ -29,5 +25,5 @@
 </ds-notifications-board>
 
 <div class="ds-full-screen-loader" *ngIf="shouldShowFullscreenLoader">
-  <ds-loading [showMessage]="false"></ds-loading>
+  <ds-themed-loading [showMessage]="false"></ds-themed-loading>
 </div>

@@ -1,38 +1,23 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import {
-  Observable,
-  of,
-} from 'rxjs';
-import {
-  startWith,
-  take,
-} from 'rxjs/operators';
-
-import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
-import { SortOptions } from '../../../core/cache/models/sort-options.model';
-import { AuthorizationDataService } from '../../../core/data/feature-authorization/authorization-data.service';
-import { FeatureID } from '../../../core/data/feature-authorization/feature-id';
-import { PaginatedList } from '../../../core/data/paginated-list.model';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import { startWith, take } from 'rxjs/operators';
+import { of, Observable } from 'rxjs';
 import { RemoteData } from '../../../core/data/remote-data';
-import { DSpaceObject } from '../../../core/shared/dspace-object.model';
+import { PaginatedList } from '../../../core/data/paginated-list.model';
 import { PaginationComponentOptions } from '../../pagination/pagination-component-options.model';
 import { ObjectSelectService } from '../object-select.service';
+import { SortOptions } from '../../../core/cache/models/sort-options.model';
+import { FeatureID } from '../../../core/data/feature-authorization/feature-id';
+import { AuthorizationDataService } from '../../../core/data/feature-authorization/authorization-data.service';
+import { DSpaceObject } from '../../../core/shared/dspace-object.model';
 
 /**
  * An abstract component used to select DSpaceObjects from a specific list and returning the UUIDs of the selected DSpaceObjects
  */
 @Component({
   selector: 'ds-object-select-abstract',
-  template: '',
+  template: ''
 })
-export abstract class ObjectSelectComponent<TDomain extends DSpaceObject> implements OnInit, OnDestroy {
+export abstract class ObjectSelectComponent<TDomain> implements OnInit, OnDestroy {
 
   /**
    * A unique key used for the object select service
@@ -103,11 +88,8 @@ export abstract class ObjectSelectComponent<TDomain extends DSpaceObject> implem
    */
   selectedIds$: Observable<string[]>;
 
-  constructor(
-    protected objectSelectService: ObjectSelectService,
-    protected authorizationService: AuthorizationDataService,
-    public dsoNameService: DSONameService,
-  ) {
+  constructor(protected objectSelectService: ObjectSelectService,
+              protected authorizationService: AuthorizationDataService) {
   }
 
   ngOnInit(): void {
@@ -151,7 +133,7 @@ export abstract class ObjectSelectComponent<TDomain extends DSpaceObject> implem
    */
   confirmSelected() {
     this.selectedIds$.pipe(
-      take(1),
+      take(1)
     ).subscribe((ids: string[]) => {
       this.confirm.emit(ids);
       this.objectSelectService.reset(this.key);

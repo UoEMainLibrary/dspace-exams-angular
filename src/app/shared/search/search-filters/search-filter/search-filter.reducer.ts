@@ -1,15 +1,10 @@
-import {
-  SearchFilterAction,
-  SearchFilterActionTypes,
-  SearchFilterInitializeAction,
-} from './search-filter.actions';
+import { SearchFilterAction, SearchFilterActionTypes, SearchFilterInitializeAction } from './search-filter.actions';
 
 /**
  * Interface that represents the state for a single filters
  */
 export interface SearchFilterState {
   filterCollapsed: boolean;
-  minimized: boolean;
   page: number;
 }
 
@@ -28,7 +23,7 @@ const initialState: SearchFiltersState = Object.create(null);
  * @param {SearchFilterAction} action The action that should be performed
  * @returns {SearchFiltersState} The state after the action is performed
  */
-export function filterReducer(state: SearchFiltersState = initialState, action: SearchFilterAction): SearchFiltersState {
+export function filterReducer(state = initialState, action: SearchFilterAction): SearchFiltersState {
 
   switch (action.type) {
 
@@ -37,19 +32,18 @@ export function filterReducer(state: SearchFiltersState = initialState, action: 
       return Object.assign({}, state, {
         [action.filterName]: {
           filterCollapsed: !initAction.initiallyExpanded,
-          minimized: false,
-          page: 1,
-        } as SearchFilterState,
+          page: 1
+        }
       });
+      return state;
     }
 
     case SearchFilterActionTypes.COLLAPSE: {
       return Object.assign({}, state, {
         [action.filterName]: {
           filterCollapsed: true,
-          minimized: state[action.filterName].minimized,
-          page: state[action.filterName].page,
-        } as SearchFilterState,
+          page: state[action.filterName].page
+        }
       });
     }
 
@@ -57,10 +51,10 @@ export function filterReducer(state: SearchFiltersState = initialState, action: 
       return Object.assign({}, state, {
         [action.filterName]: {
           filterCollapsed: false,
-          minimized: state[action.filterName].minimized,
-          page: state[action.filterName].page,
-        } as SearchFilterState,
+          page: state[action.filterName].page
+        }
       });
+
     }
 
     case SearchFilterActionTypes.DECREMENT_PAGE: {
@@ -68,9 +62,8 @@ export function filterReducer(state: SearchFiltersState = initialState, action: 
       return Object.assign({}, state, {
         [action.filterName]: {
           filterCollapsed: state[action.filterName].filterCollapsed,
-          minimized: state[action.filterName].minimized,
-          page: (page >= 1 ? page : 1),
-        } as SearchFilterState,
+          page: (page >= 1 ? page : 1)
+        }
       });
     }
 
@@ -78,34 +71,29 @@ export function filterReducer(state: SearchFiltersState = initialState, action: 
       return Object.assign({}, state, {
         [action.filterName]: {
           filterCollapsed: state[action.filterName].filterCollapsed,
-          minimized: state[action.filterName].minimized,
-          page: state[action.filterName].page + 1,
-        } as SearchFilterState,
+          page: state[action.filterName].page + 1
+        }
       });
-    }
 
-    case SearchFilterActionTypes.MINIMIZE_ALL: {
-      return  Object.assign({}, ...Object.entries(state).map(([key, value]) => ({ [key]: { ...value, minimized: true } })));
     }
-
     case SearchFilterActionTypes.RESET_PAGE: {
       return Object.assign({}, state, {
         [action.filterName]: {
           filterCollapsed: state[action.filterName].filterCollapsed,
-          minimized: false,
-          page: 1,
-        } as SearchFilterState,
+          page: 1
+        }
       });
+
     }
 
     case SearchFilterActionTypes.TOGGLE: {
       return Object.assign({}, state, {
         [action.filterName]: {
           filterCollapsed: !state[action.filterName].filterCollapsed,
-          minimized: state[action.filterName].minimized,
-          page: state[action.filterName].page,
-        } as SearchFilterState,
+          page: state[action.filterName].page
+        }
       });
+
     }
 
     default: {

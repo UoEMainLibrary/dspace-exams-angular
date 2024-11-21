@@ -1,12 +1,9 @@
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { RouterTestingModule } from '@angular/router/testing';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { ItemVersionsDeleteModalComponent } from './item-versions-delete-modal.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 describe('ItemVersionsDeleteModalComponent', () => {
   let component: ItemVersionsDeleteModalComponent;
@@ -14,10 +11,11 @@ describe('ItemVersionsDeleteModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), RouterTestingModule.withRoutes([]), ItemVersionsDeleteModalComponent],
+      declarations: [ItemVersionsDeleteModalComponent],
+      imports: [ TranslateModule.forRoot(), RouterTestingModule.withRoutes([]) ],
       providers: [
         { provide: NgbActiveModal },
-      ],
+      ]
     }).compileComponents();
   });
 

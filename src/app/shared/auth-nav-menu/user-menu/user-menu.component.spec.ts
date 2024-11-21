@@ -1,39 +1,19 @@
-import {
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  inject,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import {
-  Store,
-  StoreModule,
-} from '@ngrx/store';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
-import { cold } from 'jasmine-marbles';
-import { of } from 'rxjs';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
 
-import { APP_DATA_SERVICES_MAP } from '../../../../config/app-config.interface';
-import { AppState } from '../../../app.reducer';
-import {
-  authReducer,
-  AuthState,
-} from '../../../core/auth/auth.reducer';
-import { AuthService } from '../../../core/auth/auth.service';
-import { AuthTokenInfo } from '../../../core/auth/models/auth-token-info.model';
-import { XSRFService } from '../../../core/xsrf/xsrf.service';
-import { TranslateLoaderMock } from '../../mocks/translate-loader.mock';
-import { ActivatedRouteStub } from '../../testing/active-router.stub';
-import { EPersonMock } from '../../testing/eperson.mock';
+import { Store, StoreModule } from '@ngrx/store';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
 import { UserMenuComponent } from './user-menu.component';
+import { authReducer, AuthState } from '../../../core/auth/auth.reducer';
+import { AuthTokenInfo } from '../../../core/auth/models/auth-token-info.model';
+import { EPersonMock } from '../../testing/eperson.mock';
+import { AppState } from '../../../app.reducer';
+import { TranslateLoaderMock } from '../../mocks/translate-loader.mock';
+import { cold } from 'jasmine-marbles';
+import { By } from '@angular/platform-browser';
+import { AuthService } from '../../../core/auth/auth.service';
+import { of } from 'rxjs';
 
 describe('UserMenuComponent', () => {
 
@@ -46,7 +26,7 @@ describe('UserMenuComponent', () => {
 
   function serviceInit() {
     authService = jasmine.createSpyObj('authService', {
-      getAuthenticatedUserFromStore: of(EPersonMock),
+      getAuthenticatedUserFromStore: of(EPersonMock)
     });
   }
 
@@ -58,7 +38,7 @@ describe('UserMenuComponent', () => {
       loading: false,
       authToken: new AuthTokenInfo('test_token'),
       userId: EPersonMock.id,
-      idle: false,
+      idle: false
     };
     authStateLoading = {
       authenticated: true,
@@ -67,7 +47,7 @@ describe('UserMenuComponent', () => {
       loading: true,
       authToken: null,
       userId: EPersonMock.id,
-      idle: false,
+      idle: false
     };
   }
 
@@ -78,26 +58,25 @@ describe('UserMenuComponent', () => {
         StoreModule.forRoot(authReducer, {
           runtimeChecks: {
             strictStateImmutability: false,
-            strictActionImmutability: false,
-          },
+            strictActionImmutability: false
+          }
         }),
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: TranslateLoaderMock,
-          },
-        }),
-        UserMenuComponent,
+            useClass: TranslateLoaderMock
+          }
+        })
       ],
       providers: [
-        { provide: AuthService, useValue: authService },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        { provide: XSRFService, useValue: {} },
-        { provide: APP_DATA_SERVICES_MAP, useValue: {} },
+        { provide: AuthService, useValue: authService }
+      ],
+      declarations: [
+        UserMenuComponent
       ],
       schemas: [
-        NO_ERRORS_SCHEMA,
-      ],
+        NO_ERRORS_SCHEMA
+      ]
     }).compileComponents();
 
   }));
@@ -133,14 +112,14 @@ describe('UserMenuComponent', () => {
       expect(component).toBeDefined();
 
       expect(component.loading$).toBeObservable(cold('b', {
-        b: true,
+        b: true
       }));
 
       expect(component.user$).toBeObservable(cold('(c|)', {
-        c: EPersonMock,
+        c: EPersonMock
       }));
-      const span = deUserMenu.query(By.css('.dropdown-item-text'));
-      expect(span).toBeNull();
+
+      expect(deUserMenu).toBeNull();
     });
 
   });
@@ -161,7 +140,7 @@ describe('UserMenuComponent', () => {
 
       fixture.detectChanges();
 
-      deUserMenu = fixture.debugElement.query(By.css('ul#user-menu-dropdown'));
+      deUserMenu = fixture.debugElement.query(By.css('div'));
     }));
 
     afterEach(() => {
@@ -172,11 +151,11 @@ describe('UserMenuComponent', () => {
       expect(component).toBeDefined();
 
       expect(component.loading$).toBeObservable(cold('b', {
-        b: false,
+        b: false
       }));
 
       expect(component.user$).toBeObservable(cold('(c|)', {
-        c: EPersonMock,
+        c: EPersonMock
       }));
 
       expect(deUserMenu).toBeDefined();
@@ -185,7 +164,7 @@ describe('UserMenuComponent', () => {
     it('should display user name and email', () => {
       const username = 'User Test';
       const email = 'test@test.com';
-      const span = deUserMenu.query(By.css('.username-email-wrapper'));
+      const span = deUserMenu.query(By.css('.dropdown-item-text'));
       expect(span).toBeDefined();
       expect(span.nativeElement.innerHTML).toContain(username);
       expect(span.nativeElement.innerHTML).toContain(email);

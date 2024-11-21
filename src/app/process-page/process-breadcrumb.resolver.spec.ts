@@ -1,11 +1,11 @@
+import { ProcessBreadcrumbResolver } from './process-breadcrumb.resolver';
+import { Process } from './processes/process.model';
 import { ProcessDataService } from '../core/data/processes/process-data.service';
 import { createSuccessfulRemoteDataObject$ } from '../shared/remote-data.utils';
-import { processBreadcrumbResolver } from './process-breadcrumb.resolver';
-import { Process } from './processes/process.model';
 
-describe('processBreadcrumbResolver', () => {
+describe('ProcessBreadcrumbResolver', () => {
   describe('resolve', () => {
-    let resolver: any;
+    let resolver: ProcessBreadcrumbResolver;
     let processDataService: ProcessDataService;
     let processBreadcrumbService: any;
     let process: Process;
@@ -17,19 +17,14 @@ describe('processBreadcrumbResolver', () => {
       path = 'rest.com/path/to/breadcrumb/12345';
       processBreadcrumbService = {};
       processDataService = {
-        findById: () => createSuccessfulRemoteDataObject$(process),
+        findById: () => createSuccessfulRemoteDataObject$(process)
       } as any;
-      resolver = processBreadcrumbResolver;
+      resolver = new ProcessBreadcrumbResolver(processBreadcrumbService, processDataService);
     });
 
     it('should resolve the breadcrumb config', (done) => {
-      const resolvedConfig = resolver(
-        { data: { breadcrumbKey: process }, params: { id: id } } as any,
-        { url: path } as any,
-        processBreadcrumbService,
-        processDataService,
-      );
-      const expectedConfig = { provider: processBreadcrumbService, key: process, url: path };
+      const resolvedConfig = resolver.resolve({ data: { breadcrumbKey: process }, params: { id: id} } as any, {url: path} as any);
+      const expectedConfig = { provider: processBreadcrumbService, key: process, url: path};
       resolvedConfig.subscribe((config) => {
         expect(config).toEqual(expectedConfig);
         done();
@@ -38,7 +33,7 @@ describe('processBreadcrumbResolver', () => {
 
     it('should resolve throw an error when no breadcrumbKey is defined', () => {
       expect(() => {
-        resolver({ data: {} } as any, undefined, processBreadcrumbService, processDataService);
+        resolver.resolve({ data: {} } as any, undefined);
       }).toThrow();
     });
   });

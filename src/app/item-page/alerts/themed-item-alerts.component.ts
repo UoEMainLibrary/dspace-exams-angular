@@ -1,21 +1,15 @@
-import {
-  Component,
-  Input,
-} from '@angular/core';
-
+import { Component, Input } from '@angular/core';
 import { Item } from '../../core/shared/item.model';
-import { ThemedComponent } from '../../shared/theme-support/themed.component';
 import { ItemAlertsComponent } from './item-alerts.component';
+import { ThemedComponent } from '../../shared/theme-support/themed.component';
 
 /**
  * Themed wrapper for {@link ItemAlertsComponent}
  */
 @Component({
-  selector: 'ds-item-alerts',
+  selector: 'ds-themed-item-alerts',
   styleUrls: [],
   templateUrl: '../../shared/theme-support/themed.component.html',
-  standalone: true,
-  imports: [ItemAlertsComponent],
 })
 export class ThemedItemAlertsComponent extends ThemedComponent<ItemAlertsComponent> {
   protected inAndOutputNames: (keyof ItemAlertsComponent & keyof this)[] = ['item'];

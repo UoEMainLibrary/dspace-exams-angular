@@ -1,10 +1,7 @@
-import {
-  SortDirection,
-  SortOptions,
-} from '../../../core/cache/models/sort-options.model';
-import { DSpaceObjectType } from '../../../core/shared/dspace-object-type.model';
+import { SortDirection, SortOptions } from '../../../core/cache/models/sort-options.model';
 import { PaginationComponentOptions } from '../../pagination/pagination-component-options.model';
 import { PaginatedSearchOptions } from './paginated-search-options.model';
+import { DSpaceObjectType } from '../../../core/shared/dspace-object-type.model';
 import { SearchFilter } from './search-filter.model';
 
 describe('PaginatedSearchOptions', () => {
@@ -47,7 +44,7 @@ describe('PaginatedSearchOptions', () => {
         'f.test=value&' +
         'f.example=another%20value&' +
         'f.example=second%20value&' +
-        'f.range=%5B2002%20TO%202021%5D,equals',
+        'f.range=%5B2002%20TO%202021%5D,equals'
       );
     });
 

@@ -1,5 +1,4 @@
 import { Operation } from 'fast-json-patch';
-
 import { FieldUpdates } from '../field-updates.model';
 
 /**

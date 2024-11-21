@@ -1,21 +1,11 @@
-import { AsyncPipe } from '@angular/common';
-import {
-  Component,
-  Input,
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Item } from '../../../../../core/shared/item.model';
-import { MetadataValuesComponent } from '../../../../field-components/metadata-values/metadata-values.component';
 import { ItemPageFieldComponent } from '../item-page-field.component';
 
 @Component({
-  selector: 'ds-item-page-date-field',
-  templateUrl: '../item-page-field.component.html',
-  standalone: true,
-  imports: [
-    MetadataValuesComponent,
-    AsyncPipe,
-  ],
+    selector: 'ds-item-page-date-field',
+    templateUrl: '../item-page-field.component.html'
 })
 /**
  * This component is used for displaying the issue date (dc.date.issued) metadata of an item
@@ -38,7 +28,7 @@ export class ItemPageDateFieldComponent extends ItemPageFieldComponent {
      * In this component, we want to display values for metadata 'dc.date.issued'
      */
     fields: string[] = [
-      'dc.date.issued',
+        'dc.date.issued'
     ];
 
     /**

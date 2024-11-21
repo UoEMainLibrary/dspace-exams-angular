@@ -4,7 +4,7 @@
     <ds-sidebar-dropdown *ngIf="sortOptionsList"
                          [id]="'search-sidebar-sort'"
                          [label]="'search.sidebar.settings.sort-by'"
-                         (changed)="reloadOrder($event)">
+                         (change)="reloadOrder($event)">
         <option *ngFor="let sortOptionsEntry of sortOptionsList"
                 [value]="sortOptionsEntry.field + ',' + sortOptionsEntry.direction.toString()"
                 [selected]="sortOptionsEntry.field === currentSortOption?.field && sortOptionsEntry.direction === (currentSortOption?.direction)? 'selected': null">

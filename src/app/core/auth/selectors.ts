@@ -1,7 +1,5 @@
 import { createSelector } from '@ngrx/store';
 
-import { coreSelector } from '../core.selectors';
-import { CoreState } from '../core-state.model';
 /**
  * Every reducer module's default export is the reducer function itself. In
  * addition, each module should export a type or interface that describes
@@ -9,6 +7,8 @@ import { CoreState } from '../core-state.model';
  * notation packages up all of the exports into a single object.
  */
 import { AuthState } from './auth.reducer';
+import { CoreState } from '../core-state.model';
+import { coreSelector } from '../core.selectors';
 
 /**
  * Returns the user state.

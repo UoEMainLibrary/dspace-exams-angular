@@ -1,43 +1,28 @@
-import {
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { TestBed, waitForAsync } from '@angular/core/testing';
+import { BehaviorSubject, Observable, of as observableOf } from 'rxjs';
 import { provideMockActions } from '@ngrx/effects/testing';
 import { Store } from '@ngrx/store';
-import { TranslateService } from '@ngx-translate/core';
-import {
-  cold,
-  hot,
-} from 'jasmine-marbles';
-import {
-  BehaviorSubject,
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-import { last } from 'rxjs/operators';
-
-import { ObjectCacheService } from '../../../../../core/cache/object-cache.service';
-import { RestResponse } from '../../../../../core/cache/response.models';
-import { RelationshipDataService } from '../../../../../core/data/relationship-data.service';
-import { RelationshipTypeDataService } from '../../../../../core/data/relationship-type-data.service';
-import { RequestService } from '../../../../../core/data/request.service';
-import { Item } from '../../../../../core/shared/item.model';
-import { ItemType } from '../../../../../core/shared/item-relationships/item-type.model';
-import { Relationship } from '../../../../../core/shared/item-relationships/relationship.model';
-import { RelationshipType } from '../../../../../core/shared/item-relationships/relationship-type.model';
-import { MetadataValue } from '../../../../../core/shared/metadata.models';
-import { DEBOUNCE_TIME_OPERATOR } from '../../../../../core/shared/operators';
-import { WorkspaceItem } from '../../../../../core/submission/models/workspaceitem.model';
-import { SubmissionObjectDataService } from '../../../../../core/submission/submission-object-data.service';
-import { NotificationsService } from '../../../../notifications/notifications.service';
-import { SelectableListService } from '../../../../object-list/selectable-list/selectable-list.service';
-import { createSuccessfulRemoteDataObject$ } from '../../../../remote-data.utils';
-import {
-  AddRelationshipAction,
-  RelationshipActionTypes,
-  RemoveRelationshipAction,
-} from './relationship.actions';
 import { RelationshipEffects } from './relationship.effects';
+import { AddRelationshipAction, RelationshipActionTypes, RemoveRelationshipAction } from './relationship.actions';
+import { Item } from '../../../../../core/shared/item.model';
+import { MetadataValue } from '../../../../../core/shared/metadata.models';
+import { RelationshipTypeDataService } from '../../../../../core/data/relationship-type-data.service';
+import { RelationshipDataService } from '../../../../../core/data/relationship-data.service';
+import { Relationship } from '../../../../../core/shared/item-relationships/relationship.model';
+import { createSuccessfulRemoteDataObject$ } from '../../../../remote-data.utils';
+import { RelationshipType } from '../../../../../core/shared/item-relationships/relationship-type.model';
+import { ItemType } from '../../../../../core/shared/item-relationships/item-type.model';
+import { RestResponse } from '../../../../../core/cache/response.models';
+import { SubmissionObjectDataService } from '../../../../../core/submission/submission-object-data.service';
+import { WorkspaceItem } from '../../../../../core/submission/models/workspaceitem.model';
+import { ObjectCacheService } from '../../../../../core/cache/object-cache.service';
+import { RequestService } from '../../../../../core/data/request.service';
+import { NotificationsService } from '../../../../notifications/notifications.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SelectableListService } from '../../../../object-list/selectable-list/selectable-list.service';
+import { cold, hot } from 'jasmine-marbles';
+import { DEBOUNCE_TIME_OPERATOR } from '../../../../../core/shared/operators';
+import { last } from 'rxjs/operators';
 
 describe('RelationshipEffects', () => {
   let relationEffects: RelationshipEffects;
@@ -80,19 +65,19 @@ describe('RelationshipEffects', () => {
 
     leftItem = Object.assign(new Item(), {
       uuid: testUUID1,
-      metadata: { 'dspace.entity.type': [leftTypeMD] },
+      metadata: { 'dspace.entity.type': [leftTypeMD] }
     });
 
     rightItem = Object.assign(new Item(), {
       uuid: testUUID2,
-      metadata: { 'dspace.entity.type': [rightTypeMD] },
+      metadata: { 'dspace.entity.type': [rightTypeMD] }
     });
 
     relationshipType = Object.assign(new RelationshipType(), {
       leftwardType: 'isAuthorOfPublication',
       rightwardType: 'isPublicationOfAuthor',
       leftType: createSuccessfulRemoteDataObject$(leftType),
-      rightType: createSuccessfulRemoteDataObject$(rightType),
+      rightType: createSuccessfulRemoteDataObject$(rightType)
     });
 
     relationship = Object.assign(new Relationship(),
@@ -101,27 +86,27 @@ describe('RelationshipEffects', () => {
         id: relationshipID,
         leftItem: createSuccessfulRemoteDataObject$(leftItem),
         rightItem: createSuccessfulRemoteDataObject$(rightItem),
-        relationshipType: createSuccessfulRemoteDataObject$(relationshipType),
+        relationshipType: createSuccessfulRemoteDataObject$(relationshipType)
       });
 
     mockRelationshipService = {
       getRelationshipByItemsAndLabel:
         () => observableOf(relationship),
       deleteRelationship: () => observableOf(new RestResponse(true, 200, 'OK')),
-      addRelationship: () => observableOf(new RestResponse(true, 200, 'OK')),
+      addRelationship: () => observableOf(new RestResponse(true, 200, 'OK'))
 
     };
     mockRelationshipTypeService = {
       getRelationshipTypeByLabelAndTypes:
-        () => observableOf(relationshipType),
+        () => observableOf(relationshipType)
     };
     notificationsService = jasmine.createSpyObj('notificationsService', ['error']);
     translateService = jasmine.createSpyObj('translateService', {
-      instant: 'translated-message',
+      instant: 'translated-message'
     });
     selectableListService = jasmine.createSpyObj('selectableListService', {
       findSelectedByCondition: observableOf({}),
-      deselectSingle: {},
+      deselectSingle: {}
     });
   }
 
@@ -135,9 +120,9 @@ describe('RelationshipEffects', () => {
         { provide: RelationshipDataService, useValue: mockRelationshipService },
         {
           provide: SubmissionObjectDataService, useValue: {
-            findById: () => createSuccessfulRemoteDataObject$(new WorkspaceItem()),
+            findById: () => createSuccessfulRemoteDataObject$(new WorkspaceItem())
           },
-          getHrefByID: () => observableOf(''),
+          getHrefByID: () => observableOf('')
         },
         { provide: Store, useValue: jasmine.createSpyObj('store', ['dispatch']) },
         { provide: ObjectCacheService, useValue: {} },
@@ -197,8 +182,6 @@ describe('RelationshipEffects', () => {
         let action;
         describe('When the last value in the debounceMap is also an ADD_RELATIONSHIP action', () => {
           beforeEach(() => {
-            jasmine.getEnv().allowRespy(true);
-            spyOn((relationEffects as any), 'addRelationship').and.returnValue(createSuccessfulRemoteDataObject$(relationship));
             (relationEffects as any).initialActionMap[identifier] = RelationshipActionTypes.ADD_RELATIONSHIP;
             ((relationEffects as any).debounceTime as jasmine.Spy).and.returnValue((v) => v);
           });
@@ -264,8 +247,6 @@ describe('RelationshipEffects', () => {
         let action;
         describe('When the last value in the debounceMap is also an REMOVE_RELATIONSHIP action', () => {
           beforeEach(() => {
-            jasmine.getEnv().allowRespy(true);
-            spyOn((relationEffects as any), 'removeRelationship').and.returnValue(createSuccessfulRemoteDataObject$(undefined));
             ((relationEffects as any).debounceTime as jasmine.Spy).and.returnValue((v) => v);
             (relationEffects as any).initialActionMap[identifier] = RelationshipActionTypes.REMOVE_RELATIONSHIP;
           });
@@ -275,7 +256,7 @@ describe('RelationshipEffects', () => {
             actions = hot('--a-|', { a: action });
             const expected = cold('--b-|', { b: undefined });
             expect(relationEffects.mapLastActions$).toBeObservable(expected);
-            expect((relationEffects as any).removeRelationship).toHaveBeenCalledWith(leftItem, rightItem, relationshipType.leftwardType);
+            expect((relationEffects as any).removeRelationship).toHaveBeenCalledWith(leftItem, rightItem, relationshipType.leftwardType, '1234',);
           });
         });
 

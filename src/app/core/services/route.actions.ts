@@ -1,8 +1,7 @@
 /* eslint-disable max-classes-per-file */
-import { Params } from '@angular/router';
 import { Action } from '@ngrx/store';
-
 import { type } from '../../shared/ngrx/type';
+import { Params } from '@angular/router';
 
 /**
  * The list of HrefIndexAction type definitions

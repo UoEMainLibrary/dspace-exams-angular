@@ -1,8 +1,7 @@
 import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
-import { isValid } from 'date-fns';
 import { formatInTimeZone }  from 'date-fns-tz';
+import { isValid } from 'date-fns';
 import isObject from 'lodash/isObject';
-
 import { hasNoValue } from './empty.util';
 
 /**
@@ -74,7 +73,7 @@ export function dateToNgbDateStruct(date?: Date): NgbDateStruct {
   return {
     year: date.getUTCFullYear(),
     month: date.getUTCMonth() + 1,
-    day: date.getUTCDate(),
+    day: date.getUTCDate()
   };
 }
 

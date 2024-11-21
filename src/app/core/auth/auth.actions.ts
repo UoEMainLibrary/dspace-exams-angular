@@ -1,13 +1,12 @@
 /* eslint-disable max-classes-per-file */
 // import @ngrx
 import { Action } from '@ngrx/store';
-
 // import type function
 import { type } from '../../shared/ngrx/type';
-import { AuthMethod } from './models/auth.method';
-import { AuthStatus } from './models/auth-status.model';
 // import models
 import { AuthTokenInfo } from './models/auth-token-info.model';
+import { AuthMethod } from './models/auth.method';
+import { AuthStatus } from './models/auth-status.model';
 
 export const AuthActionTypes = {
   AUTHENTICATE: type('dspace/auth/AUTHENTICATE'),
@@ -39,7 +38,7 @@ export const AuthActionTypes = {
   RETRIEVE_AUTHENTICATED_EPERSON_ERROR: type('dspace/auth/RETRIEVE_AUTHENTICATED_EPERSON_ERROR'),
   REDIRECT_AFTER_LOGIN_SUCCESS: type('dspace/auth/REDIRECT_AFTER_LOGIN_SUCCESS'),
   SET_USER_AS_IDLE: type('dspace/auth/SET_USER_AS_IDLE'),
-  UNSET_USER_AS_IDLE: type('dspace/auth/UNSET_USER_AS_IDLE'),
+  UNSET_USER_AS_IDLE: type('dspace/auth/UNSET_USER_AS_IDLE')
 };
 
 
@@ -428,22 +427,15 @@ export class UnsetUserAsIdleAction implements Action {
 }
 
 /**
- * Authentication error actions that include Error payloads.
- */
-export type AuthErrorActionsWithErrorPayload
-  = AuthenticatedErrorAction
-  | AuthenticationErrorAction
-  | LogOutErrorAction
-  | RetrieveAuthenticatedEpersonErrorAction;
-
-/**
  * Actions type.
  * @type {AuthActions}
  */
 export type AuthActions
   = AuthenticateAction
   | AuthenticatedAction
+  | AuthenticatedErrorAction
   | AuthenticatedSuccessAction
+  | AuthenticationErrorAction
   | AuthenticationSuccessAction
   | CheckAuthenticationTokenAction
   | CheckAuthenticationTokenCookieAction
@@ -460,9 +452,10 @@ export type AuthActions
   | RetrieveAuthMethodsErrorAction
   | RetrieveTokenAction
   | RetrieveAuthenticatedEpersonAction
+  | RetrieveAuthenticatedEpersonErrorAction
   | RetrieveAuthenticatedEpersonSuccessAction
   | SetRedirectUrlAction
   | RedirectAfterLoginSuccessAction
   | SetUserAsIdleAction
-  | UnsetUserAsIdleAction
-  | AuthErrorActionsWithErrorPayload;
+  | UnsetUserAsIdleAction;
+

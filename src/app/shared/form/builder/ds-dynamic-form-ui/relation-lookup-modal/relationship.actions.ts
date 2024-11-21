@@ -2,11 +2,10 @@
 /**
  * The list of RelationshipAction type definitions
  */
+import { type } from '../../../../ngrx/type';
 import { Action } from '@ngrx/store';
-
 import { Item } from '../../../../../core/shared/item.model';
 import { Relationship } from '../../../../../core/shared/item-relationships/relationship.model';
-import { type } from '../../../../ngrx/type';
 
 export const RelationshipActionTypes = {
   ADD_RELATIONSHIP: type('dspace/relationship/ADD_RELATIONSHIP'),
@@ -43,7 +42,7 @@ export class AddRelationshipAction implements Action {
     item2: Item,
     relationshipType: string,
     submissionId: string,
-    nameVariant?: string,
+    nameVariant?: string
   ) {
     this.payload = { item1, item2, relationshipType, submissionId, nameVariant };
   }
@@ -74,7 +73,7 @@ export class UpdateRelationshipNameVariantAction implements Action {
     item2: Item,
     relationshipType: string,
     submissionId: string,
-    nameVariant?: string,
+    nameVariant?: string
   ) {
     this.payload = { item1, item2, relationshipType, submissionId, nameVariant };
   }
@@ -127,7 +126,7 @@ export class RemoveRelationshipAction implements Action {
     item1: Item,
     item2: Item,
     relationshipType: string,
-    submissionId: string,
+    submissionId: string
   ) {
     this.payload = { item1, item2, relationshipType, submissionId };
   }

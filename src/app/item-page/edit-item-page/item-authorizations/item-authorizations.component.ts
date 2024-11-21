@@ -1,53 +1,22 @@
-import {
-  AsyncPipe,
-  NgForOf,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
-import { NgbCollapseModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
 import isEqual from 'lodash/isEqual';
-import {
-  BehaviorSubject,
-  Observable,
-  of as observableOf,
-  Subscription,
-} from 'rxjs';
-import {
-  catchError,
-  filter,
-  first,
-  map,
-  mergeMap,
-  take,
-} from 'rxjs/operators';
-
 import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
-import { LinkService } from '../../../core/cache/builders/link.service';
-import {
-  buildPaginatedList,
-  PaginatedList,
-} from '../../../core/data/paginated-list.model';
-import { Bitstream } from '../../../core/shared/bitstream.model';
-import { Bundle } from '../../../core/shared/bundle.model';
-import { Item } from '../../../core/shared/item.model';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+import { BehaviorSubject, Observable, of as observableOf, Subscription } from 'rxjs';
+import { catchError, filter, first, map, mergeMap, take } from 'rxjs/operators';
+
+import { buildPaginatedList, PaginatedList } from '../../../core/data/paginated-list.model';
 import {
   getFirstSucceededRemoteDataPayload,
   getFirstSucceededRemoteDataWithNotEmptyPayload,
 } from '../../../core/shared/operators';
-import { AlertComponent } from '../../../shared/alert/alert.component';
-import {
-  hasValue,
-  isNotEmpty,
-} from '../../../shared/empty.util';
-import { NgForTrackByIdDirective } from '../../../shared/ng-for-track-by-id.directive';
-import { ResourcePoliciesComponent } from '../../../shared/resource-policies/resource-policies.component';
+import { Item } from '../../../core/shared/item.model';
 import { followLink } from '../../../shared/utils/follow-link-config.model';
+import { LinkService } from '../../../core/cache/builders/link.service';
+import { Bundle } from '../../../core/shared/bundle.model';
+import { hasValue, isNotEmpty } from '../../../shared/empty.util';
+import { Bitstream } from '../../../core/shared/bitstream.model';
 
 /**
  * Interface for a bundle's bitstream map entry
@@ -60,18 +29,7 @@ interface BundleBitstreamsMapEntry {
 @Component({
   selector: 'ds-item-authorizations',
   templateUrl: './item-authorizations.component.html',
-  styleUrls: ['./item-authorizations.component.scss'],
-  imports: [
-    ResourcePoliciesComponent,
-    NgbCollapseModule,
-    TranslateModule,
-    NgForOf,
-    NgForTrackByIdDirective,
-    AsyncPipe,
-    NgIf,
-    AlertComponent,
-  ],
-  standalone: true,
+  styleUrls:['./item-authorizations.component.scss']
 })
 /**
  * Component that handles the item Authorizations
@@ -143,7 +101,7 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
   constructor(
     private linkService: LinkService,
     private route: ActivatedRoute,
-    public nameService: DSONameService,
+    public nameService: DSONameService
   ) {
   }
 
@@ -151,7 +109,7 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
    * Initialize the component, setting up the bundle and bitstream within the item
    */
   ngOnInit(): void {
-    this.getBundlesPerItem();
+   this.getBundlesPerItem();
   }
 
   /**
@@ -160,7 +118,7 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
   getItemUUID(): Observable<string> {
     return this.item$.pipe(
       map((item: Item) => item.id),
-      first((UUID: string) => isNotEmpty(UUID)),
+      first((UUID: string) => isNotEmpty(UUID))
     );
   }
 
@@ -169,7 +127,7 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
  */
   getItemName(): Observable<string> {
     return this.item$.pipe(
-      map((item: Item) => this.nameService.getName(item)),
+      map((item: Item) => this.nameService.getName(item))
     );
   }
 
@@ -193,24 +151,24 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
       getFirstSucceededRemoteDataWithNotEmptyPayload(),
       map((item: Item) => this.linkService.resolveLink(
         item,
-        followLink('bundles', { findListOptions: { currentPage : page, elementsPerPage: this.bundlesPerPage } }, followLink('bitstreams')),
-      )),
+        followLink('bundles', {findListOptions: {currentPage : page, elementsPerPage: this.bundlesPerPage}}, followLink('bitstreams'))
+      ))
     ) as Observable<Item>;
 
     const bundles$: Observable<PaginatedList<Bundle>> =  this.item$.pipe(
       filter((item: Item) => isNotEmpty(item.bundles)),
       mergeMap((item: Item) => item.bundles),
       getFirstSucceededRemoteDataWithNotEmptyPayload(),
-      catchError((error: unknown) => {
+      catchError((error) => {
         console.error(error);
         return observableOf(buildPaginatedList(null, []));
-      }),
+      })
     );
 
     this.subs.push(
       bundles$.pipe(
         take(1),
-        map((list: PaginatedList<Bundle>) => list.page),
+        map((list: PaginatedList<Bundle>) => list.page)
       ).subscribe((bundles: Bundle[]) => {
         if (isEqual(bundles.length,0) || bundles.length < this.bundlesPerPage) {
           this.allBundlesLoaded = true;
@@ -224,21 +182,21 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
       bundles$.pipe(
         take(1),
         mergeMap((list: PaginatedList<Bundle>) => list.page),
-        map((bundle: Bundle) => ({ id: bundle.id, bitstreams: this.getBundleBitstreams(bundle) })),
+        map((bundle: Bundle) => ({ id: bundle.id, bitstreams: this.getBundleBitstreams(bundle) }))
       ).subscribe((entry: BundleBitstreamsMapEntry) => {
-        const bitstreamMapValues: BitstreamMapValue = {
+        let bitstreamMapValues: BitstreamMapValue = {
           isCollapsed: true,
           allBitstreamsLoaded: false,
-          bitstreams: null,
+          bitstreams: null
         };
         bitstreamMapValues.bitstreams = entry.bitstreams.pipe(
           map((b: PaginatedList<Bitstream>) => {
             bitstreamMapValues.allBitstreamsLoaded = b?.page.length < this.bitstreamSize;
             return [...b.page.slice(0, this.bitstreamSize)];
-          }),
+          })
         );
         this.bundleBitstreamsMap.set(entry.id, bitstreamMapValues);
-      }),
+      })
     );
   }
 
@@ -250,10 +208,10 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
   private getBundleBitstreams(bundle: Bundle): Observable<PaginatedList<Bitstream>> {
     return bundle.bitstreams.pipe(
       getFirstSucceededRemoteDataPayload(),
-      catchError((error: unknown) => {
+      catchError((error) => {
         console.error(error);
         return observableOf(buildPaginatedList(null, []));
-      }),
+      })
     );
   }
 
@@ -281,17 +239,17 @@ export class ItemAuthorizationsComponent implements OnInit, OnDestroy {
    */
   onBitstreamsLoad(bundle: Bundle) {
     return this.getBundleBitstreams(bundle).subscribe((res: PaginatedList<Bitstream>) => {
-      const nextBitstreams = res?.page.slice(this.bitstreamPageSize, this.bitstreamPageSize + this.bitstreamSize);
-      const bitstreamsToShow = this.bundleBitstreamsMap.get(bundle.id).bitstreams.pipe(
+      let nextBitstreams = res?.page.slice(this.bitstreamPageSize, this.bitstreamPageSize + this.bitstreamSize);
+      let bitstreamsToShow = this.bundleBitstreamsMap.get(bundle.id).bitstreams.pipe(
         map((existingBits: Bitstream[])=> {
           return [... existingBits, ...nextBitstreams];
-        }),
+        })
       );
       this.bitstreamPageSize = this.bitstreamPageSize + this.bitstreamSize;
-      const bitstreamMapValues: BitstreamMapValue = {
+      let bitstreamMapValues: BitstreamMapValue = {
         bitstreams: bitstreamsToShow ,
         isCollapsed: this.bundleBitstreamsMap.get(bundle.id).isCollapsed,
-        allBitstreamsLoaded: res?.page.length <= this.bitstreamPageSize,
+        allBitstreamsLoaded: res?.page.length <= this.bitstreamPageSize
       };
       this.bundleBitstreamsMap.set(bundle.id, bitstreamMapValues);
     });

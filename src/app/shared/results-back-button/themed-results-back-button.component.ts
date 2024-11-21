@@ -1,18 +1,12 @@
-import {
-  Component,
-  Input,
-} from '@angular/core';
-import { Observable } from 'rxjs';
-
+import { Component, Input } from '@angular/core';
 import { ThemedComponent } from '../theme-support/themed.component';
 import { ResultsBackButtonComponent } from './results-back-button.component';
+import { Observable } from 'rxjs';
 
 @Component({
-  selector: 'ds-results-back-button',
+  selector: 'ds-themed-results-back-button',
   styleUrls: [],
   templateUrl: '../theme-support/themed.component.html',
-  standalone: true,
-  imports: [ResultsBackButtonComponent],
 })
 export class ThemedResultsBackButtonComponent extends ThemedComponent<ResultsBackButtonComponent> {
 

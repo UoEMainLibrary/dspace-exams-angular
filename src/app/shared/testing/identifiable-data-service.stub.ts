@@ -1,12 +1,8 @@
-import {
-  EMPTY,
-  Observable,
-} from 'rxjs';
-
 import { CacheableObject } from '../../core/cache/cacheable-object.model';
-import { RemoteData } from '../../core/data/remote-data';
-import { FollowLinkConfig } from '../utils/follow-link-config.model';
 import { BaseDataServiceStub } from './base-data-service.stub';
+import { FollowLinkConfig } from '../utils/follow-link-config.model';
+import { Observable, EMPTY } from 'rxjs';
+import { RemoteData } from '../../core/data/remote-data';
 
 /**
  * Stub class for {@link IdentifiableDataService}

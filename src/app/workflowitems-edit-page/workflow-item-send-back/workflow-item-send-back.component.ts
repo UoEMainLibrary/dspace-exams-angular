@@ -1,36 +1,22 @@
-import {
-  CommonModule,
-  Location,
-} from '@angular/common';
 import { Component } from '@angular/core';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-import {
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
+import { WorkflowItemActionPageComponent } from '../workflow-item-action-page.component';
 import { Observable } from 'rxjs';
-
-import { RequestService } from '../../core/data/request.service';
-import { RouteService } from '../../core/services/route.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { WorkflowItemDataService } from '../../core/submission/workflowitem-data.service';
-import { ModifyItemOverviewComponent } from '../../item-page/edit-item-page/modify-item-overview/modify-item-overview.component';
+import { RouteService } from '../../core/services/route.service';
 import { NotificationsService } from '../../shared/notifications/notifications.service';
-import { VarDirective } from '../../shared/utils/var.directive';
-import { WorkflowItemActionPageDirective } from '../workflow-item-action-page.component';
+import { TranslateService } from '@ngx-translate/core';
+import { RequestService } from '../../core/data/request.service';
+import { Location } from '@angular/common';
 
 @Component({
-  selector: 'ds-base-workflow-item-send-back',
-  templateUrl: '../workflow-item-action-page.component.html',
-  standalone: true,
-  imports: [VarDirective, TranslateModule, CommonModule, ModifyItemOverviewComponent],
+  selector: 'ds-workflow-item-send-back',
+  templateUrl: '../workflow-item-action-page.component.html'
 })
 /**
  * Component representing a page to send back a workflow item to the submitter
  */
-export class WorkflowItemSendBackComponent extends WorkflowItemActionPageDirective {
+export class WorkflowItemSendBackComponent extends WorkflowItemActionPageComponent {
   constructor(protected route: ActivatedRoute,
               protected workflowItemService: WorkflowItemDataService,
               protected router: Router,

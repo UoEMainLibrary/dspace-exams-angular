@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { BrowserHardRedirectService } from './browser-hard-redirect.service';
 
 describe('BrowserHardRedirectService', () => {
@@ -16,7 +15,7 @@ describe('BrowserHardRedirectService', () => {
       origin,
       replace: (url: string) => {
         mockLocation.href = url;
-      },
+      }
     } as Location;
     spyOn(mockLocation, 'replace');
 

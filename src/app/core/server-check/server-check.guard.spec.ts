@@ -1,97 +1,68 @@
-import {
-  NavigationEnd,
-  NavigationStart,
-  Router,
-  RouterEvent,
-  UrlTree,
-} from '@angular/router';
-import {
-  of,
-  ReplaySubject,
-} from 'rxjs';
-import { TestScheduler } from 'rxjs/testing';
-
-import { RootDataService } from '../data/root-data.service';
 import { ServerCheckGuard } from './server-check.guard';
+import { Router } from '@angular/router';
+
+import { of } from 'rxjs';
+import { take } from 'rxjs/operators';
+
+import { getPageInternalServerErrorRoute } from '../../app-routing-paths';
+import { RootDataService } from '../data/root-data.service';
 import SpyObj = jasmine.SpyObj;
 
 describe('ServerCheckGuard', () => {
-  let guard: any;
-  let router: Router;
-  let eventSubject: ReplaySubject<RouterEvent>;
+  let guard: ServerCheckGuard;
+  let router: SpyObj<Router>;
   let rootDataServiceStub: SpyObj<RootDataService>;
-  let testScheduler: TestScheduler;
-  let redirectUrlTree: UrlTree;
+
+  rootDataServiceStub = jasmine.createSpyObj('RootDataService', {
+    checkServerAvailability: jasmine.createSpy('checkServerAvailability'),
+    invalidateRootCache: jasmine.createSpy('invalidateRootCache')
+  });
+  router = jasmine.createSpyObj('Router', {
+    navigateByUrl: jasmine.createSpy('navigateByUrl')
+  });
 
   beforeEach(() => {
-    testScheduler = new TestScheduler((actual, expected) => {
-      expect(actual).toEqual(expected);
-    });
-    rootDataServiceStub = jasmine.createSpyObj('RootDataService', {
-      checkServerAvailability: jasmine.createSpy('checkServerAvailability'),
-      invalidateRootCache: jasmine.createSpy('invalidateRootCache'),
-      findRoot: jasmine.createSpy('findRoot'),
-    });
-    redirectUrlTree = new UrlTree();
-    eventSubject = new ReplaySubject<RouterEvent>(1);
-    router = {
-      events: eventSubject.asObservable(),
-      navigateByUrl: jasmine.createSpy('navigateByUrl'),
-      parseUrl: jasmine.createSpy('parseUrl').and.returnValue(redirectUrlTree),
-    } as any;
-    guard = ServerCheckGuard;
+    guard = new ServerCheckGuard(router, rootDataServiceStub);
+  });
+
+  afterEach(() => {
+    router.navigateByUrl.calls.reset();
+    rootDataServiceStub.invalidateRootCache.calls.reset();
   });
 
   it('should be created', () => {
     expect(guard).toBeTruthy();
   });
 
-  describe('when root endpoint request has succeeded', () => {
+  describe('when root endpoint has succeeded', () => {
     beforeEach(() => {
       rootDataServiceStub.checkServerAvailability.and.returnValue(of(true));
     });
 
-    it('should return true', () => {
-      testScheduler.run(({ expectObservable }) => {
-        const result$ = guard({} as any, {} as any, rootDataServiceStub, router);
-        expectObservable(result$).toBe('(a|)', { a: true });
+    it('should not redirect to error page', () => {
+      guard.canActivateChild({} as any, {} as any).pipe(
+        take(1)
+      ).subscribe((canActivate: boolean) => {
+        expect(canActivate).toEqual(true);
+        expect(rootDataServiceStub.invalidateRootCache).not.toHaveBeenCalled();
+        expect(router.navigateByUrl).not.toHaveBeenCalled();
       });
     });
   });
 
-  describe('when root endpoint request has not succeeded', () => {
+  describe('when root endpoint has not succeeded', () => {
     beforeEach(() => {
       rootDataServiceStub.checkServerAvailability.and.returnValue(of(false));
     });
 
-    it('should return a UrlTree with the route to the 500 error page', () => {
-      testScheduler.run(({ expectObservable }) => {
-        const result$ = guard({} as any, {} as any, rootDataServiceStub, router);
-        expectObservable(result$).toBe('(b|)', { b: redirectUrlTree });
+    it('should redirect to error page', () => {
+      guard.canActivateChild({} as any, {} as any).pipe(
+        take(1)
+      ).subscribe((canActivate: boolean) => {
+        expect(canActivate).toEqual(false);
+        expect(rootDataServiceStub.invalidateRootCache).toHaveBeenCalled();
+        expect(router.navigateByUrl).toHaveBeenCalledWith(getPageInternalServerErrorRoute());
       });
-      expect(router.parseUrl).toHaveBeenCalledWith('/500');
-    });
-  });
-
-  xdescribe(`listenForRouteChanges`, () => {
-    it(`should invalidate the root cache, when the method is first called`, () => {
-      testScheduler.run(() => {
-        guard.listenForRouteChanges();
-        expect(rootDataServiceStub.invalidateRootCache).toHaveBeenCalledTimes(1);
-      });
-    });
-
-    it(`should invalidate the root cache on every NavigationStart event`, () => {
-      testScheduler.run(() => {
-        guard.listenForRouteChanges();
-        eventSubject.next(new NavigationStart(1,''));
-        eventSubject.next(new NavigationEnd(1,'', ''));
-        eventSubject.next(new NavigationStart(2,''));
-        eventSubject.next(new NavigationEnd(2,'', ''));
-        eventSubject.next(new NavigationStart(3,''));
-      });
-      // once when the method is first called, and then 3 times for NavigationStart events
-      expect(rootDataServiceStub.invalidateRootCache).toHaveBeenCalledTimes(1 + 3);
     });
   });
 });

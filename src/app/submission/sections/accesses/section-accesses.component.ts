@@ -1,10 +1,16 @@
-import { NgIf } from '@angular/common';
-import {
-  Component,
-  Inject,
-  ViewChild,
-} from '@angular/core';
+import { SectionAccessesService } from './section-accesses.service';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { UntypedFormControl } from '@angular/forms';
+
+import { filter, map, mergeMap, take } from 'rxjs/operators';
+import { combineLatest, Observable, of, Subscription } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
+
+import { renderSectionFor } from '../sections-decorator';
+import { SectionsType } from '../sections-type';
+import { SectionDataObject } from '../models/section-data.model';
+import { SectionsService } from '../sections.service';
+import { SectionModelComponent } from '../models/section.model';
 import {
   DYNAMIC_FORM_CONTROL_TYPE_CHECKBOX,
   DYNAMIC_FORM_CONTROL_TYPE_DATEPICKER,
@@ -16,44 +22,10 @@ import {
   DynamicFormGroupModel,
   DynamicSelectModel,
   MATCH_ENABLED,
-  OR_OPERATOR,
+  OR_OPERATOR
 } from '@ng-dynamic-forms/core';
-import { DynamicDateControlValue } from '@ng-dynamic-forms/core/lib/model/dynamic-date-control.model';
-import { DynamicFormControlCondition } from '@ng-dynamic-forms/core/lib/model/misc/dynamic-form-control-relation.model';
-import { TranslateService } from '@ngx-translate/core';
-import {
-  combineLatest,
-  Observable,
-  of,
-  Subscription,
-} from 'rxjs';
-import {
-  filter,
-  map,
-  mergeMap,
-  take,
-} from 'rxjs/operators';
 
-import { AccessesConditionOption } from '../../../core/config/models/config-accesses-conditions-options.model';
-import { SubmissionAccessesConfigDataService } from '../../../core/config/submission-accesses-config-data.service';
-import { JsonPatchOperationPathCombiner } from '../../../core/json-patch/builder/json-patch-operation-path-combiner';
-import { JsonPatchOperationsBuilder } from '../../../core/json-patch/builder/json-patch-operations-builder';
-import { getFirstSucceededRemoteData } from '../../../core/shared/operators';
-import { WorkspaceitemSectionAccessesObject } from '../../../core/submission/models/workspaceitem-section-accesses.model';
-import { SubmissionJsonPatchOperationsService } from '../../../core/submission/submission-json-patch-operations.service';
-import { dateToISOFormat } from '../../../shared/date.util';
-import {
-  hasValue,
-  isNotEmpty,
-  isNotNull,
-} from '../../../shared/empty.util';
 import { FormBuilderService } from '../../../shared/form/builder/form-builder.service';
-import { FormComponent } from '../../../shared/form/form.component';
-import { FormService } from '../../../shared/form/form.service';
-import { SectionFormOperationsService } from '../form/section-form-operations.service';
-import { SectionModelComponent } from '../models/section.model';
-import { SectionDataObject } from '../models/section-data.model';
-import { SectionsService } from '../sections.service';
 import {
   ACCESS_CONDITION_GROUP_CONFIG,
   ACCESS_CONDITION_GROUP_LAYOUT,
@@ -66,9 +38,26 @@ import {
   FORM_ACCESS_CONDITION_START_DATE_CONFIG,
   FORM_ACCESS_CONDITION_START_DATE_LAYOUT,
   FORM_ACCESS_CONDITION_TYPE_CONFIG,
-  FORM_ACCESS_CONDITION_TYPE_LAYOUT,
+  FORM_ACCESS_CONDITION_TYPE_LAYOUT
 } from './section-accesses.model';
-import { SectionAccessesService } from './section-accesses.service';
+import { hasValue, isNotEmpty, isNotNull } from '../../../shared/empty.util';
+import {
+  WorkspaceitemSectionAccessesObject
+} from '../../../core/submission/models/workspaceitem-section-accesses.model';
+import { SubmissionAccessesConfigDataService } from '../../../core/config/submission-accesses-config-data.service';
+import { getFirstSucceededRemoteData } from '../../../core/shared/operators';
+import { FormComponent } from '../../../shared/form/form.component';
+import { FormService } from '../../../shared/form/form.service';
+import { JsonPatchOperationPathCombiner } from '../../../core/json-patch/builder/json-patch-operation-path-combiner';
+import { SectionFormOperationsService } from '../form/section-form-operations.service';
+import { JsonPatchOperationsBuilder } from '../../../core/json-patch/builder/json-patch-operations-builder';
+import { AccessesConditionOption } from '../../../core/config/models/config-accesses-conditions-options.model';
+import {
+  SubmissionJsonPatchOperationsService
+} from '../../../core/submission/submission-json-patch-operations.service';
+import { dateToISOFormat } from '../../../shared/date.util';
+import { DynamicFormControlCondition } from '@ng-dynamic-forms/core/lib/model/misc/dynamic-form-control-relation.model';
+import { DynamicDateControlValue } from '@ng-dynamic-forms/core/lib/model/dynamic-date-control.model';
 
 /**
  * This component represents a section for managing item's access conditions.
@@ -76,13 +65,9 @@ import { SectionAccessesService } from './section-accesses.service';
 @Component({
   selector: 'ds-section-accesses',
   templateUrl: './section-accesses.component.html',
-  styleUrls: ['./section-accesses.component.scss'],
-  imports: [
-    FormComponent,
-    NgIf,
-  ],
-  standalone: true,
+  styleUrls: ['./section-accesses.component.scss']
 })
+@renderSectionFor(SectionsType.AccessesCondition)
 export class SubmissionSectionAccessesComponent extends SectionModelComponent {
 
   /**
@@ -178,7 +163,7 @@ export class SubmissionSectionAccessesComponent extends SectionModelComponent {
               metadataModel.value = {
                 year: date.getUTCFullYear(),
                 month: date.getUTCMonth() + 1,
-                day: date.getUTCDate(),
+                day: date.getUTCDate()
               };
             } else {
               metadataModel.value = accessCondition[key];
@@ -218,7 +203,7 @@ export class SubmissionSectionAccessesComponent extends SectionModelComponent {
         take(1),
         filter((isValid) => isValid),
         mergeMap(() => this.formService.getFormData(this.formId)),
-        take(1),
+        take(1)
       ).subscribe((formData: any) => {
         const accessConditionsToSave = [];
         formData.accessCondition
@@ -322,10 +307,10 @@ export class SubmissionSectionAccessesComponent extends SectionModelComponent {
       const discoverableCheckboxConfig = Object.assign({}, ACCESS_FORM_CHECKBOX_CONFIG, {
         label: this.translate.instant('submission.sections.accesses.form.discoverable-label'),
         hint: this.translate.instant('submission.sections.accesses.form.discoverable-description'),
-        value: this.accessesData.discoverable,
+        value: this.accessesData.discoverable
       });
       formModel.push(
-        new DynamicCheckboxModel(discoverableCheckboxConfig, ACCESS_FORM_CHECKBOX_LAYOUT),
+        new DynamicCheckboxModel(discoverableCheckboxConfig, ACCESS_FORM_CHECKBOX_LAYOUT)
       );
     }
 
@@ -337,8 +322,8 @@ export class SubmissionSectionAccessesComponent extends SectionModelComponent {
       accessConditionTypeOptions.push(
         {
           label: accessCondition.name,
-          value: accessCondition.name,
-        },
+          value: accessCondition.name
+        }
       );
     }
     accessConditionTypeModelConfig.options = accessConditionTypeOptions;
@@ -357,7 +342,7 @@ export class SubmissionSectionAccessesComponent extends SectionModelComponent {
           maxStartDate = {
             year: min.getUTCFullYear(),
             month: min.getUTCMonth() + 1,
-            day: min.getUTCDate(),
+            day: min.getUTCDate()
           };
         }
       }
@@ -368,7 +353,7 @@ export class SubmissionSectionAccessesComponent extends SectionModelComponent {
           maxEndDate = {
             year: max.getUTCFullYear(),
             month: max.getUTCMonth() + 1,
-            day: max.getUTCDate(),
+            day: max.getUTCDate()
           };
         }
       }
@@ -406,7 +391,7 @@ export class SubmissionSectionAccessesComponent extends SectionModelComponent {
     // Number of access conditions blocks in form
     accessConditionsArrayConfig.initialCount = isNotEmpty(this.accessesData.accessConditions) ? this.accessesData.accessConditions.length : 1;
     formModel.push(
-      new DynamicFormArrayModel(accessConditionsArrayConfig, ACCESS_CONDITIONS_FORM_ARRAY_LAYOUT),
+      new DynamicFormArrayModel(accessConditionsArrayConfig, ACCESS_CONDITIONS_FORM_ARRAY_LAYOUT)
     );
 
     this.initModelData(formModel);

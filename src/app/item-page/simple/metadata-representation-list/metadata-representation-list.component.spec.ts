@@ -1,29 +1,18 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { BrowseDefinitionDataService } from '../../../core/browse/browse-definition-data.service';
+import { MetadataRepresentationListComponent } from './metadata-representation-list.component';
 import { RelationshipDataService } from '../../../core/data/relationship-data.service';
-import { DSpaceObject } from '../../../core/shared/dspace-object.model';
 import { Item } from '../../../core/shared/item.model';
+import { TranslateModule } from '@ngx-translate/core';
+import { VarDirective } from '../../../shared/utils/var.directive';
+import { of as observableOf } from 'rxjs';
 import { MetadataValue } from '../../../core/shared/metadata.models';
+import { DSpaceObject } from '../../../core/shared/dspace-object.model';
 import { ItemMetadataRepresentation } from '../../../core/shared/metadata-representation/item/item-metadata-representation.model';
 import { MetadatumRepresentation } from '../../../core/shared/metadata-representation/metadatum/metadatum-representation.model';
-import { ThemedLoadingComponent } from '../../../shared/loading/themed-loading.component';
-import { MetadataFieldWrapperComponent } from '../../../shared/metadata-field-wrapper/metadata-field-wrapper.component';
-import { MetadataRepresentationLoaderComponent } from '../../../shared/metadata-representation/metadata-representation-loader.component';
+import { BrowseDefinitionDataService } from '../../../core/browse/browse-definition-data.service';
 import { BrowseDefinitionDataServiceStub } from '../../../shared/testing/browse-definition-data-service.stub';
-import { VarDirective } from '../../../shared/utils/var.directive';
-import { MetadataRepresentationListComponent } from './metadata-representation-list.component';
 
 const itemType = 'Person';
 const metadataFields = ['dc.contributor.author', 'dc.creator'];
@@ -35,13 +24,13 @@ const parentItem: Item = Object.assign(new Item(), {
         language: null,
         value: 'Related Author with authority',
         authority: 'virtual::related-author',
-        place: 2,
+        place: 2
       },
       {
         language: null,
         value: 'Author without authority',
-        place: 1,
-      },
+        place: 1
+      }
     ],
     'dc.creator': [
       {
@@ -60,10 +49,10 @@ const parentItem: Item = Object.assign(new Item(), {
     'dc.title': [
       {
         language: null,
-        value: 'Parent Item',
-      },
-    ],
-  },
+        value: 'Parent Item'
+      }
+    ]
+  }
 });
 const relatedAuthor: Item = Object.assign(new Item(), {
   id: 'related-author',
@@ -71,10 +60,10 @@ const relatedAuthor: Item = Object.assign(new Item(), {
     'dc.title': [
       {
         language: null,
-        value: 'Related Author',
-      },
-    ],
-  },
+        value: 'Related Author'
+      }
+    ]
+  }
 });
 const relatedCreator: Item = Object.assign(new Item(), {
   id: 'related-creator',
@@ -82,11 +71,11 @@ const relatedCreator: Item = Object.assign(new Item(), {
     'dc.title': [
       {
         language: null,
-        value: 'Related Creator',
-      },
+        value: 'Related Creator'
+      }
     ],
     'dspace.entity.type': 'Person',
-  },
+  }
 });
 
 describe('MetadataRepresentationListComponent', () => {
@@ -114,15 +103,15 @@ describe('MetadataRepresentationListComponent', () => {
     };
 
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), MetadataRepresentationListComponent, VarDirective],
+      imports: [TranslateModule.forRoot()],
+      declarations: [MetadataRepresentationListComponent, VarDirective],
       providers: [
         { provide: RelationshipDataService, useValue: relationshipService },
-        { provide: BrowseDefinitionDataService, useValue: BrowseDefinitionDataServiceStub },
+        { provide: BrowseDefinitionDataService, useValue: BrowseDefinitionDataServiceStub }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(MetadataRepresentationListComponent, {
-      add: { changeDetection: ChangeDetectionStrategy.Default },
-      remove: { imports: [MetadataFieldWrapperComponent, MetadataRepresentationLoaderComponent, ThemedLoadingComponent] },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 

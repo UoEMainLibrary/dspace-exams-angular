@@ -1,54 +1,19 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-  UntypedFormBuilder,
-  UntypedFormControl,
-  UntypedFormGroup,
-  Validators,
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import {
-  NgbDatepickerModule,
-  NgbDateStruct,
-  NgbTimepickerModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import {
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import {
-  utcToZonedTime,
-  zonedTimeToUtc,
-} from 'date-fns-tz';
-import { UiSwitchModule } from 'ngx-ui-switch';
-import {
-  BehaviorSubject,
-  Observable,
-} from 'rxjs';
-import {
-  filter,
-  map,
-} from 'rxjs/operators';
-
-import { PaginatedList } from '../../core/data/paginated-list.model';
-import { RemoteData } from '../../core/data/remote-data';
-import { RequestService } from '../../core/data/request.service';
+import { Component, OnInit } from '@angular/core';
 import { SystemWideAlertDataService } from '../../core/data/system-wide-alert-data.service';
 import { getFirstCompletedRemoteData } from '../../core/shared/operators';
-import {
-  hasValue,
-  isNotEmpty,
-} from '../../shared/empty.util';
-import { NotificationsService } from '../../shared/notifications/notifications.service';
+import { filter, map } from 'rxjs/operators';
+import { PaginatedList } from '../../core/data/paginated-list.model';
 import { SystemWideAlert } from '../system-wide-alert.model';
+import { hasValue, isNotEmpty } from '../../shared/empty.util';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { UntypedFormBuilder, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms';
+import { NgbDateStruct } from '@ng-bootstrap/ng-bootstrap';
+import { utcToZonedTime, zonedTimeToUtc } from 'date-fns-tz';
+import { RemoteData } from '../../core/data/remote-data';
+import { NotificationsService } from '../../shared/notifications/notifications.service';
+import { Router } from '@angular/router';
+import { RequestService } from '../../core/data/request.service';
+import { TranslateService } from '@ngx-translate/core';
 
 
 /**
@@ -57,9 +22,7 @@ import { SystemWideAlert } from '../system-wide-alert.model';
 @Component({
   selector: 'ds-system-wide-alert-form',
   styleUrls: ['./system-wide-alert-form.component.scss'],
-  templateUrl: './system-wide-alert-form.component.html',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, UiSwitchModule, NgIf, NgbDatepickerModule, NgbTimepickerModule, AsyncPipe, TranslateModule],
+  templateUrl: './system-wide-alert-form.component.html'
 })
 export class SystemWideAlertFormComponent implements OnInit {
 
@@ -119,7 +82,7 @@ export class SystemWideAlertFormComponent implements OnInit {
     protected notificationsService: NotificationsService,
     protected router: Router,
     protected requestService: RequestService,
-    protected translateService: TranslateService,
+    protected translateService: TranslateService
   ) {
   }
 
@@ -135,12 +98,12 @@ export class SystemWideAlertFormComponent implements OnInit {
       }),
       map((payload: PaginatedList<SystemWideAlert>) => payload.page),
       filter((page) => isNotEmpty(page)),
-      map((page) => page[0]),
+      map((page) => page[0])
     );
     this.createForm();
 
     const currentDate = new Date();
-    this.minDate = { year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate() };
+    this.minDate = {year: currentDate.getFullYear(), month: currentDate.getMonth() + 1, day: currentDate.getDate()};
 
 
     this.systemWideAlert$.subscribe((alert) => {
@@ -154,11 +117,11 @@ export class SystemWideAlertFormComponent implements OnInit {
    */
   createForm() {
     this.alertForm = new UntypedFormBuilder().group({
-      formMessage: new UntypedFormControl('', {
-        validators: [Validators.required],
-      }),
-      formActive: new UntypedFormControl(false),
-    },
+        formMessage: new UntypedFormControl('', {
+          validators: [Validators.required],
+        }),
+        formActive: new UntypedFormControl(false),
+      }
     );
     this.setDateTime(new Date());
   }
@@ -205,8 +168,8 @@ export class SystemWideAlertFormComponent implements OnInit {
 
 
   private setDateTime(dateToSet) {
-    this.time = { hour: dateToSet.getHours(), minute: dateToSet.getMinutes() };
-    this.date = { year: dateToSet.getFullYear(), month: dateToSet.getMonth() + 1, day: dateToSet.getDate() };
+    this.time = {hour: dateToSet.getHours(), minute: dateToSet.getMinutes()};
+    this.date = {year: dateToSet.getFullYear(), month: dateToSet.getMonth() + 1, day: dateToSet.getDate()};
 
     this.updatePreviewTime();
   }
@@ -256,19 +219,17 @@ export class SystemWideAlertFormComponent implements OnInit {
     } else {
       alert.countdownTo = null;
     }
-    if (this.alertForm.valid) {
-      if (hasValue(this.currentAlert)) {
-        const updatedAlert = Object.assign(new SystemWideAlert(), this.currentAlert, alert);
-        this.handleResponse(this.systemWideAlertDataService.put(updatedAlert), 'system-wide-alert.form.update', navigateToHomePage);
-      } else {
-        this.handleResponse(this.systemWideAlertDataService.create(alert), 'system-wide-alert.form.create', navigateToHomePage);
-      }
+    if (hasValue(this.currentAlert)) {
+      const updatedAlert = Object.assign(new SystemWideAlert(), this.currentAlert, alert);
+      this.handleResponse(this.systemWideAlertDataService.put(updatedAlert), 'system-wide-alert.form.update', navigateToHomePage);
+    } else {
+      this.handleResponse(this.systemWideAlertDataService.create(alert), 'system-wide-alert.form.create', navigateToHomePage);
     }
   }
 
   private handleResponse(response$: Observable<RemoteData<SystemWideAlert>>, messagePrefix, navigateToHomePage: boolean) {
     response$.pipe(
-      getFirstCompletedRemoteData(),
+      getFirstCompletedRemoteData()
     ).subscribe((response: RemoteData<SystemWideAlert>) => {
       if (response.hasSucceeded) {
         this.notificationsService.success(this.translateService.get(`${messagePrefix}.success`));

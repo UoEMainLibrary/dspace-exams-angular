@@ -1,25 +1,21 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 import { By } from '@angular/platform-browser';
 import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule } from '@ngx-translate/core';
-
+import { ItemAdminSearchResultActionsComponent } from './item-admin-search-result-actions.component';
 import { Item } from '../../../core/shared/item.model';
 import { URLCombiner } from '../../../core/url-combiner/url-combiner';
+import { getItemEditRoute } from '../../../item-page/item-page-routing-paths';
 import {
   ITEM_EDIT_DELETE_PATH,
   ITEM_EDIT_MOVE_PATH,
   ITEM_EDIT_PRIVATE_PATH,
   ITEM_EDIT_PUBLIC_PATH,
   ITEM_EDIT_REINSTATE_PATH,
-  ITEM_EDIT_WITHDRAW_PATH,
+  ITEM_EDIT_WITHDRAW_PATH
 } from '../../../item-page/edit-item-page/edit-item-page.routing-paths';
-import { getItemEditRoute } from '../../../item-page/item-page-routing-paths';
-import { ItemAdminSearchResultActionsComponent } from './item-admin-search-result-actions.component';
 
 describe('ItemAdminSearchResultActionsComponent', () => {
   let component: ItemAdminSearchResultActionsComponent;
@@ -38,10 +34,10 @@ describe('ItemAdminSearchResultActionsComponent', () => {
     TestBed.configureTestingModule({
       imports: [
         TranslateModule.forRoot(),
-        RouterTestingModule.withRoutes([]),
-        ItemAdminSearchResultActionsComponent,
+        RouterTestingModule.withRoutes([])
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      declarations: [ItemAdminSearchResultActionsComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

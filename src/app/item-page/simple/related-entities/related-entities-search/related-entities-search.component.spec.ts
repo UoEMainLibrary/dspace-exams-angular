@@ -1,23 +1,17 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
+import { RelatedEntitiesSearchComponent } from './related-entities-search.component';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { FormsModule } from '@angular/forms';
 import { Item } from '../../../../core/shared/item.model';
-import { ThemedConfigurationSearchPageComponent } from '../../../../search-page/themed-configuration-search-page.component';
-import { RelatedEntitiesSearchComponent } from './related-entities-search.component';
 
 describe('RelatedEntitiesSearchComponent', () => {
   let comp: RelatedEntitiesSearchComponent;
   let fixture: ComponentFixture<RelatedEntitiesSearchComponent>;
 
   const mockItem = Object.assign(new Item(), {
-    id: 'id1',
+    id: 'id1'
   });
   const mockRelationType = 'publicationsOfAuthor';
   const mockConfiguration = 'publication';
@@ -25,15 +19,10 @@ describe('RelatedEntitiesSearchComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), NoopAnimationsModule, FormsModule, RelatedEntitiesSearchComponent],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(RelatedEntitiesSearchComponent, {
-        remove: {
-          imports: [ThemedConfigurationSearchPageComponent],
-        },
-      })
-      .compileComponents();
+      imports: [TranslateModule.forRoot(), NoopAnimationsModule, FormsModule],
+      declarations: [RelatedEntitiesSearchComponent],
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

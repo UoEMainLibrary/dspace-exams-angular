@@ -1,19 +1,7 @@
-import { NgIf } from '@angular/common';
-import {
-  Component,
-  Optional,
-} from '@angular/core';
-import {
-  ControlContainer,
-  FormsModule,
-  NgForm,
-} from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-
-import { FileValueAccessorDirective } from '../../../../../shared/utils/file-value-accessor.directive';
-import { FileValidator } from '../../../../../shared/utils/require-file.validator';
-import { controlContainerFactory } from '../../../process-form-factory';
+import { Component, Optional } from '@angular/core';
 import { ValueInputComponent } from '../value-input.component';
+import { ControlContainer, NgForm } from '@angular/forms';
+import { controlContainerFactory } from '../../../process-form.component';
 
 /**
  * Represents the user inputted value of a file parameter
@@ -22,11 +10,9 @@ import { ValueInputComponent } from '../value-input.component';
   selector: 'ds-file-value-input',
   templateUrl: './file-value-input.component.html',
   styleUrls: ['./file-value-input.component.scss'],
-  viewProviders: [{ provide: ControlContainer,
+  viewProviders: [ { provide: ControlContainer,
     useFactory: controlContainerFactory,
-    deps: [[new Optional(), NgForm]] }],
-  standalone: true,
-  imports: [FileValueAccessorDirective, FormsModule, FileValidator, NgIf, TranslateModule],
+    deps: [[new Optional(), NgForm]] } ]
 })
 export class FileValueInputComponent extends ValueInputComponent<File> {
   /**

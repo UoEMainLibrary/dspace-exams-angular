@@ -1,24 +1,17 @@
-import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { AuthService } from '../../core/auth/auth.service';
-import { CommunityDataService } from '../../core/data/community-data.service';
-import { RequestService } from '../../core/data/request.service';
+import { CommonModule } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouteService } from '../../core/services/route.service';
-import { AuthServiceMock } from '../../shared/mocks/auth.service.mock';
+import { SharedModule } from '../../shared/shared.module';
+import { of as observableOf } from 'rxjs';
+import { CommunityDataService } from '../../core/data/community-data.service';
+import { CreateCommunityPageComponent } from './create-community-page.component';
 import { NotificationsService } from '../../shared/notifications/notifications.service';
 import { NotificationsServiceStub } from '../../shared/testing/notifications-service.stub';
-import { CommunityFormComponent } from '../community-form/community-form.component';
-import { CreateCommunityPageComponent } from './create-community-page.component';
+import { RequestService } from '../../core/data/request.service';
 
 describe('CreateCommunityPageComponent', () => {
   let comp: CreateCommunityPageComponent;
@@ -26,23 +19,17 @@ describe('CreateCommunityPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), CommonModule, RouterTestingModule, CreateCommunityPageComponent],
+      imports: [TranslateModule.forRoot(), SharedModule, CommonModule, RouterTestingModule],
+      declarations: [CreateCommunityPageComponent],
       providers: [
         { provide: CommunityDataService, useValue: { findById: () => observableOf({}) } },
         { provide: RouteService, useValue: { getQueryParameterValue: () => observableOf('1234') } },
         { provide: Router, useValue: {} },
         { provide: NotificationsService, useValue: new NotificationsServiceStub() },
-        { provide: RequestService, useValue: {} },
-        { provide: AuthService, useValue: new AuthServiceMock() },
+        { provide: RequestService, useValue: {} }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(CreateCommunityPageComponent, {
-        remove: {
-          imports: [CommunityFormComponent],
-        },
-      })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

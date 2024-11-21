@@ -1,24 +1,16 @@
-import { NgIf } from '@angular/common';
-import {
-  Component,
-  Input,
-} from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, Injectable, Input } from '@angular/core';
 
 /**
  * This component builds a URL from the value of "handle"
  */
 
 @Component({
-  selector: 'ds-base-comcol-page-handle',
+  selector: 'ds-comcol-page-handle',
   styleUrls: ['./comcol-page-handle.component.scss'],
-  templateUrl: './comcol-page-handle.component.html',
-  imports: [
-    NgIf,
-    TranslateModule,
-  ],
-  standalone: true,
+  templateUrl: './comcol-page-handle.component.html'
 })
+
+@Injectable()
 export class ComcolPageHandleComponent {
 
   // Optional title

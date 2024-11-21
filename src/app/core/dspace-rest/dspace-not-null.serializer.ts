@@ -1,7 +1,4 @@
-import {
-  Deserialize,
-  Serialize,
-} from 'cerialize';
+import { Deserialize, Serialize } from 'cerialize';
 
 import { Serializer } from '../serializer';
 import { GenericConstructor } from '../shared/generic-constructor';

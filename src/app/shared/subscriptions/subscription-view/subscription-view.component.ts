@@ -1,38 +1,24 @@
-import {
-  NgFor,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
-import { RouterLink } from '@angular/router';
-import {
-  NgbModal,
-  NgbModalRef,
-} from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
-import { take } from 'rxjs/operators';
-import { getDSORoute } from 'src/app/app-routing-paths';
-
-import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
-import { DSpaceObject } from '../../../core/shared/dspace-object.model';
-import { ConfirmationModalComponent } from '../../confirmation-modal/confirmation-modal.component';
-import { hasValue } from '../../empty.util';
-import { ThemedTypeBadgeComponent } from '../../object-collection/shared/badges/type-badge/themed-type-badge.component';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Subscription } from '../models/subscription.model';
-import { SubscriptionModalComponent } from '../subscription-modal/subscription-modal.component';
+import { DSpaceObject } from '../../../core/shared/dspace-object.model';
+
+import { take } from 'rxjs/operators';
+import { NgbModal, NgbModalRef } from '@ng-bootstrap/ng-bootstrap';
+
+import { hasValue } from '../../empty.util';
+import { ConfirmationModalComponent } from '../../confirmation-modal/confirmation-modal.component';
 import { SubscriptionsDataService } from '../subscriptions-data.service';
+import { getCommunityModuleRoute } from '../../../community-page/community-page-routing-paths';
+import { getCollectionModuleRoute } from '../../../collection-page/collection-page-routing-paths';
+import { getItemModuleRoute } from '../../../item-page/item-page-routing-paths';
+import { SubscriptionModalComponent } from '../subscription-modal/subscription-modal.component';
+import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
 
 @Component({
   // eslint-disable-next-line @angular-eslint/component-selector
   selector: '[ds-subscription-view]',
   templateUrl: './subscription-view.component.html',
-  styleUrls: ['./subscription-view.component.scss'],
-  standalone: true,
-  imports: [NgIf, ThemedTypeBadgeComponent, RouterLink, NgFor, TranslateModule],
+  styleUrls: ['./subscription-view.component.scss']
 })
 /**
  * Table row representing a subscription that displays all information and action buttons to manage it
@@ -71,10 +57,22 @@ export class SubscriptionViewComponent {
   ) { }
 
   /**
-   * Return the route to the dso object page
+   * Return the prefix of the route to the dso object page ( e.g. "items")
    */
-  getPageRoute(dso: DSpaceObject): string {
-    return getDSORoute(dso);
+  getPageRoutePrefix(): string {
+    let routePrefix;
+    switch (this.dso.type.toString()) {
+      case 'community':
+        routePrefix = getCommunityModuleRoute();
+        break;
+      case 'collection':
+        routePrefix = getCollectionModuleRoute();
+        break;
+      case 'item':
+        routePrefix = getItemModuleRoute();
+        break;
+    }
+    return routePrefix;
   }
 
   /**
@@ -84,7 +82,7 @@ export class SubscriptionViewComponent {
   deleteSubscriptionPopup(subscription: Subscription) {
     if (hasValue(subscription.id)) {
       const modalRef = this.modalService.open(ConfirmationModalComponent);
-      modalRef.componentInstance.name = this.dsoNameService.getName(this.dso);
+      modalRef.componentInstance.dso = this.dso;
       modalRef.componentInstance.headerLabel = 'confirmation-modal.delete-subscription.header';
       modalRef.componentInstance.infoLabel = 'confirmation-modal.delete-subscription.info';
       modalRef.componentInstance.cancelLabel = 'confirmation-modal.delete-subscription.cancel';

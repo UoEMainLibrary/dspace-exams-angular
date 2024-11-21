@@ -1,18 +1,10 @@
 import { Injectable } from '@angular/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-import {
-  map,
-  switchMap,
-  take,
-} from 'rxjs/operators';
-
-import { hasValue } from '../../shared/empty.util';
 import { AuthService } from '../auth/auth.service';
-import { EPersonDataService } from '../eperson/eperson-data.service';
 import { CookieService } from '../services/cookie.service';
+import { Observable, of as observableOf } from 'rxjs';
+import { map, switchMap, take } from 'rxjs/operators';
+import { hasValue } from '../../shared/empty.util';
+import { EPersonDataService } from '../eperson/eperson-data.service';
 import { getFirstCompletedRemoteData } from '../shared/operators';
 
 export const END_USER_AGREEMENT_COOKIE = 'hasAgreedEndUser';
@@ -21,7 +13,7 @@ export const END_USER_AGREEMENT_METADATA_FIELD = 'dspace.agreements.end-user';
 /**
  * Service for checking and managing the status of the current end user agreement
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class EndUserAgreementService {
 
   constructor(protected cookie: CookieService,
@@ -52,12 +44,12 @@ export class EndUserAgreementService {
       switchMap((authenticated) => {
         if (authenticated) {
           return this.authService.getAuthenticatedUserFromStore().pipe(
-            map((user) => hasValue(user) && user.hasMetadata(END_USER_AGREEMENT_METADATA_FIELD) && user.firstMetadata(END_USER_AGREEMENT_METADATA_FIELD).value === 'true'),
+            map((user) => hasValue(user) && user.hasMetadata(END_USER_AGREEMENT_METADATA_FIELD) && user.firstMetadata(END_USER_AGREEMENT_METADATA_FIELD).value === 'true')
           );
         } else {
           return observableOf(acceptedWhenAnonymous);
         }
-      }),
+      })
     );
   }
 
@@ -84,14 +76,14 @@ export class EndUserAgreementService {
               return this.ePersonService.patch(user, [operation]);
             }),
             getFirstCompletedRemoteData(),
-            map((response) => response.hasSucceeded),
+            map((response) => response.hasSucceeded)
           );
         } else {
           this.setCookieAccepted(accepted);
           return observableOf(true);
         }
       }),
-      take(1),
+      take(1)
     );
   }
 

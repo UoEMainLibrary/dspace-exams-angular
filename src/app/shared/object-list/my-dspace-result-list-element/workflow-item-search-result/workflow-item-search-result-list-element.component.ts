@@ -1,35 +1,23 @@
-import {
-  AsyncPipe,
-  NgClass,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  Inject,
-} from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import { Component, Inject } from '@angular/core';
 
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../../../../config/app-config.interface';
-import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 import { LinkService } from '../../../../core/cache/builders/link.service';
-import { Context } from '../../../../core/shared/context.model';
 import { Item } from '../../../../core/shared/item.model';
-import { getFirstSucceededRemoteDataPayload } from '../../../../core/shared/operators';
+
 import { ViewMode } from '../../../../core/shared/view-mode.model';
 import { WorkflowItem } from '../../../../core/submission/models/workflowitem.model';
-import { ThemedLoadingComponent } from '../../../loading/themed-loading.component';
-import { WorkflowitemActionsComponent } from '../../../mydspace-actions/workflowitem/workflowitem-actions.component';
-import { CollectionElementLinkType } from '../../../object-collection/collection-element-link.type';
-import { ItemSearchResult } from '../../../object-collection/shared/item-search-result.model';
 import { listableObjectComponent } from '../../../object-collection/shared/listable-object/listable-object.decorator';
-import { ListableObjectComponentLoaderComponent } from '../../../object-collection/shared/listable-object/listable-object-component-loader.component';
 import { WorkflowItemSearchResult } from '../../../object-collection/shared/workflow-item-search-result.model';
 import { TruncatableService } from '../../../truncatable/truncatable.service';
 import { followLink } from '../../../utils/follow-link-config.model';
 import { SearchResultListElementComponent } from '../../search-result-list-element/search-result-list-element.component';
+import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
+import { APP_CONFIG, AppConfig } from '../../../../../config/app-config.interface';
+import { getFirstSucceededRemoteDataPayload } from '../../../../core/shared/operators';
+import { ItemSearchResult } from '../../../object-collection/shared/item-search-result.model';
+import { CollectionElementLinkType } from '../../../object-collection/collection-element-link.type';
+import { Context } from '../../../../core/shared/context.model';
 
 /**
  * This component renders workflowitem object for the search result in the list view.
@@ -38,8 +26,6 @@ import { SearchResultListElementComponent } from '../../search-result-list-eleme
   selector: 'ds-workflow-item-my-dspace-result-list-element',
   styleUrls: ['../../search-result-list-element/search-result-list-element.component.scss'],
   templateUrl: './workflow-item-search-result-list-element.component.html',
-  standalone: true,
-  imports: [NgIf, ListableObjectComponentLoaderComponent, NgClass, WorkflowitemActionsComponent, ThemedLoadingComponent, AsyncPipe],
 })
 
 @listableObjectComponent(WorkflowItemSearchResult, ViewMode.ListElement)
@@ -51,7 +37,7 @@ export class WorkflowItemSearchResultListElementComponent extends SearchResultLi
   /**
    * The item search result derived from the WorkspaceItemSearchResult
    */
-  derivedSearchResult$: BehaviorSubject<ItemSearchResult> = new BehaviorSubject(undefined);
+  derivedSearchResult$: Observable<ItemSearchResult>;
 
   /**
    * Represents the badge context
@@ -67,7 +53,7 @@ export class WorkflowItemSearchResultListElementComponent extends SearchResultLi
     protected truncatableService: TruncatableService,
     protected linkService: LinkService,
     public dsoNameService: DSONameService,
-    @Inject(APP_CONFIG) protected appConfig: AppConfig,
+    @Inject(APP_CONFIG) protected appConfig: AppConfig
   ) {
     super(truncatableService, dsoNameService, appConfig);
   }
@@ -83,14 +69,13 @@ export class WorkflowItemSearchResultListElementComponent extends SearchResultLi
 
   private deriveSearchResult() {
     this.linkService.resolveLink(this.object.indexableObject, followLink('item'));
-    this.object.indexableObject.item.pipe(
+    this.derivedSearchResult$ = this.object.indexableObject.item.pipe(
       getFirstSucceededRemoteDataPayload(),
-    ).subscribe((item: Item) => {
-      const result = new ItemSearchResult();
-      this.derivedSearchResult$.next(Object.assign(new ItemSearchResult(), {
-        indexableObject: item,
-        hitHighlights: this.object.hitHighlights,
+      map((item: Item) => {
+        const result = new ItemSearchResult();
+        result.indexableObject = item;
+        result.hitHighlights = this.object.hitHighlights;
+        return result;
       }));
-    });
   }
 }

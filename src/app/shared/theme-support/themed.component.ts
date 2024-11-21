@@ -1,49 +1,33 @@
 import {
-  AfterViewInit,
-  ChangeDetectorRef,
   Component,
-  ComponentRef,
-  ElementRef,
-  HostBinding,
-  OnChanges,
-  OnDestroy,
-  SimpleChanges,
   ViewChild,
   ViewContainerRef,
+  ComponentRef,
+  SimpleChanges,
+  OnInit,
+  OnDestroy,
+  ComponentFactoryResolver,
+  ChangeDetectorRef,
+  OnChanges,
+  HostBinding,
+  ElementRef,
 } from '@angular/core';
-import {
-  BehaviorSubject,
-  combineLatest,
-  from as fromPromise,
-  Observable,
-  of as observableOf,
-  Subscription,
-} from 'rxjs';
-import {
-  catchError,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
-
-import { GenericConstructor } from '../../core/shared/generic-constructor';
-import {
-  hasNoValue,
-  hasValue,
-  isNotEmpty,
-} from '../empty.util';
-import { BASE_THEME_NAME } from './theme.constants';
+import { hasNoValue, hasValue, isNotEmpty } from '../empty.util';
+import { combineLatest, from as fromPromise, Observable, of as observableOf, Subscription, BehaviorSubject } from 'rxjs';
 import { ThemeService } from './theme.service';
+import { catchError, switchMap, map, tap } from 'rxjs/operators';
+import { GenericConstructor } from '../../core/shared/generic-constructor';
+import { BASE_THEME_NAME } from './theme.constants';
 
 @Component({
   selector: 'ds-themed',
   styleUrls: ['./themed.component.scss'],
   templateUrl: './themed.component.html',
 })
-export abstract class ThemedComponent<T extends object> implements AfterViewInit, OnDestroy, OnChanges {
+export abstract class ThemedComponent<T> implements OnInit, OnDestroy, OnChanges {
   @ViewChild('vcr', { read: ViewContainerRef }) vcr: ViewContainerRef;
   @ViewChild('content') themedElementContent: ElementRef;
-  compRef: ComponentRef<T>;
+  protected compRef: ComponentRef<T>;
 
   /**
    * A reference to the themed component. Will start as undefined and emit every time the themed
@@ -63,6 +47,7 @@ export abstract class ThemedComponent<T extends object> implements AfterViewInit
   @HostBinding('attr.data-used-theme') usedTheme: string;
 
   constructor(
+    protected resolver: ComponentFactoryResolver,
     protected cdr: ChangeDetectorRef,
     protected themeService: ThemeService,
   ) {
@@ -89,7 +74,8 @@ export abstract class ThemedComponent<T extends object> implements AfterViewInit
     }
   }
 
-  ngAfterViewInit(): void {
+  ngOnInit(): void {
+    this.destroyComponentInstance();
     this.initComponentInstance();
   }
 
@@ -110,6 +96,8 @@ export abstract class ThemedComponent<T extends object> implements AfterViewInit
     }
 
     if (hasNoValue(this.lazyLoadObs)) {
+      this.destroyComponentInstance();
+
       this.lazyLoadObs = combineLatest([
         observableOf(changes),
         this.resolveThemedComponent(this.themeService.getThemeName()).pipe(
@@ -121,10 +109,10 @@ export abstract class ThemedComponent<T extends object> implements AfterViewInit
             } else {
               // otherwise import and return the default component
               return fromPromise(this.importUnthemedComponent()).pipe(
-                tap(() => this.usedTheme = BASE_THEME_NAME),
+            tap(() => this.usedTheme = BASE_THEME_NAME),
                 map((unthemedFile: any) => {
                   return unthemedFile[this.getComponentName()];
-                }),
+                })
               );
             }
           })),
@@ -132,10 +120,8 @@ export abstract class ThemedComponent<T extends object> implements AfterViewInit
     }
 
     this.lazyLoadSub = this.lazyLoadObs.subscribe(([simpleChanges, constructor]: [SimpleChanges, GenericConstructor<T>]) => {
-      this.destroyComponentInstance();
-      this.compRef = this.vcr.createComponent(constructor, {
-        projectableNodes: [this.themedElementContent.nativeElement.childNodes],
-      });
+      const factory = this.resolver.resolveComponentFactory(constructor);
+      this.compRef = this.vcr.createComponent(factory, undefined, undefined, [this.themedElementContent.nativeElement.childNodes]);
       if (hasValue(simpleChanges)) {
         this.ngOnChanges(simpleChanges);
       } else {

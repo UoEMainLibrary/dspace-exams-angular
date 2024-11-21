@@ -1,15 +1,10 @@
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
+import { ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
 
-import { ContextHelpService } from '../../shared/context-help.service';
 import { ContextHelpToggleComponent } from './context-help-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { ContextHelpService } from '../../shared/context-help.service';
+import { of as observableOf } from 'rxjs';
+import { By } from '@angular/platform-browser';
 
 describe('ContextHelpToggleComponent', () => {
   let component: ContextHelpToggleComponent;
@@ -18,14 +13,15 @@ describe('ContextHelpToggleComponent', () => {
 
   beforeEach(async () => {
     contextHelpService = jasmine.createSpyObj('contextHelpService', [
-      'tooltipCount$', 'toggleIcons',
+      'tooltipCount$', 'toggleIcons'
     ]);
     contextHelpService.tooltipCount$.and.returnValue(observableOf(0));
     await TestBed.configureTestingModule({
+      declarations: [ ContextHelpToggleComponent ],
       providers: [
         { provide: ContextHelpService, useValue: contextHelpService },
       ],
-      imports: [TranslateModule.forRoot(), ContextHelpToggleComponent],
+      imports: [ TranslateModule.forRoot() ]
     })
       .compileComponents();
   });

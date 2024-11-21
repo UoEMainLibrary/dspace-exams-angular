@@ -1,46 +1,22 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { UntypedFormGroup } from '@angular/forms';
+import { Component, EventEmitter, Input, OnDestroy, OnInit, Output } from '@angular/core';
 import {
   DynamicFormControlModel,
   DynamicFormGroupModel,
   DynamicFormLayout,
-  DynamicInputModel,
-  DynamicTextAreaModel,
+  DynamicInputModel
 } from '@ng-dynamic-forms/core';
-import {
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import { combineLatest } from 'rxjs';
-import { take } from 'rxjs/operators';
-
-import { MetadataField } from '../../../../core/metadata/metadata-field.model';
-import { MetadataSchema } from '../../../../core/metadata/metadata-schema.model';
+import { UntypedFormGroup } from '@angular/forms';
 import { RegistryService } from '../../../../core/registry/registry.service';
 import { FormBuilderService } from '../../../../shared/form/builder/form-builder.service';
-import { FormComponent } from '../../../../shared/form/form.component';
+import { take } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
+import { combineLatest } from 'rxjs';
+import { MetadataSchema } from '../../../../core/metadata/metadata-schema.model';
+import { MetadataField } from '../../../../core/metadata/metadata-field.model';
 
 @Component({
   selector: 'ds-metadata-field-form',
-  templateUrl: './metadata-field-form.component.html',
-  imports: [
-    NgIf,
-    FormComponent,
-    TranslateModule,
-    AsyncPipe,
-  ],
-  standalone: true,
+  templateUrl: './metadata-field-form.component.html'
 })
 /**
  * A form used for creating and editing metadata fields
@@ -75,7 +51,7 @@ export class MetadataFieldFormComponent implements OnInit, OnDestroy {
   /**
    * A dynamic input model for the scopeNote field
    */
-  scopeNote: DynamicTextAreaModel;
+  scopeNote: DynamicInputModel;
 
   /**
    * A list of all dynamic input models
@@ -88,19 +64,19 @@ export class MetadataFieldFormComponent implements OnInit, OnDestroy {
   formLayout: DynamicFormLayout = {
     element: {
       grid: {
-        host: 'col col-sm-6 d-inline-block',
-      },
+        host: 'col col-sm-6 d-inline-block'
+      }
     },
     qualifier: {
       grid: {
-        host: 'col col-sm-6 d-inline-block',
-      },
+        host: 'col col-sm-6 d-inline-block'
+      }
     },
     scopeNote: {
       grid: {
-        host: 'col col-sm-12 d-inline-block',
-      },
-    },
+        host: 'col col-sm-12 d-inline-block'
+      }
+    }
   };
 
   /**
@@ -125,7 +101,7 @@ export class MetadataFieldFormComponent implements OnInit, OnDestroy {
     combineLatest([
       this.translateService.get(`${this.messagePrefix}.element`),
       this.translateService.get(`${this.messagePrefix}.qualifier`),
-      this.translateService.get(`${this.messagePrefix}.scopenote`),
+      this.translateService.get(`${this.messagePrefix}.scopenote`)
     ]).subscribe(([element, qualifier, scopenote]) => {
       this.element = new DynamicInputModel({
         id: 'element',
@@ -156,19 +132,18 @@ export class MetadataFieldFormComponent implements OnInit, OnDestroy {
           maxLength: 'error.validation.metadata.qualifier.max-length',
         },
       });
-      this.scopeNote = new DynamicTextAreaModel({
+      this.scopeNote = new DynamicInputModel({
         id: 'scopeNote',
         label: scopenote,
         name: 'scopeNote',
         required: false,
-        rows: 5,
       });
       this.formModel = [
         new DynamicFormGroupModel(
-          {
-            id: 'metadatadatafieldgroup',
-            group:[this.element, this.qualifier, this.scopeNote],
-          }),
+        {
+          id: 'metadatadatafieldgroup',
+          group:[this.element, this.qualifier, this.scopeNote]
+        })
       ];
       this.formGroup = this.formBuilderService.createFormGroup(this.formModel);
       this.registryService.getActiveMetadataField().subscribe((field: MetadataField): void => {
@@ -225,7 +200,7 @@ export class MetadataFieldFormComponent implements OnInit, OnDestroy {
         }
         this.clearFields();
         this.registryService.cancelEditMetadataField();
-      },
+      }
     );
   }
 

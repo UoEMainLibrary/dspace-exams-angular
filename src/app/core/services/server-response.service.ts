@@ -1,16 +1,12 @@
-import {
-  Inject,
-  Injectable,
-  Optional,
-} from '@angular/core';
-import { Response } from 'express';
+import { RESPONSE } from '@nguniversal/express-engine/tokens';
+import { Inject, Injectable, Optional } from '@angular/core';
 
-import { RESPONSE } from '../../../express.tokens';
+import { Response } from 'express';
 
 /**
  * Service responsible to provide method to manage the response object
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ServerResponseService {
   private response: Response;
 

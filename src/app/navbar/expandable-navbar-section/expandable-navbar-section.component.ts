@@ -1,80 +1,34 @@
-import {
-  AsyncPipe,
-  NgComponentOutlet,
-  NgFor,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  HostListener,
-  Inject,
-  Injector,
-  OnInit,
-} from '@angular/core';
-import { RouterLinkActive } from '@angular/router';
-import { Observable } from 'rxjs';
-import { first } from 'rxjs/operators';
-
-import { slide } from '../../shared/animations/slide';
-import { HostWindowService } from '../../shared/host-window.service';
-import { MenuService } from '../../shared/menu/menu.service';
-import { MenuID } from '../../shared/menu/menu-id.model';
-import { VarDirective } from '../../shared/utils/var.directive';
+import { Component, Inject, Injector, OnInit } from '@angular/core';
 import { NavbarSectionComponent } from '../navbar-section/navbar-section.component';
+import { MenuService } from '../../shared/menu/menu.service';
+import { slide } from '../../shared/animations/slide';
+import { first } from 'rxjs/operators';
+import { HostWindowService } from '../../shared/host-window.service';
+import { rendersSectionForMenu } from '../../shared/menu/menu-section.decorator';
+import { MenuID } from '../../shared/menu/menu-id.model';
 
 /**
  * Represents an expandable section in the navbar
  */
 @Component({
-  selector: 'ds-base-expandable-navbar-section',
+  selector: 'ds-expandable-navbar-section',
   templateUrl: './expandable-navbar-section.component.html',
   styleUrls: ['./expandable-navbar-section.component.scss'],
-  animations: [slide],
-  standalone: true,
-  imports: [VarDirective, RouterLinkActive, NgComponentOutlet, NgIf, NgFor, AsyncPipe],
+  animations: [slide]
 })
+@rendersSectionForMenu(MenuID.PUBLIC, true)
 export class ExpandableNavbarSectionComponent extends NavbarSectionComponent implements OnInit {
   /**
    * This section resides in the Public Navbar
    */
   menuID = MenuID.PUBLIC;
 
-  /**
-   * True if mouse has entered the menu section toggler
-   */
-  mouseEntered = false;
-
-  /**
-   * True if screen size was small before a resize event
-   */
-  wasMobile = undefined;
-
-  /**
-   * Observable that emits true if the screen is small, false otherwise
-   */
-  isMobile$: Observable<boolean>;
-
-  @HostListener('window:resize', ['$event'])
-  onResize() {
-    this.isMobile$.pipe(
-      first(),
-    ).subscribe((isMobile) => {
-      // When switching between desktop and mobile active sections should be deactivated
-      if (isMobile !== this.wasMobile) {
-        this.wasMobile = isMobile;
-        this.menuService.deactivateSection(this.menuID, this.section.id);
-        this.mouseEntered = false;
-      }
-    });
-  }
-
   constructor(@Inject('sectionDataProvider') menuSection,
               protected menuService: MenuService,
               protected injector: Injector,
-              private windowService: HostWindowService,
+              private windowService: HostWindowService
   ) {
     super(menuSection, menuService, injector);
-    this.isMobile$ = this.windowService.isMobile();
   }
 
   ngOnInit() {
@@ -82,42 +36,48 @@ export class ExpandableNavbarSectionComponent extends NavbarSectionComponent imp
   }
 
   /**
-   * When the mouse enters the section toggler activate the menu section
-   * @param $event
-   * @param isActive
+   * Overrides the super function that activates this section (triggered on hover)
+   * Has an extra check to make sure the section can only be activated on non-mobile devices
+   * @param {Event} event The user event that triggered this function
    */
-  onMouseEnter($event: Event, isActive: boolean) {
-    this.isMobile$.pipe(
-      first(),
+  activateSection(event): void {
+    this.windowService.isXsOrSm().pipe(
+      first()
     ).subscribe((isMobile) => {
-      if (!isMobile && !isActive && !this.mouseEntered) {
-        this.activateSection($event);
+      if (!isMobile) {
+        super.activateSection(event);
       }
-      this.mouseEntered = true;
     });
   }
 
   /**
-   * When the mouse leaves the section toggler deactivate the menu section
-   * @param $event
-   * @param isActive
+   * Overrides the super function that deactivates this section (triggered on hover)
+   * Has an extra check to make sure the section can only be deactivated on non-mobile devices
+   * @param {Event} event The user event that triggered this function
    */
-  onMouseLeave($event: Event, isActive: boolean) {
-    this.isMobile$.pipe(
-      first(),
+  deactivateSection(event): void {
+    this.windowService.isXsOrSm().pipe(
+      first()
     ).subscribe((isMobile) => {
-      if (!isMobile && isActive && this.mouseEntered) {
-        this.deactivateSection($event);
+      if (!isMobile) {
+        super.deactivateSection(event);
       }
-      this.mouseEntered = false;
     });
   }
 
   /**
-   * returns the ID of the DOM element representing the navbar section
-   * @param sectionId
+   * Overrides the super function that toggles this section (triggered on click)
+   * Has an extra check to make sure the section can only be toggled on mobile devices
+   * @param {Event} event The user event that triggered this function
    */
-  expandableNavbarSectionId(sectionId: string) {
-    return `expandable-navbar-section-${sectionId}-dropdown`;
+  toggleSection(event): void {
+    event.preventDefault();
+    this.windowService.isXsOrSm().pipe(
+      first()
+    ).subscribe((isMobile) => {
+      if (isMobile) {
+        super.toggleSection(event);
+      }
+    });
   }
 }

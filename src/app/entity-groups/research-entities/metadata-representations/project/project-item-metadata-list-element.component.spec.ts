@@ -1,23 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { RouterLink } from '@angular/router';
+
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 
-import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
-import { Item } from '../../../../core/shared/item.model';
-import { MetadataValue } from '../../../../core/shared/metadata.models';
 import { ItemMetadataRepresentation } from '../../../../core/shared/metadata-representation/item/item-metadata-representation.model';
-import { DSONameServiceMock } from '../../../../shared/mocks/dso-name.service.mock';
-import { TruncatableComponent } from '../../../../shared/truncatable/truncatable.component';
+import { Item } from '../../../../core/shared/item.model';
 import { ProjectItemMetadataListElementComponent } from './project-item-metadata-list-element.component';
+import { MetadataValue } from '../../../../core/shared/metadata.models';
+import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
+import { DSONameServiceMock } from '../../../../shared/mocks/dso-name.service.mock';
 
 const projectTitle = 'Lorem ipsum dolor sit amet';
 const mockItem = Object.assign(new Item(), { metadata: { 'dc.title': [{ value: projectTitle }] } });
@@ -31,19 +23,16 @@ describe('ProjectItemMetadataListElementComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        NgbModule,
-        ProjectItemMetadataListElementComponent,
+      imports:[
+        NgbModule
       ],
+      declarations: [ProjectItemMetadataListElementComponent],
       providers: [
-        { provide: DSONameService, useValue: new DSONameServiceMock() },
+        { provide: DSONameService, useValue: new DSONameServiceMock() }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(ProjectItemMetadataListElementComponent, {
-      remove: {
-        imports: [TruncatableComponent, RouterLink],
-      },
-      add: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 

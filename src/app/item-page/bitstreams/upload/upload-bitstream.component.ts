@@ -1,73 +1,29 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-import {
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import {
-  Observable,
-  of as observableOf,
-  Subscription,
-} from 'rxjs';
-import {
-  map,
-  switchMap,
-  take,
-} from 'rxjs/operators';
-
-import { environment } from '../../../../environments/environment';
-import { getBitstreamModuleRoute } from '../../../app-routing-paths';
-import { AuthService } from '../../../core/auth/auth.service';
-import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
-import { BundleDataService } from '../../../core/data/bundle-data.service';
-import { ItemDataService } from '../../../core/data/item-data.service';
-import { PaginatedList } from '../../../core/data/paginated-list.model';
+import { Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { Observable, Subscription, of as observableOf } from 'rxjs';
 import { RemoteData } from '../../../core/data/remote-data';
-import { RequestService } from '../../../core/data/request.service';
-import { Bundle } from '../../../core/shared/bundle.model';
 import { Item } from '../../../core/shared/item.model';
-import {
-  getFirstCompletedRemoteData,
-  getFirstSucceededRemoteDataPayload,
-} from '../../../core/shared/operators';
-import {
-  hasValue,
-  isEmpty,
-  isNotEmpty,
-} from '../../../shared/empty.util';
-import { DsoInputSuggestionsComponent } from '../../../shared/input-suggestions/dso-input-suggestions/dso-input-suggestions.component';
-import { NotificationsService } from '../../../shared/notifications/notifications.service';
-import { UploaderComponent } from '../../../shared/upload/uploader/uploader.component';
+import { map, take, switchMap } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { UploaderOptions } from '../../../shared/upload/uploader/uploader-options.model';
-import { VarDirective } from '../../../shared/utils/var.directive';
+import { hasValue, isEmpty, isNotEmpty } from '../../../shared/empty.util';
+import { ItemDataService } from '../../../core/data/item-data.service';
+import { AuthService } from '../../../core/auth/auth.service';
+import { NotificationsService } from '../../../shared/notifications/notifications.service';
+import { TranslateService } from '@ngx-translate/core';
+import { PaginatedList } from '../../../core/data/paginated-list.model';
+import { Bundle } from '../../../core/shared/bundle.model';
+import { BundleDataService } from '../../../core/data/bundle-data.service';
+import { getFirstSucceededRemoteDataPayload, getFirstCompletedRemoteData } from '../../../core/shared/operators';
+import { UploaderComponent } from '../../../shared/upload/uploader/uploader.component';
+import { RequestService } from '../../../core/data/request.service';
+import { getBitstreamModuleRoute } from '../../../app-routing-paths';
 import { getEntityEditRoute } from '../../item-page-routing-paths';
+import { environment } from '../../../../environments/environment';
+import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
 
 @Component({
   selector: 'ds-upload-bitstream',
-  templateUrl: './upload-bitstream.component.html',
-  imports: [
-    TranslateModule,
-    AsyncPipe,
-    VarDirective,
-    NgIf,
-    DsoInputSuggestionsComponent,
-    FormsModule,
-    UploaderComponent,
-  ],
-  standalone: true,
+  templateUrl: './upload-bitstream.component.html'
 })
 /**
  * Page component for uploading a bitstream to an item
@@ -118,7 +74,7 @@ export class UploadBitstreamComponent implements OnInit, OnDestroy {
     url: 'placeholder',
     authToken: null,
     disableMultipart: false,
-    itemAlias: null,
+    itemAlias: null
   });
 
   /**
@@ -146,7 +102,7 @@ export class UploadBitstreamComponent implements OnInit, OnDestroy {
 
   /**
    * Initialize component properties:
-   * itemRD$          Fetched from the current route data (populated by bitstreamPageResolver)
+   * itemRD$          Fetched from the current route data (populated by BitstreamPageResolver)
    * selectedBundleId Starts off by checking if the route's queryParams contain a "bundle" parameter. If none is found,
    *                  the ID of the first bundle in the list is selected.
    * Calls setUploadUrl after setting the selected bundle
@@ -172,15 +128,15 @@ export class UploadBitstreamComponent implements OnInit, OnDestroy {
               if (check) {
                 this.bundles.push(Object.assign(new Bundle(), {
                   _name: defaultBundle,
-                  type: 'bundle',
+                  type: 'bundle'
                 }));
               }
             }
           } else {
             this.bundles = environment.bundle.standardBundles.map((defaultBundle: string) => Object.assign(new Bundle(), {
-              _name: defaultBundle,
-              type: 'bundle',
-            }),
+                _name: defaultBundle,
+                type: 'bundle'
+              })
             );
           }
           return observableOf(remoteData.payload.page);
@@ -189,7 +145,7 @@ export class UploadBitstreamComponent implements OnInit, OnDestroy {
     this.selectedBundleId = this.route.snapshot.queryParams.bundle;
     if (isNotEmpty(this.selectedBundleId)) {
       this.subs.push(this.bundleService.findById(this.selectedBundleId).pipe(
-        getFirstSucceededRemoteDataPayload(),
+        getFirstSucceededRemoteDataPayload()
       ).subscribe((bundle: Bundle) => {
         this.selectedBundleName = bundle.name;
       }));
@@ -203,12 +159,12 @@ export class UploadBitstreamComponent implements OnInit, OnDestroy {
    */
   createBundle() {
     this.itemService.createBundle(this.itemId, this.selectedBundleName).pipe(
-      getFirstSucceededRemoteDataPayload(),
+      getFirstSucceededRemoteDataPayload()
     ).subscribe((bundle: Bundle) => {
       this.selectedBundleId = bundle.id;
       this.notificationsService.success(
         this.translate.instant(this.NOTIFICATIONS_PREFIX + 'bundle.created.title'),
-        this.translate.instant(this.NOTIFICATIONS_PREFIX + 'bundle.created.content'),
+        this.translate.instant(this.NOTIFICATIONS_PREFIX + 'bundle.created.content')
       );
       this.setUploadUrl();
     });

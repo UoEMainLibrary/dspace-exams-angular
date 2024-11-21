@@ -1,32 +1,19 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import {
-  select,
-  Store,
-} from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
 
-import { AppState } from '../../app.reducer';
+import { Observable } from 'rxjs';
+import { select, Store } from '@ngrx/store';
+
 import { LogOutAction } from '../../core/auth/auth.actions';
-import { getLogOutError } from '../../core/auth/selectors';
+import { getLogOutError, } from '../../core/auth/selectors';
+import { AppState } from '../../app.reducer';
 import { fadeOut } from '../animations/fade';
-import { BrowserOnlyPipe } from '../utils/browser-only.pipe';
 
 @Component({
   selector: 'ds-log-out',
   templateUrl: './log-out.component.html',
   styleUrls: ['./log-out.component.scss'],
-  animations: [fadeOut],
-  standalone: true,
-  imports: [NgIf, AsyncPipe, TranslateModule, BrowserOnlyPipe],
+  animations: [fadeOut]
 })
 export class LogOutComponent implements OnInit {
   /**

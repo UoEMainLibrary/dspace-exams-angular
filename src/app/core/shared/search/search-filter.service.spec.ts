@@ -1,13 +1,5 @@
-import {
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { SearchFilterService } from './search-filter.service';
 import { Store } from '@ngrx/store';
-import { of as observableOf } from 'rxjs';
-
-import { FilterType } from '../../../shared/search/models/filter-type.model';
-import { SearchFilterConfig } from '../../../shared/search/models/search-filter-config.model';
-import { SearchOptions } from '../../../shared/search/models/search-options.model';
 import {
   SearchFilterCollapseAction,
   SearchFilterDecrementPageAction,
@@ -15,18 +7,14 @@ import {
   SearchFilterIncrementPageAction,
   SearchFilterInitializeAction,
   SearchFilterResetPageAction,
-  SearchFilterToggleAction,
+  SearchFilterToggleAction
 } from '../../../shared/search/search-filters/search-filter/search-filter.actions';
 import { SearchFiltersState } from '../../../shared/search/search-filters/search-filter/search-filter.reducer';
-import { routeServiceStub } from '../../../shared/testing/route-service.stub';
-import { SearchServiceStub } from '../../../shared/testing/search-service.stub';
-import {
-  SortDirection,
-  SortOptions,
-} from '../../cache/models/sort-options.model';
-import { RouteService } from '../../services/route.service';
-import { SearchService } from './search.service';
-import { SearchFilterService } from './search-filter.service';
+import { SearchFilterConfig } from '../../../shared/search/models/search-filter-config.model';
+import { FilterType } from '../../../shared/search/models/filter-type.model';
+import { ActivatedRouteStub } from '../../../shared/testing/active-router.stub';
+import { of as observableOf } from 'rxjs';
+import { SortDirection, SortOptions } from '../../cache/models/sort-options.model';
 
 describe('SearchFilterService', () => {
   let service: SearchFilterService;
@@ -36,33 +24,48 @@ describe('SearchFilterService', () => {
     filterType: FilterType.text,
     hasFacets: false,
     isOpenByDefault: false,
-    pageSize: 2,
+    pageSize: 2
   });
 
   const value1 = 'random value';
-
-  let searchService: SearchServiceStub;
+  // const value2 = 'another value';
   const store: Store<SearchFiltersState> = jasmine.createSpyObj('store', {
     /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
     dispatch: {},
     /* eslint-enable no-empty,@typescript-eslint/no-empty-function */
-    select: observableOf(true),
+    select: observableOf(true)
   });
 
-  beforeEach(waitForAsync(() => {
-    searchService = new SearchServiceStub();
+  const routeServiceStub: any = {
+    /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
+    hasQueryParamWithValue: (param: string, value: string) => {
+    },
+    hasQueryParam: (param: string) => {
+    },
+    removeQueryParameterValue: (param: string, value: string) => {
+    },
+    addQueryParameterValue: (param: string, value: string) => {
+    },
+    getQueryParameterValue: (param: string) => {
+    },
+    getQueryParameterValues: (param: string) => {
+      return observableOf({});
+    },
+    getQueryParamsWithPrefix: (param: string) => {
+      return observableOf({});
+    },
+    getRouteParameterValue: (param: string) => {
+    }
+    /* eslint-enable no-empty, @typescript-eslint/no-empty-function */
+  };
+  const activatedRoute: any = new ActivatedRouteStub();
+  const searchServiceStub: any = {
+    uiSearchRoute: '/search'
+  };
 
-    TestBed.configureTestingModule({
-      providers: [
-        SearchFilterService,
-        { provide: SearchService, useValue: searchService },
-        { provide: Store, useValue: store },
-        { provide: RouteService, useValue: routeServiceStub },
-      ],
-    });
-
-    service = TestBed.inject(SearchFilterService);
-  }));
+  beforeEach(() => {
+    service = new SearchFilterService(store, routeServiceStub);
+  });
 
   describe('when the initializeFilter method is triggered', () => {
     beforeEach(() => {
@@ -157,6 +160,17 @@ describe('SearchFilterService', () => {
 
     it('should call hasQueryParam on the route service with the same parameters', () => {
       expect(routeServiceStub.hasQueryParam).toHaveBeenCalledWith(mockFilterConfig.paramName);
+    });
+  });
+
+  describe('when the getSelectedValuesForFilter method is called', () => {
+    beforeEach(() => {
+      spyOn(routeServiceStub, 'getQueryParameterValues');
+      service.getSelectedValuesForFilter(mockFilterConfig);
+    });
+
+    it('should call getQueryParameterValues on the route service with the same parameters', () => {
+      expect(routeServiceStub.getQueryParameterValues).toHaveBeenCalledWith(mockFilterConfig.paramName);
     });
   });
 
@@ -255,18 +269,4 @@ describe('SearchFilterService', () => {
     });
   });
 
-
-  describe('when findSuggestions is called with query \'test\'', () => {
-    const query = 'test';
-    const searchOptions = new SearchOptions({});
-
-    beforeEach(() => {
-      spyOn(searchService, 'getFacetValuesFor').and.returnValue(observableOf());
-      service.findSuggestions(mockFilterConfig, searchOptions, query);
-    });
-
-    it('should call getFacetValuesFor on the component\'s SearchService with the right query', () => {
-      expect(searchService.getFacetValuesFor).toHaveBeenCalledWith(mockFilterConfig, 1, searchOptions, query);
-    });
-  });
 });

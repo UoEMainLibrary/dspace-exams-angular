@@ -1,5 +1,3 @@
-import { hasValue } from '../empty.util';
-import { initialMenusState } from './initial-menus-state';
 import {
   ActivateMenuSectionAction,
   AddMenuSectionAction,
@@ -10,14 +8,16 @@ import {
   MenuSectionAction,
   RemoveMenuSectionAction,
   ShowMenuSectionAction,
-  ToggleActiveMenuSectionAction,
+  ToggleActiveMenuSectionAction
 } from './menu.actions';
-import { MenuID } from './menu-id.model';
-import { MenuSection } from './menu-section.model';
+import { initialMenusState} from './initial-menus-state';
+import { hasValue } from '../empty.util';
+import { MenusState } from './menus-state.model';
+import { MenuState } from './menu-state.model';
 import { MenuSectionIndex } from './menu-section-Index.model';
 import { MenuSections } from './menu-sections.model';
-import { MenuState } from './menu-state.model';
-import { MenusState } from './menus-state.model';
+import { MenuSection } from './menu-section.model';
+import { MenuID } from './menu-id.model';
 
 /**
  * Reducer that handles MenuActions to update the MenusState
@@ -26,38 +26,35 @@ import { MenusState } from './menus-state.model';
  * @returns {MenusState} The new, reducer MenusState
  */
 export function menusReducer(state: MenusState = initialMenusState, action: MenuAction): MenusState {
+  const menuState: MenuState = state[action.menuID];
   switch (action.type) {
     case MenuActionTypes.COLLAPSE_MENU: {
-      const newMenuState = Object.assign({}, state[action.menuID], { collapsed: true });
+      const newMenuState = Object.assign({}, menuState, { collapsed: true });
       return Object.assign({}, state, { [action.menuID]: newMenuState });
     }
     case MenuActionTypes.EXPAND_MENU: {
-      const newMenuState = Object.assign({}, state[action.menuID], { collapsed: false });
+      const newMenuState = Object.assign({}, menuState, { collapsed: false });
       return Object.assign({}, state, { [action.menuID]: newMenuState });
     }
     case MenuActionTypes.COLLAPSE_MENU_PREVIEW: {
-      const newMenuState = Object.assign({}, state[action.menuID], { previewCollapsed: true });
+      const newMenuState = Object.assign({}, menuState, { previewCollapsed: true });
       return Object.assign({}, state, { [action.menuID]: newMenuState });
     }
     case MenuActionTypes.EXPAND_MENU_PREVIEW: {
-      const newMenuState = Object.assign({}, state[action.menuID], { previewCollapsed: false });
+      const newMenuState = Object.assign({}, menuState, { previewCollapsed: false });
       return Object.assign({}, state, { [action.menuID]: newMenuState });
     }
     case MenuActionTypes.TOGGLE_MENU: {
-      const menuState = state[action.menuID];
       const newMenuState = Object.assign({}, menuState, { collapsed: !menuState.collapsed });
       return Object.assign({}, state, { [action.menuID]: newMenuState });
     }
     case MenuActionTypes.SHOW_MENU: {
-      const newMenuState = Object.assign({}, state[action.menuID], { visible: true });
+      const newMenuState = Object.assign({}, menuState, { visible: true });
       return Object.assign({}, state, { [action.menuID]: newMenuState });
     }
     case MenuActionTypes.HIDE_MENU: {
-      const newMenuState = Object.assign({}, state[action.menuID], { visible: false });
+      const newMenuState = Object.assign({}, menuState, { visible: false });
       return Object.assign({}, state, { [action.menuID]: newMenuState });
-    }
-    case MenuActionTypes.REINIT_MENUS: {
-      return Object.assign({}, initialMenusState);
     }
     case MenuActionTypes.ADD_SECTION: {
       return addSection(state, action as AddMenuSectionAction);
@@ -123,7 +120,7 @@ function reorderSections(state: MenusState, action: MenuSectionAction) {
   });
   const newMenuState = Object.assign({}, menuState, {
     sections: newSectionState,
-    sectionToSubsectionIndex: newSectionIndexState,
+    sectionToSubsectionIndex: newSectionIndexState
   });
   return Object.assign({}, state, { [action.menuID]: newMenuState });
 }
@@ -139,7 +136,7 @@ function removeSection(state: MenusState, action: RemoveMenuSectionAction) {
   const id = action.id;
   const newState = removeFromIndex(state, menuState.sections[action.id], action.menuID);
   const newMenuState = Object.assign({}, newState[action.menuID], {
-    sections: Object.assign({}, newState[action.menuID].sections),
+    sections: Object.assign({}, newState[action.menuID].sections)
   });
   delete newMenuState.sections[id];
   return Object.assign({}, newState, { [action.menuID]: newMenuState });
@@ -233,13 +230,13 @@ function toggleActiveSection(state: MenusState, action: ToggleActiveMenuSectionA
  * @param {MenuSection} section The section that will be added or replaced in the state
  * @returns {MenusState} The new reduced state
  */
-function putSectionState(state: MenusState, action: MenuSectionAction, section: MenuSection): MenusState {
+function putSectionState(state: MenusState, action: MenuAction, section: MenuSection): MenusState {
   const menuState: MenuState = state[action.menuID];
   const newSections = Object.assign({}, menuState.sections, {
-    [section.id]: section,
+    [section.id]: section
   });
   const newMenuState = Object.assign({}, menuState, {
-    sections: newSections,
+    sections: newSections
   });
   return Object.assign({}, state, { [action.menuID]: newMenuState });
 }

@@ -1,26 +1,20 @@
-import {
-  Component,
-  Injector,
-  Input,
-  OnDestroy,
-} from '@angular/core';
-import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
-
-import { RemoteData } from '../../../../core/data/remote-data';
-import { RequestService } from '../../../../core/data/request.service';
-import { DSpaceObject } from '../../../../core/shared/dspace-object.model';
-import { Item } from '../../../../core/shared/item.model';
-import { SearchService } from '../../../../core/shared/search/search.service';
-import { WorkflowItem } from '../../../../core/submission/models/workflowitem.model';
-import { ClaimedTaskDataService } from '../../../../core/tasks/claimed-task-data.service';
+import { Component, Injector, OnDestroy } from '@angular/core';
 import { ClaimedTask } from '../../../../core/tasks/models/claimed-task-object.model';
-import { CLAIMED_TASK } from '../../../../core/tasks/models/claimed-task-object.resource-type';
-import { isEmpty } from '../../../empty.util';
+import { ClaimedTaskDataService } from '../../../../core/tasks/claimed-task-data.service';
+import { DSpaceObject } from '../../../../core/shared/dspace-object.model';
+import { Router } from '@angular/router';
 import { NotificationsService } from '../../../notifications/notifications.service';
+import { TranslateService } from '@ngx-translate/core';
+import { SearchService } from '../../../../core/shared/search/search.service';
+import { RequestService } from '../../../../core/data/request.service';
+import { Observable } from 'rxjs';
+import { RemoteData } from '../../../../core/data/remote-data';
+import { WorkflowItem } from '../../../../core/submission/models/workflowitem.model';
+import { take } from 'rxjs/operators';
+import { CLAIMED_TASK } from '../../../../core/tasks/models/claimed-task-object.resource-type';
+import { Item } from '../../../../core/shared/item.model';
 import { MyDSpaceReloadableActionsComponent } from '../../mydspace-reloadable-actions';
+import { isEmpty } from '../../../empty.util';
 
 /**
  * Abstract component for rendering a claimed task's action
@@ -31,21 +25,21 @@ import { MyDSpaceReloadableActionsComponent } from '../../mydspace-reloadable-ac
  */
 @Component({
   selector: 'ds-claimed-task-action-abstract',
-  template: '',
+  template: ''
 })
 export abstract class ClaimedTaskActionsAbstractComponent extends MyDSpaceReloadableActionsComponent<ClaimedTask, ClaimedTaskDataService> implements OnDestroy {
 
   /**
    * The workflow task option the child component represents
    */
-  @Input() option: string;
+  abstract option: string;
 
   object: ClaimedTask;
 
   /**
    * The item object that belonging to the ClaimedTask object
    */
-  @Input() item: Item;
+  item: Item;
 
   /**
    * Anchor used to reload the pool task.
@@ -57,7 +51,7 @@ export abstract class ClaimedTaskActionsAbstractComponent extends MyDSpaceReload
   /**
    * The workflowitem object that belonging to the ClaimedTask object
    */
-  @Input() workflowitem: WorkflowItem;
+  workflowitem: WorkflowItem;
 
   protected constructor(protected injector: Injector,
                         protected router: Router,
@@ -81,7 +75,7 @@ export abstract class ClaimedTaskActionsAbstractComponent extends MyDSpaceReload
    */
   createbody(): any {
     return {
-      [this.option]: 'true',
+      [this.option]: 'true'
     };
   }
 

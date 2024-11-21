@@ -5,10 +5,6 @@ interface AutosaveConfig extends Config {
   timer: number;
 }
 
-interface DuplicateDetectionConfig extends Config {
-  alwaysShowSection: boolean;
-}
-
 interface TypeBindConfig extends Config {
   field: string;
 }
@@ -28,12 +24,10 @@ export interface MetadataIconConfig extends Config {
 export interface ConfidenceIconConfig extends Config {
   value: any;
   style: string;
-  icon: string;
 }
 
 export interface SubmissionConfig extends Config {
   autosave: AutosaveConfig;
-  duplicateDetection: DuplicateDetectionConfig;
   typeBind: TypeBindConfig;
   icons: IconsConfig;
 }

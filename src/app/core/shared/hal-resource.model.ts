@@ -1,6 +1,5 @@
-import { deserialize } from 'cerialize';
-
 import { HALLink } from './hal-link.model';
+import { deserialize } from 'cerialize';
 
 /**
  * Represents HAL resources.

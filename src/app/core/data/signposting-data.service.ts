@@ -1,29 +1,18 @@
-import {
-  Inject,
-  Injectable,
-} from '@angular/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-import {
-  catchError,
-  map,
-} from 'rxjs/operators';
+import { Inject, Injectable } from '@angular/core';
 
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../../config/app-config.interface';
+import { catchError, map } from 'rxjs/operators';
+import { Observable, of as observableOf } from 'rxjs';
+
 import { DspaceRestService } from '../dspace-rest/dspace-rest.service';
 import { RawRestResponse } from '../dspace-rest/raw-rest-response.model';
 import { SignpostingLink } from './signposting-links.model';
+import { APP_CONFIG, AppConfig } from '../../../config/app-config.interface';
 
 /**
  * Service responsible for handling requests related to the Signposting endpoint
  */
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class SignpostingDataService {
 
@@ -39,10 +28,10 @@ export class SignpostingDataService {
     const baseUrl = `${this.appConfig.rest.baseUrl}`;
 
     return this.restService.get(`${baseUrl}/signposting/links/${uuid}`).pipe(
-      catchError((err: unknown) => {
+      catchError((err) => {
         return observableOf([]);
       }),
-      map((res: RawRestResponse) => res.statusCode === 200 ? res.payload as SignpostingLink[] : []),
+      map((res: RawRestResponse) => res.statusCode === 200 ? res.payload as SignpostingLink[] : [])
     );
   }
 

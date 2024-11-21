@@ -1,24 +1,20 @@
-import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-
+import { StatisticsPageComponent } from '../statistics-page/statistics-page.component';
+import { UsageReportDataService } from '../../core/statistics/usage-report-data.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Community } from '../../core/shared/community.model';
-import { ThemedLoadingComponent } from '../../shared/loading/themed-loading.component';
-import { VarDirective } from '../../shared/utils/var.directive';
-import { StatisticsPageDirective } from '../statistics-page/statistics-page.directive';
-import { StatisticsTableComponent } from '../statistics-table/statistics-table.component';
+import { DSONameService } from '../../core/breadcrumbs/dso-name.service';
+import { AuthService } from '../../core/auth/auth.service';
 
 /**
  * Component representing the statistics page for a community.
  */
 @Component({
-  selector: 'ds-base-community-statistics-page',
+  selector: 'ds-community-statistics-page',
   templateUrl: '../statistics-page/statistics-page.component.html',
-  styleUrls: ['./community-statistics-page.component.scss'],
-  standalone: true,
-  imports: [CommonModule, VarDirective, ThemedLoadingComponent, StatisticsTableComponent, TranslateModule],
+  styleUrls: ['./community-statistics-page.component.scss']
 })
-export class CommunityStatisticsPageComponent extends StatisticsPageDirective<Community> {
+export class CommunityStatisticsPageComponent extends StatisticsPageComponent<Community> {
 
   /**
    * The report types to show on this statistics page.
@@ -29,4 +25,20 @@ export class CommunityStatisticsPageComponent extends StatisticsPageDirective<Co
     'TopCountries',
     'TopCities',
   ];
+
+  constructor(
+    protected route: ActivatedRoute,
+    protected router: Router,
+    protected usageReportService: UsageReportDataService,
+    protected nameService: DSONameService,
+    protected authService: AuthService,
+  ) {
+    super(
+      route,
+      router,
+      usageReportService,
+      nameService,
+      authService,
+    );
+  }
 }

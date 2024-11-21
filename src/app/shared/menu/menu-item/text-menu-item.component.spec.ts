@@ -1,16 +1,8 @@
-import {
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { TranslateModule } from '@ngx-translate/core';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TextMenuItemComponent } from './text-menu-item.component';
+import { TranslateModule } from '@ngx-translate/core';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
 
 describe('TextMenuItemComponent', () => {
   let component: TextMenuItemComponent;
@@ -19,11 +11,12 @@ describe('TextMenuItemComponent', () => {
   const text = 'HELLO';
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), TextMenuItemComponent],
+      imports: [TranslateModule.forRoot()],
+      declarations: [TextMenuItemComponent],
       providers: [
         { provide: 'itemModelProvider', useValue: { text: text } },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

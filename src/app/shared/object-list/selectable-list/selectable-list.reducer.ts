@@ -1,14 +1,13 @@
-import { hasNoValue } from '../../empty.util';
 import { ListableObject } from '../../object-collection/shared/listable-object.model';
 import {
   SelectableListAction,
   SelectableListActionTypes,
-  SelectableListDeselectAction,
-  SelectableListDeselectSingleAction,
   SelectableListSelectAction,
   SelectableListSelectSingleAction,
-  SelectableListSetSelectionAction,
+  SelectableListDeselectAction,
+  SelectableListDeselectSingleAction, SelectableListSetSelectionAction
 } from './selectable-list.actions';
+import { hasNoValue } from '../../empty.util';
 
 /**
  * Represents the state of all selectable lists in the store

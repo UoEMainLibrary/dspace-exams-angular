@@ -1,18 +1,13 @@
+import { Observable, of as observableOf } from 'rxjs';
 import { Injectable } from '@angular/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-
-import { Breadcrumb } from '../breadcrumbs/breadcrumb/breadcrumb.model';
 import { BreadcrumbsProviderService } from '../core/breadcrumbs/breadcrumbsProviderService';
-import { hasValue } from '../shared/empty.util';
+import { Breadcrumb } from '../breadcrumbs/breadcrumb/breadcrumb.model';
 import { Process } from './processes/process.model';
 
 /**
  * Service to calculate process breadcrumbs for a single part of the route
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class ProcessBreadcrumbsService implements BreadcrumbsProviderService<Process> {
 
   /**
@@ -21,10 +16,6 @@ export class ProcessBreadcrumbsService implements BreadcrumbsProviderService<Pro
    * @param url The url to use as a link for this breadcrumb
    */
   getBreadcrumbs(key: Process, url: string): Observable<Breadcrumb[]> {
-    if (hasValue(key)) {
-      return observableOf([new Breadcrumb(key.processId + ' - ' + key.scriptName, url)]);
-    } else {
-      return observableOf([]);
-    }
+    return observableOf([new Breadcrumb(key.processId + ' - ' + key.scriptName, url)]);
   }
 }

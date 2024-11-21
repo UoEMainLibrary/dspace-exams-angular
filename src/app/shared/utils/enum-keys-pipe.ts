@@ -1,12 +1,6 @@
-import {
-  Pipe,
-  PipeTransform,
-} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
-@Pipe({
-  name: 'dsKeys',
-  standalone: true,
-})
+@Pipe({ name: 'dsKeys' })
 /**
  * Pipe for parsing all values of an enumeration to an array of key-value pairs
  */

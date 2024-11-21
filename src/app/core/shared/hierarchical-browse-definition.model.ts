@@ -1,17 +1,10 @@
-import {
-  autoserialize,
-  autoserializeAs,
-  deserialize,
-  inheritSerialization,
-} from 'cerialize';
-
-import { BrowseByDataType } from '../../browse-by/browse-by-switcher/browse-by-data-type';
+import { autoserialize, autoserializeAs, deserialize, inheritSerialization } from 'cerialize';
 import { typedObject } from '../cache/builders/build-decorators';
 import { excludeFromEquals } from '../utilities/equals.decorators';
-import { BrowseDefinition } from './browse-definition.model';
-import { HALLink } from './hal-link.model';
 import { HIERARCHICAL_BROWSE_DEFINITION } from './hierarchical-browse-definition.resource-type';
+import { HALLink } from './hal-link.model';
 import { ResourceType } from './resource-type';
+import { BrowseDefinition } from './browse-definition.model';
 
 /**
  * BrowseDefinition model for browses of type 'hierarchicalBrowse'
@@ -46,7 +39,7 @@ export class HierarchicalBrowseDefinition extends BrowseDefinition {
     vocabulary: HALLink;
   };
 
-  getRenderType(): BrowseByDataType {
-    return BrowseByDataType.Hierarchy;
+  getRenderType(): string {
+    return 'hierarchy';
   }
 }

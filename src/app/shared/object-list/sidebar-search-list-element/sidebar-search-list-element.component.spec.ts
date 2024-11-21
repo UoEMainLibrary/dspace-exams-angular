@@ -1,22 +1,16 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { VarDirective } from '../../utils/var.directive';
 import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
-import { LinkService } from '../../../core/cache/builders/link.service';
-import { ChildHALResource } from '../../../core/shared/child-hal-resource.model';
-import { DSpaceObject } from '../../../core/shared/dspace-object.model';
-import { HALResource } from '../../../core/shared/hal-resource.model';
-import { mockTruncatableService } from '../../mocks/mock-trucatable.service';
-import { createSuccessfulRemoteDataObject$ } from '../../remote-data.utils';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { SearchResult } from '../../search/models/search-result.model';
+import { DSpaceObject } from '../../../core/shared/dspace-object.model';
 import { TruncatableService } from '../../truncatable/truncatable.service';
-import { VarDirective } from '../../utils/var.directive';
+import { LinkService } from '../../../core/cache/builders/link.service';
+import { createSuccessfulRemoteDataObject$ } from '../../remote-data.utils';
+import { HALResource } from '../../../core/shared/hal-resource.model';
+import { ChildHALResource } from '../../../core/shared/child-hal-resource.model';
+import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
 
 export function createSidebarSearchListElementTests(
   componentClass: any,
@@ -25,7 +19,7 @@ export function createSidebarSearchListElementTests(
   expectedParentTitle: string,
   expectedTitle: string,
   expectedDescription: string,
-  extraProviders: any[] = [],
+  extraProviders: any[] = []
 ) {
   return () => {
     let component;
@@ -36,18 +30,19 @@ export function createSidebarSearchListElementTests(
     beforeEach(waitForAsync(() => {
       linkService = jasmine.createSpyObj('linkService', {
         resolveLink: Object.assign(new HALResource(), {
-          [object.indexableObject.getParentLinkKey()]: createSuccessfulRemoteDataObject$(parent),
-        }),
+          [object.indexableObject.getParentLinkKey()]: createSuccessfulRemoteDataObject$(parent)
+        })
       });
       TestBed.configureTestingModule({
-        imports: [TranslateModule.forRoot(), RouterTestingModule.withRoutes([]), VarDirective],
+        declarations: [componentClass, VarDirective],
+        imports: [TranslateModule.forRoot(), RouterTestingModule.withRoutes([])],
         providers: [
-          { provide: TruncatableService, useValue: mockTruncatableService },
+          { provide: TruncatableService, useValue: {} },
           { provide: LinkService, useValue: linkService },
           DSONameService,
-          ...extraProviders,
+          ...extraProviders
         ],
-        schemas: [NO_ERRORS_SCHEMA],
+        schemas: [NO_ERRORS_SCHEMA]
       }).compileComponents();
     }));
 

@@ -1,15 +1,9 @@
-import {
-  Component,
-  Input,
-} from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, Input } from '@angular/core';
 
 @Component({
   selector: 'ds-dso-edit-metadata-value-headers',
   styleUrls: ['./dso-edit-metadata-value-headers.component.scss', '../dso-edit-metadata-shared/dso-edit-metadata-cells.scss'],
   templateUrl: './dso-edit-metadata-value-headers.component.html',
-  standalone: true,
-  imports: [TranslateModule],
 })
 /**
  * Component displaying invisible headers for a list of metadata values using table roles for accessibility

@@ -1,21 +1,15 @@
-import {
-  Component,
-  Input,
-} from '@angular/core';
-
-import { Item } from '../../../../../core/shared/item.model';
+import { Component, Input } from '@angular/core';
 import { ThemedComponent } from '../../../../../shared/theme-support/themed.component';
 import { ItemPageTitleFieldComponent } from './item-page-title-field.component';
+import { Item } from '../../../../../core/shared/item.model';
 
 /**
  * Themed wrapper for {@link ItemPageTitleFieldComponent}
  */
 @Component({
-  selector: 'ds-item-page-title-field',
+  selector: 'ds-themed-item-page-title-field',
   styleUrls: [],
   templateUrl: '../../../../../shared/theme-support/themed.component.html',
-  standalone: true,
-  imports: [ItemPageTitleFieldComponent],
 })
 export class ThemedItemPageTitleFieldComponent extends ThemedComponent<ItemPageTitleFieldComponent> {
 

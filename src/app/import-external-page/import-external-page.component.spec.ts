@@ -1,17 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { ActivatedRoute } from '@angular/router';
-
-import { SearchConfigurationService } from '../core/shared/search/search-configuration.service';
-import { getMockThemeService } from '../shared/mocks/theme-service.mock';
-import { ActivatedRouteStub } from '../shared/testing/active-router.stub';
-import { ThemeService } from '../shared/theme-support/theme.service';
-import { ThemedSubmissionImportExternalComponent } from '../submission/import-external/themed-submission-import-external.component';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 import { ImportExternalPageComponent } from './import-external-page.component';
+import { ThemeService } from '../shared/theme-support/theme.service';
+import { getMockThemeService } from '../shared/mocks/theme-service.mock';
 
 describe('ImportExternalPageComponent', () => {
   let component: ImportExternalPageComponent;
@@ -19,21 +10,13 @@ describe('ImportExternalPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ImportExternalPageComponent],
-      providers: [
+      declarations: [ ImportExternalPageComponent ],
+      providers:[
         { provide: ThemeService, useValue: getMockThemeService() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        { provide: SearchConfigurationService, useValue: {} },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-      .overrideComponent(ImportExternalPageComponent, {
-        remove: {
-          imports: [ThemedSubmissionImportExternalComponent],
-        },
-      },
-      )
-      .compileComponents();
+    .compileComponents();
   }));
 
   beforeEach(() => {

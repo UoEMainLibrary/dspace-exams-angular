@@ -1,13 +1,7 @@
-import {
-  Directive,
-  ElementRef,
-  HostListener,
-  Input,
-} from '@angular/core';
+import { Directive, ElementRef, HostListener, Input } from '@angular/core';
 
 @Directive({
-  selector: '[dsHoverClass]',
-  standalone: true,
+  selector: '[dsHoverClass]'
 })
 /**
  * A directive adding a class to an element when hovered over

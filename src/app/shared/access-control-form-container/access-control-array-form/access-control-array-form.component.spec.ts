@@ -1,16 +1,14 @@
-import { CommonModule } from '@angular/common';
-import { DebugElement } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { AccessControlArrayFormComponent } from './access-control-array-form.component';
+import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { TranslateModule } from '@ngx-translate/core';
+import { NgbDatepickerModule } from '@ng-bootstrap/ng-bootstrap';
+import { DebugElement } from '@angular/core';
+import { By } from '@angular/platform-browser';
 import { ToDatePipe } from './to-date.pipe';
+import { SharedBrowseByModule } from '../../browse-by/shared-browse-by.module';
 
 describe('AccessControlArrayFormComponent', () => {
   let component: AccessControlArrayFormComponent;
@@ -18,15 +16,16 @@ describe('AccessControlArrayFormComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [CommonModule, FormsModule, TranslateModule.forRoot(), NgbDatepickerModule, AccessControlArrayFormComponent, ToDatePipe],
+      imports: [ CommonModule, FormsModule, SharedBrowseByModule, TranslateModule.forRoot(), NgbDatepickerModule ],
+      declarations: [ AccessControlArrayFormComponent, ToDatePipe  ]
     })
-      .compileComponents();
+    .compileComponents();
   });
 
   beforeEach(() => {
     fixture = TestBed.createComponent(AccessControlArrayFormComponent);
     component = fixture.componentInstance;
-    component.dropdownOptions = [{ name: 'Option1' }, { name: 'Option2' }] as any;
+    component.dropdownOptions = [{name: 'Option1'}, {name: 'Option2'}] as any;
     component.type = 'item';
     fixture.detectChanges();
   });
@@ -63,7 +62,7 @@ describe('AccessControlArrayFormComponent', () => {
     // set value to item1
     component.accessControlChanged(
       component.form.accessControls[1],
-      'item1',
+      'item1'
     );
 
     component.reset();

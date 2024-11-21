@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { ThemedComponent } from '../theme-support/themed.component';
 import { AuthNavMenuComponent } from './auth-nav-menu.component';
 
@@ -7,11 +6,9 @@ import { AuthNavMenuComponent } from './auth-nav-menu.component';
  * Themed wrapper for {@link AuthNavMenuComponent}
  */
 @Component({
-  selector: 'ds-auth-nav-menu',
+  selector: 'ds-themed-auth-nav-menu',
   styleUrls: [],
   templateUrl: '../theme-support/themed.component.html',
-  standalone: true,
-  imports: [AuthNavMenuComponent],
 })
 export class ThemedAuthNavMenuComponent extends ThemedComponent<AuthNavMenuComponent> {
   protected getComponentName(): string {

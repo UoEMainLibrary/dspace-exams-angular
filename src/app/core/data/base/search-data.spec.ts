@@ -5,17 +5,12 @@
  *
  * http://www.dspace.org/license/
  */
-import { of as observableOf } from 'rxjs';
-
-import { getMockRemoteDataBuildService } from '../../../shared/mocks/remote-data-build.service.mock';
-import { getMockRequestService } from '../../../shared/mocks/request.service.mock';
-import { followLink } from '../../../shared/utils/follow-link-config.model';
+import { constructSearchEndpointDefault, SearchData, SearchDataImpl } from './search-data';
 import { FindListOptions } from '../find-list-options.model';
-import {
-  constructSearchEndpointDefault,
-  SearchData,
-  SearchDataImpl,
-} from './search-data';
+import { followLink } from '../../../shared/utils/follow-link-config.model';
+import { of as observableOf } from 'rxjs';
+import { getMockRequestService } from '../../../shared/mocks/request.service.mock';
+import { getMockRemoteDataBuildService } from '../../../shared/mocks/remote-data-build.service.mock';
 
 /**
  * Tests whether calls to `SearchData` methods are correctly patched through in a concrete data service that implements it

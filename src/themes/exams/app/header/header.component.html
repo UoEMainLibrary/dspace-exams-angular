@@ -1,0 +1,19 @@
+<header>
+    <div class="container">
+        <div class="flex-row justify-content-between">
+            <nav role="navigation" [attr.aria-label]="'nav.user.description' | translate" class="navbar navbar-light navbar-expand-md flex-shrink-0 px-0">
+                <div class="col-sm-4 header-left"></div>
+                <div class="col-sm-8 header-right">
+                    <ul>
+                        <a routerLink="/home" title="Link to home page"><li>Home</li></a>
+                        <a routerLink="/info/about" title="Link to about page"><li>About</li></a>
+                        <a routerLink="/info/help" title="Link to help page"><li>Help</li></a>
+                        <a routerLink="/info/feedback" title="Link to feedback page"><li>Feedback</li></a>
+                        <a routerLink="/info/faqs" title="Link to FAQs page"><li>FAQs</li></a>
+                    </ul>
+                </div>
+                <!-- <ds-themed-auth-nav-menu></ds-themed-auth-nav-menu> -->
+            </nav>
+        </div>
+    </div>  
+</header>

@@ -1,25 +1,12 @@
-import {
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  Router,
-  RouterLink,
-} from '@angular/router';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
-import { ActivatedRouteStub } from '../../testing/active-router.stub';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { LinkMenuItemComponent } from './link-menu-item.component';
+import { RouterLinkDirectiveStub } from '../../testing/router-link-directive.stub';
 import { QueryParamsDirectiveStub } from '../../testing/query-params-directive.stub';
 import { RouterStub } from '../../testing/router.stub';
-import { RouterLinkDirectiveStub } from '../../testing/router-link-directive.stub';
-import { LinkMenuItemComponent } from './link-menu-item.component';
+import { Router } from '@angular/router';
 
 describe('LinkMenuItemComponent', () => {
   let component: LinkMenuItemComponent;
@@ -32,27 +19,20 @@ describe('LinkMenuItemComponent', () => {
   function init() {
     text = 'HELLO';
     link = '/world/hello';
-    queryParams = { params: true };
+    queryParams = {params: true};
   }
 
   beforeEach(waitForAsync(() => {
     init();
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), LinkMenuItemComponent],
+      imports: [TranslateModule.forRoot()],
+      declarations: [LinkMenuItemComponent, RouterLinkDirectiveStub, QueryParamsDirectiveStub],
       providers: [
         { provide: 'itemModelProvider', useValue: { text: text, link: link, queryParams: queryParams } },
-        { provide: Router, useValue: new RouterStub() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        RouterLinkDirectiveStub,
-        QueryParamsDirectiveStub,
-        RouterLink,
+        { provide: Router, useValue: RouterStub },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     })
-      .overrideComponent(LinkMenuItemComponent, {
-        remove: { imports: [] },
-        add: { imports: [RouterLinkDirectiveStub, QueryParamsDirectiveStub] },
-      })
       .compileComponents();
   }));
 

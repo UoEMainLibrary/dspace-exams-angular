@@ -1,21 +1,12 @@
-import {
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { Item } from '../../../../core/shared/item.model';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
 import { SelectableListService } from '../../../object-list/selectable-list/selectable-list.service';
-import { VarDirective } from '../../../utils/var.directive';
-import { ListableObject } from '../listable-object.model';
 import { SelectableListItemControlComponent } from './selectable-list-item-control.component';
+import { Item } from '../../../../core/shared/item.model';
+import { FormsModule } from '@angular/forms';
+import { VarDirective } from '../../../utils/var.directive';
+import { of as observableOf } from 'rxjs';
+import { ListableObject } from '../listable-object.model';
 
 describe('SelectableListItemControlComponent', () => {
   let comp: SelectableListItemControlComponent;
@@ -42,25 +33,26 @@ describe('SelectableListItemControlComponent', () => {
     index = 0;
     selection = [otherObject];
     selectionService = jasmine.createSpyObj('selectionService', {
-      selectSingle: jasmine.createSpy('selectSingle'),
-      deselectSingle: jasmine.createSpy('deselectSingle'),
-      isObjectSelected: observableOf(true),
-      getSelectableList: observableOf({ selection }),
-    },
+        selectSingle: jasmine.createSpy('selectSingle'),
+        deselectSingle: jasmine.createSpy('deselectSingle'),
+        isObjectSelected: observableOf(true),
+        getSelectableList: observableOf({ selection })
+      }
     );
   }
 
   beforeEach(waitForAsync(() => {
     init();
     TestBed.configureTestingModule({
-      imports: [FormsModule, SelectableListItemControlComponent, VarDirective, TranslateModule.forRoot()],
+      declarations: [SelectableListItemControlComponent, VarDirective],
+      imports: [FormsModule],
       providers: [
         {
           provide: SelectableListService,
-          useValue: selectionService,
-        },
+          useValue: selectionService
+        }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 

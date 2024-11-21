@@ -1,62 +1,43 @@
-import {
-  AsyncPipe,
-  DatePipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  Inject,
-  OnInit,
-  Optional,
-} from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import {
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../config/app-config.interface';
-import { NotifyInfoService } from '../core/coar-notify/notify-info/notify-info.service';
+import { Component, Optional } from '@angular/core';
+import { hasValue } from '../shared/empty.util';
+import { KlaroService } from '../shared/cookies/klaro.service';
+import { environment } from '../../environments/environment';
+import { Observable } from 'rxjs';
 import { AuthorizationDataService } from '../core/data/feature-authorization/authorization-data.service';
 import { FeatureID } from '../core/data/feature-authorization/feature-id';
-import { KlaroService } from '../shared/cookies/klaro.service';
-import { hasValue } from '../shared/empty.util';
+
+import { isAuthenticated } from '../core/auth/selectors';
+import { select, Store } from '@ngrx/store';
+import { AppState} from '../app.reducer';
+
 
 @Component({
-  selector: 'ds-base-footer',
+  selector: 'ds-footer',
   styleUrls: ['footer.component.scss'],
-  templateUrl: 'footer.component.html',
-  standalone: true,
-  imports: [NgIf, RouterLink, AsyncPipe, DatePipe, TranslateModule],
+  templateUrl: 'footer.component.html'
 })
-export class FooterComponent implements OnInit {
+export class FooterComponent {
   dateObj: number = Date.now();
 
   /**
    * A boolean representing if to show or not the top footer container
    */
   showTopFooter = false;
-  showPrivacyPolicy: boolean;
-  showEndUserAgreement: boolean;
+  showPrivacyPolicy = environment.info.enablePrivacyStatement;
+  showEndUserAgreement = environment.info.enableEndUserAgreement;
   showSendFeedback$: Observable<boolean>;
-  coarLdnEnabled$: Observable<boolean>;
+
+  /**
+   * Whether user is authenticated.
+   * @type {Observable<string>}
+   */
+  public isAuthenticated: Observable<boolean>;
 
   constructor(
-    @Optional() public cookies: KlaroService,
-    protected authorizationService: AuthorizationDataService,
-    protected notifyInfoService: NotifyInfoService,
-    @Inject(APP_CONFIG) protected appConfig: AppConfig,
+    @Optional() private cookies: KlaroService,
+    private authorizationService: AuthorizationDataService,
+    public store: Store<AppState>,
   ) {
-  }
-
-  ngOnInit(): void {
-    this.showPrivacyPolicy = this.appConfig.info.enablePrivacyStatement;
-    this.showEndUserAgreement = this.appConfig.info.enableEndUserAgreement;
-    this.coarLdnEnabled$ = this.appConfig.info.enableCOARNotifySupport ? this.notifyInfoService.isCoarConfigEnabled() : observableOf(false);
     this.showSendFeedback$ = this.authorizationService.isAuthorized(FeatureID.CanSendFeedback);
   }
 
@@ -65,5 +46,9 @@ export class FooterComponent implements OnInit {
       this.cookies.showSettings();
     }
     return false;
+  }
+
+  ngOnInit(): void {
+    this.isAuthenticated = this.store.pipe(select(isAuthenticated));
   }
 }

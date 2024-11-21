@@ -1,5 +1,4 @@
 import { inheritSerialization } from 'cerialize';
-
 import { typedObject } from '../../cache/builders/build-decorators';
 import { SubmissionFormModel } from './config-submission-form.model';
 import { SUBMISSION_FORMS_TYPE } from './config-type';

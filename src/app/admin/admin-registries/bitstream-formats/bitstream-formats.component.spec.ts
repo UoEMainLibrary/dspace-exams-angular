@@ -1,41 +1,37 @@
-import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { RouterModule } from '@angular/router';
-import { provideMockStore } from '@ngrx/store/testing';
-import { TranslateModule } from '@ngx-translate/core';
-import {
-  cold,
-  hot,
-} from 'jasmine-marbles';
+import { BitstreamFormatsComponent } from './bitstream-formats.component';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { of as observableOf } from 'rxjs';
-
+import { CommonModule } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
+import { TranslateModule } from '@ngx-translate/core';
+import { By } from '@angular/platform-browser';
+import { PaginationComponent } from '../../../shared/pagination/pagination.component';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EnumKeysPipe } from '../../../shared/utils/enum-keys-pipe';
+import { HostWindowService } from '../../../shared/host-window.service';
+import { HostWindowServiceStub } from '../../../shared/testing/host-window-service.stub';
 import { BitstreamFormatDataService } from '../../../core/data/bitstream-format-data.service';
-import { PaginationService } from '../../../core/pagination/pagination.service';
+import { NotificationsService } from '../../../shared/notifications/notifications.service';
+import { NotificationsServiceStub } from '../../../shared/testing/notifications-service.stub';
 import { BitstreamFormat } from '../../../core/shared/bitstream-format.model';
 import { BitstreamFormatSupportLevel } from '../../../core/shared/bitstream-format-support-level';
-import { NotificationsService } from '../../../shared/notifications/notifications.service';
-import { PaginationComponent } from '../../../shared/pagination/pagination.component';
+import { cold, getTestScheduler, hot } from 'jasmine-marbles';
+import { TestScheduler } from 'rxjs/testing';
 import {
-  createFailedRemoteDataObject$,
   createNoContentRemoteDataObject$,
   createSuccessfulRemoteDataObject,
   createSuccessfulRemoteDataObject$,
+  createFailedRemoteDataObject$
 } from '../../../shared/remote-data.utils';
-import { NotificationsServiceStub } from '../../../shared/testing/notifications-service.stub';
-import { PaginationServiceStub } from '../../../shared/testing/pagination-service.stub';
 import { createPaginatedList } from '../../../shared/testing/utils.test';
-import { EnumKeysPipe } from '../../../shared/utils/enum-keys-pipe';
-import { BitstreamFormatsComponent } from './bitstream-formats.component';
+import { PaginationService } from '../../../core/pagination/pagination.service';
+import { PaginationServiceStub } from '../../../shared/testing/pagination-service.stub';
 
 describe('BitstreamFormatsComponent', () => {
   let comp: BitstreamFormatsComponent;
   let fixture: ComponentFixture<BitstreamFormatsComponent>;
   let bitstreamFormatService;
+  let scheduler: TestScheduler;
   let notificationsServiceStub;
   let paginationService;
 
@@ -83,12 +79,14 @@ describe('BitstreamFormatsComponent', () => {
     bitstreamFormat1,
     bitstreamFormat2,
     bitstreamFormat3,
-    bitstreamFormat4,
+    bitstreamFormat4
   ];
   const mockFormatsRD = createSuccessfulRemoteDataObject(createPaginatedList(mockFormatsList));
 
   const initAsync = () => {
     notificationsServiceStub = new NotificationsServiceStub();
+
+    scheduler = getTestScheduler();
 
     bitstreamFormatService = jasmine.createSpyObj('bitstreamFormatService', {
       findAll: observableOf(mockFormatsRD),
@@ -98,31 +96,20 @@ describe('BitstreamFormatsComponent', () => {
       deselectBitstreamFormat: {},
       deselectAllBitstreamFormats: {},
       delete: createSuccessfulRemoteDataObject$({}),
-      clearBitStreamFormatRequests: observableOf('cleared'),
+      clearBitStreamFormatRequests: observableOf('cleared')
     });
 
     paginationService = new PaginationServiceStub();
 
     TestBed.configureTestingModule({
-      imports: [
-        BitstreamFormatsComponent,
-        EnumKeysPipe,
-        RouterModule.forRoot([]),
-        TranslateModule.forRoot(),
-      ],
+      imports: [CommonModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), NgbModule],
+      declarations: [BitstreamFormatsComponent, PaginationComponent, EnumKeysPipe],
       providers: [
-        provideMockStore(),
         { provide: BitstreamFormatDataService, useValue: bitstreamFormatService },
+        { provide: HostWindowService, useValue: new HostWindowServiceStub(0) },
         { provide: NotificationsService, useValue: notificationsServiceStub },
-        { provide: PaginationService, useValue: paginationService },
-      ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
-    }).overrideComponent(BitstreamFormatsComponent, {
-      remove: {
-        imports: [
-          PaginationComponent,
-        ],
-      },
+        { provide: PaginationService, useValue: paginationService }
+      ]
     }).compileComponents();
   };
 
@@ -225,42 +212,34 @@ describe('BitstreamFormatsComponent', () => {
 
   describe('deleteFormats success', () => {
     beforeEach(waitForAsync(() => {
-      notificationsServiceStub = new NotificationsServiceStub();
+        notificationsServiceStub = new NotificationsServiceStub();
 
-      bitstreamFormatService = jasmine.createSpyObj('bitstreamFormatService', {
-        findAll: observableOf(mockFormatsRD),
-        find: createSuccessfulRemoteDataObject$(mockFormatsList[0]),
-        getSelectedBitstreamFormats: observableOf(mockFormatsList),
-        selectBitstreamFormat: {},
-        deselectBitstreamFormat: {},
-        deselectAllBitstreamFormats: {},
-        delete: createNoContentRemoteDataObject$(),
-        clearBitStreamFormatRequests: observableOf('cleared'),
-      });
+        scheduler = getTestScheduler();
+
+        bitstreamFormatService = jasmine.createSpyObj('bitstreamFormatService', {
+          findAll: observableOf(mockFormatsRD),
+          find: createSuccessfulRemoteDataObject$(mockFormatsList[0]),
+          getSelectedBitstreamFormats: observableOf(mockFormatsList),
+          selectBitstreamFormat: {},
+          deselectBitstreamFormat: {},
+          deselectAllBitstreamFormats: {},
+          delete: createNoContentRemoteDataObject$(),
+          clearBitStreamFormatRequests: observableOf('cleared')
+        });
 
       paginationService = new PaginationServiceStub();
 
       TestBed.configureTestingModule({
-        imports: [
-          BitstreamFormatsComponent,
-          EnumKeysPipe,
-          PaginationComponent,
-          RouterModule.forRoot([]),
-          TranslateModule.forRoot(),
-        ],
-        providers: [
-          provideMockStore(),
-          { provide: BitstreamFormatDataService, useValue: bitstreamFormatService },
-          { provide: NotificationsService, useValue: notificationsServiceStub },
-          { provide: PaginationService, useValue: paginationService },
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      })
-        .overrideComponent(BitstreamFormatsComponent, {
-          remove: { imports: [PaginationComponent] },
-        })
-        .compileComponents();
-    },
+          imports: [CommonModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), NgbModule],
+          declarations: [BitstreamFormatsComponent, PaginationComponent, EnumKeysPipe],
+          providers: [
+            { provide: BitstreamFormatDataService, useValue: bitstreamFormatService },
+            { provide: HostWindowService, useValue: new HostWindowServiceStub(0) },
+            { provide: NotificationsService, useValue: notificationsServiceStub },
+            { provide: PaginationService, useValue: paginationService }
+          ]
+        }).compileComponents();
+      }
     ));
 
     beforeEach(initBeforeEach);
@@ -282,40 +261,34 @@ describe('BitstreamFormatsComponent', () => {
 
   describe('deleteFormats error', () => {
     beforeEach(waitForAsync(() => {
-      notificationsServiceStub = new NotificationsServiceStub();
+        notificationsServiceStub = new NotificationsServiceStub();
 
-      bitstreamFormatService = jasmine.createSpyObj('bitstreamFormatService', {
-        findAll: observableOf(mockFormatsRD),
-        find: createSuccessfulRemoteDataObject$(mockFormatsList[0]),
-        getSelectedBitstreamFormats: observableOf(mockFormatsList),
-        selectBitstreamFormat: {},
-        deselectBitstreamFormat: {},
-        deselectAllBitstreamFormats: {},
-        delete: createFailedRemoteDataObject$(),
-        clearBitStreamFormatRequests: observableOf('cleared'),
-      });
+        scheduler = getTestScheduler();
+
+        bitstreamFormatService = jasmine.createSpyObj('bitstreamFormatService', {
+          findAll: observableOf(mockFormatsRD),
+          find: createSuccessfulRemoteDataObject$(mockFormatsList[0]),
+          getSelectedBitstreamFormats: observableOf(mockFormatsList),
+          selectBitstreamFormat: {},
+          deselectBitstreamFormat: {},
+          deselectAllBitstreamFormats: {},
+          delete: createFailedRemoteDataObject$(),
+          clearBitStreamFormatRequests: observableOf('cleared')
+        });
 
       paginationService = new PaginationServiceStub();
 
       TestBed.configureTestingModule({
-        imports: [
-          BitstreamFormatsComponent,
-          EnumKeysPipe,
-          RouterModule.forRoot([]),
-          TranslateModule.forRoot(),
-        ],
-        providers: [
-          { provide: BitstreamFormatDataService, useValue: bitstreamFormatService },
-          { provide: NotificationsService, useValue: notificationsServiceStub },
-          { provide: PaginationService, useValue: paginationService },
-        ],
-        schemas: [CUSTOM_ELEMENTS_SCHEMA],
-      })
-        .overrideComponent(BitstreamFormatsComponent, {
-          remove: { imports: [PaginationComponent] },
-        })
-        .compileComponents();
-    },
+          imports: [CommonModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), NgbModule],
+          declarations: [BitstreamFormatsComponent, PaginationComponent, EnumKeysPipe],
+          providers: [
+            { provide: BitstreamFormatDataService, useValue: bitstreamFormatService },
+            { provide: HostWindowService, useValue: new HostWindowServiceStub(0) },
+            { provide: NotificationsService, useValue: notificationsServiceStub },
+            { provide: PaginationService, useValue: paginationService }
+          ]
+        }).compileComponents();
+      }
     ));
 
     beforeEach(initBeforeEach);

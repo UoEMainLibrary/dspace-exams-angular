@@ -1,9 +1,4 @@
-import {
-  Inject,
-  Injectable,
-  InjectionToken,
-} from '@angular/core';
-
+import { Inject, Injectable, InjectionToken } from '@angular/core';
 import { HardRedirectService } from './hard-redirect.service';
 
 export const LocationToken = new InjectionToken('Location');
@@ -15,7 +10,7 @@ export function locationProvider(): Location {
 /**
  * Service for performing hard redirects within the browser app module
  */
-@Injectable({ providedIn: 'root' })
+@Injectable({providedIn: 'root'})
 export class BrowserHardRedirectService extends HardRedirectService {
 
   constructor(
@@ -43,8 +38,8 @@ export class BrowserHardRedirectService extends HardRedirectService {
   /**
    * Get the origin of the current URL
    * i.e. <scheme> "://" <hostname> [ ":" <port> ]
-   * e.g. if the URL is https://demo.dspace.org/search?query=test,
-   * the origin would be https://demo.dspace.org
+   * e.g. if the URL is https://demo7.dspace.org/search?query=test,
+   * the origin would be https://demo7.dspace.org
    */
   getCurrentOrigin(): string {
     return this.location.origin;

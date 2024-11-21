@@ -1,34 +1,17 @@
-import {
-  NgForOf,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  Input,
-} from '@angular/core';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
-import { Bitstream } from 'src/app/core/shared/bitstream.model';
-
-import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
+import { Component, Input } from '@angular/core';
 import { MediaViewerItem } from '../../../core/shared/media-viewer-item.model';
-import { CaptionInfo } from './caption-info';
+import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
 import { languageHelper } from './language-helper';
+import { CaptionInfo } from './caption-info';
+import { Bitstream } from 'src/app/core/shared/bitstream.model';
 
 /**
  * This component renders a video viewer and playlist for the media viewer
  */
 @Component({
-  selector: 'ds-base-media-viewer-video',
+  selector: 'ds-media-viewer-video',
   templateUrl: './media-viewer-video.component.html',
   styleUrls: ['./media-viewer-video.component.scss'],
-  imports: [
-    NgForOf,
-    NgbDropdownModule,
-    TranslateModule,
-    NgIf,
-  ],
-  standalone: true,
 })
 export class MediaViewerVideoComponent {
   @Input() medias: MediaViewerItem[];
@@ -65,7 +48,7 @@ export class MediaViewerVideoComponent {
       .filter((media: Bitstream) => media.name.substring(0, (media.name.length - 7)).toLowerCase() === name.toLowerCase());
 
     for (const media of filteredCapMedias) {
-      const srclang: string = media.name.slice(-6, -4).toLowerCase();
+      let srclang: string = media.name.slice(-6, -4).toLowerCase();
       capInfos.push(new CaptionInfo(
         media._links.content.href,
         srclang,

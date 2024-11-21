@@ -1,15 +1,11 @@
-import { TestBed } from '@angular/core/testing';
-import { ROOT_EFFECTS_INIT } from '@ngrx/effects';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import {
-  cold,
-  hot,
-} from 'jasmine-marbles';
-
-import { SetThemeAction } from './theme.actions';
-import { BASE_THEME_NAME } from './theme.constants';
 import { ThemeEffects } from './theme.effects';
+import { TestBed } from '@angular/core/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { cold, hot } from 'jasmine-marbles';
+import { ROOT_EFFECTS_INIT } from '@ngrx/effects';
+import { SetThemeAction } from './theme.actions';
+import { provideMockStore } from '@ngrx/store/testing';
+import { BASE_THEME_NAME } from './theme.constants';
 
 describe('ThemeEffects', () => {
   let themeEffects: ThemeEffects;
@@ -29,8 +25,8 @@ describe('ThemeEffects', () => {
       providers: [
         ThemeEffects,
         provideMockStore({ initialState }),
-        provideMockActions(() => mockActions),
-      ],
+        provideMockActions(() => mockActions)
+      ]
     });
 
     themeEffects = TestBed.inject(ThemeEffects);
@@ -41,15 +37,15 @@ describe('ThemeEffects', () => {
       setupEffectsWithActions(
         hot('--a-', {
           a: {
-            type: ROOT_EFFECTS_INIT,
-          },
-        }),
+            type: ROOT_EFFECTS_INIT
+          }
+        })
       );
     });
 
     it('should set the default theme', () => {
       const expected = cold('--b-', {
-        b: new SetThemeAction(BASE_THEME_NAME),
+        b: new SetThemeAction(BASE_THEME_NAME)
       });
 
       expect(themeEffects.initTheme$).toBeObservable(expected);

@@ -1,28 +1,21 @@
-import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
-import { TranslateModule } from '@ngx-translate/core';
-import { getTestScheduler } from 'jasmine-marbles';
-import { of as observableOf } from 'rxjs';
-
-import { ComColDataService } from '../../../../core/data/comcol-data.service';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { CommunityDataService } from '../../../../core/data/community-data.service';
-import { RequestService } from '../../../../core/data/request.service';
 import { RouteService } from '../../../../core/services/route.service';
+import { Router } from '@angular/router';
+import { TranslateModule } from '@ngx-translate/core';
+import { of as observableOf } from 'rxjs';
 import { Community } from '../../../../core/shared/community.model';
-import { NotificationsService } from '../../../notifications/notifications.service';
-import {
-  createFailedRemoteDataObject$,
-  createSuccessfulRemoteDataObject$,
-} from '../../../remote-data.utils';
-import { NotificationsServiceStub } from '../../../testing/notifications-service.stub';
+import { SharedModule } from '../../../shared.module';
+import { CommonModule } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { CreateComColPageComponent } from './create-comcol-page.component';
+import { createFailedRemoteDataObject$, createSuccessfulRemoteDataObject$ } from '../../../remote-data.utils';
+import { ComColDataService } from '../../../../core/data/comcol-data.service';
+import { NotificationsService } from '../../../notifications/notifications.service';
+import { NotificationsServiceStub } from '../../../testing/notifications-service.stub';
+import { RequestService } from '../../../../core/data/request.service';
+import { getTestScheduler } from 'jasmine-marbles';
 
 describe('CreateComColPageComponent', () => {
   let comp: CreateComColPageComponent<any>;
@@ -48,9 +41,9 @@ describe('CreateComColPageComponent', () => {
       uuid: 'a20da287-e174-466a-9926-f66b9300d347',
       metadata: [{
         key: 'dc.title',
-        value: 'test community',
+        value: 'test community'
       }],
-      _links: {},
+      _links: {}
     });
 
     parentCommunity = Object.assign(new Community(), {
@@ -58,18 +51,18 @@ describe('CreateComColPageComponent', () => {
       id: 'a20da287-e174-466a-9926-f66as300d399',
       metadata: [{
         key: 'dc.title',
-        value: 'parent community',
+        value: 'parent community'
       }],
-      _links: {},
+      _links: {}
     });
 
     newCommunity = Object.assign(new Community(), {
       uuid: '1ff59938-a69a-4e62-b9a4-718569c55d48',
       metadata: [{
         key: 'dc.title',
-        value: 'new community',
+        value: 'new community'
       }],
-      _links: {},
+      _links: {}
     });
 
     communityDataServiceStub = {
@@ -77,22 +70,22 @@ describe('CreateComColPageComponent', () => {
         uuid: uuid,
         metadata: [{
           key: 'dc.title',
-          value: community.name,
-        }],
+          value: community.name
+        }]
       })),
       create: (com, uuid?) => createSuccessfulRemoteDataObject$(newCommunity),
       getLogoEndpoint: () => observableOf(logoEndpoint),
       findByHref: () => null,
       refreshCache: () => {
         return;
-      },
+      }
     };
 
     routeServiceStub = {
-      getQueryParameterValue: (param) => observableOf(community.uuid),
+      getQueryParameterValue: (param) => observableOf(community.uuid)
     };
     routerStub = {
-      navigate: (commands) => commands,
+      navigate: (commands) => commands
     };
 
     requestServiceStub = jasmine.createSpyObj('RequestService', {
@@ -104,16 +97,16 @@ describe('CreateComColPageComponent', () => {
   beforeEach(waitForAsync(() => {
     initializeVars();
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), CommonModule, RouterTestingModule],
+      imports: [TranslateModule.forRoot(), SharedModule, CommonModule, RouterTestingModule],
       providers: [
         { provide: ComColDataService, useValue: communityDataServiceStub },
         { provide: CommunityDataService, useValue: communityDataServiceStub },
         { provide: RouteService, useValue: routeServiceStub },
         { provide: Router, useValue: routerStub },
         { provide: NotificationsService, useValue: new NotificationsServiceStub() },
-        { provide: RequestService, useValue: requestServiceStub },
+        { provide: RequestService, useValue: requestServiceStub }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents();
   }));
 
@@ -138,20 +131,20 @@ describe('CreateComColPageComponent', () => {
           dso: Object.assign(new Community(), {
             metadata: [{
               key: 'dc.title',
-              value: 'test',
-            }],
+              value: 'test'
+            }]
           }),
           _links: {},
           uploader: {
             options: {
-              url: '',
+              url: ''
             },
             queue: [],
             /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
             uploadAll: () => {
-            },
+            }
             /* eslint-enable no-empty,@typescript-eslint/no-empty-function */
-          },
+          }
         };
       });
 
@@ -181,22 +174,22 @@ describe('CreateComColPageComponent', () => {
           dso: Object.assign(new Community(), {
             metadata: [{
               key: 'dc.title',
-              value: 'test',
-            }],
+              value: 'test'
+            }]
           }),
           _links: {},
           uploader: {
             options: {
-              url: '',
+              url: ''
             },
             queue: [
-              {},
+              {}
             ],
             /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
             uploadAll: () => {
-            },
+            }
             /* eslint-enable no-empty, @typescript-eslint/no-empty-function */
-          },
+          }
         };
       });
 

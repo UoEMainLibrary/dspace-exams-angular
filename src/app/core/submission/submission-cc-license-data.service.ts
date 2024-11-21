@@ -1,22 +1,21 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-
-import { FollowLinkConfig } from '../../shared/utils/follow-link-config.model';
 import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
 import { ObjectCacheService } from '../cache/object-cache.service';
-import { BaseDataService } from '../data/base/base-data.service';
-import {
-  FindAllData,
-  FindAllDataImpl,
-} from '../data/base/find-all-data';
-import { FindListOptions } from '../data/find-list-options.model';
-import { PaginatedList } from '../data/paginated-list.model';
-import { RemoteData } from '../data/remote-data';
-import { RequestService } from '../data/request.service';
 import { HALEndpointService } from '../shared/hal-endpoint.service';
+import { RequestService } from '../data/request.service';
+import { SUBMISSION_CC_LICENSE } from './models/submission-cc-licence.resource-type';
 import { SubmissionCcLicence } from './models/submission-cc-license.model';
+import { BaseDataService } from '../data/base/base-data.service';
+import {FindAllData, FindAllDataImpl} from '../data/base/find-all-data';
+import { FindListOptions } from '../data/find-list-options.model';
+import { FollowLinkConfig } from '../../shared/utils/follow-link-config.model';
+import { Observable } from 'rxjs';
+import { RemoteData } from '../data/remote-data';
+import { PaginatedList } from '../data/paginated-list.model';
+import { dataService } from '../data/base/data-service.decorator';
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
+@dataService(SUBMISSION_CC_LICENSE)
 export class SubmissionCcLicenseDataService extends BaseDataService<SubmissionCcLicence> implements FindAllData<SubmissionCcLicence> {
 
   protected linkPath = 'submissioncclicenses';

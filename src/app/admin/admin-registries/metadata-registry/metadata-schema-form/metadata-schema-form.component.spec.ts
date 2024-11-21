@@ -1,23 +1,15 @@
-import { CommonModule } from '@angular/common';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
+import { MetadataSchemaFormComponent } from './metadata-schema-form.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  inject,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { CommonModule } from '@angular/common';
 import { RouterTestingModule } from '@angular/router/testing';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { MetadataSchema } from '../../../../core/metadata/metadata-schema.model';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EnumKeysPipe } from '../../../../shared/utils/enum-keys-pipe';
 import { RegistryService } from '../../../../core/registry/registry.service';
 import { FormBuilderService } from '../../../../shared/form/builder/form-builder.service';
-import { FormComponent } from '../../../../shared/form/form.component';
-import { getMockFormBuilderService } from '../../../../shared/mocks/form-builder-service.mock';
-import { EnumKeysPipe } from '../../../../shared/utils/enum-keys-pipe';
-import { MetadataSchemaFormComponent } from './metadata-schema-form.component';
+import { of as observableOf } from 'rxjs';
+import { MetadataSchema } from '../../../../core/metadata/metadata-schema.model';
 
 describe('MetadataSchemaFormComponent', () => {
   let component: MetadataSchemaFormComponent;
@@ -30,7 +22,7 @@ describe('MetadataSchemaFormComponent', () => {
     createOrUpdateMetadataSchema: (schema: MetadataSchema) => observableOf(schema),
     cancelEditMetadataSchema: () => {
     },
-    clearMetadataSchemaRequests: () => observableOf(undefined),
+    clearMetadataSchemaRequests: () => observableOf(undefined)
   };
   const formBuilderServiceStub = {
     createFormGroup: () => {
@@ -40,25 +32,20 @@ describe('MetadataSchemaFormComponent', () => {
         reset(_value?: any, _options?: { onlySelf?: boolean; emitEvent?: boolean; }): void {
         },
       };
-    },
+    }
   };
   /* eslint-enable no-empty, @typescript-eslint/no-empty-function */
 
   beforeEach(waitForAsync(() => {
     return TestBed.configureTestingModule({
-      imports: [CommonModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), NgbModule, MetadataSchemaFormComponent, EnumKeysPipe],
+      imports: [CommonModule, RouterTestingModule.withRoutes([]), TranslateModule.forRoot(), NgbModule],
+      declarations: [MetadataSchemaFormComponent, EnumKeysPipe],
       providers: [
         { provide: RegistryService, useValue: registryServiceStub },
-        { provide: FormBuilderService, useValue: getMockFormBuilderService() },
+        { provide: FormBuilderService, useValue: formBuilderServiceStub }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(MetadataSchemaFormComponent, {
-        remove: {
-          imports: [FormComponent],
-        },
-      })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {
@@ -77,7 +64,7 @@ describe('MetadataSchemaFormComponent', () => {
 
     const expected = Object.assign(new MetadataSchema(), {
       namespace: namespace,
-      prefix: prefix,
+      prefix: prefix
     } as MetadataSchema);
 
     beforeEach(() => {
@@ -103,7 +90,7 @@ describe('MetadataSchemaFormComponent', () => {
       const expectedWithId = Object.assign(new MetadataSchema(), {
         id: 1,
         namespace: namespace,
-        prefix: prefix,
+        prefix: prefix
       } as MetadataSchema);
 
       beforeEach(() => {

@@ -1,42 +1,22 @@
 // Load the implementations that should be tested
-import {
-  ChangeDetectorRef,
-  Component,
-  CUSTOM_ELEMENTS_SCHEMA,
-  EventEmitter,
-  Renderer2,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  fakeAsync,
-  inject,
-  TestBed,
-  tick,
-  waitForAsync,
-} from '@angular/core/testing';
-import {
-  UntypedFormControl,
-  UntypedFormGroup,
-} from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import {
-  DynamicFormLayoutService,
-  DynamicFormValidationService,
-} from '@ng-dynamic-forms/core';
-import { TranslateService } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
+import { ChangeDetectorRef, Component, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
+import { ComponentFixture, inject, TestBed, waitForAsync, } from '@angular/core/testing';
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms';
 
-import {
-  mockDynamicFormLayoutService,
-  mockDynamicFormValidationService,
-} from '../../../../../testing/dynamic-form-mock-services';
-import { createTestComponent } from '../../../../../testing/utils.test';
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { DynamicFormLayoutService, DynamicFormValidationService } from '@ng-dynamic-forms/core';
+
 import { DsDatePickerComponent } from './date-picker.component';
 import { DynamicDsDatePickerModel } from './date-picker.model';
+import { createTestComponent } from '../../../../../testing/utils.test';
+import {
+  mockDynamicFormLayoutService,
+  mockDynamicFormValidationService
+} from '../../../../../testing/dynamic-form-mock-services';
+
 
 export const DATE_TEST_GROUP = new UntypedFormGroup({
-  date: new UntypedFormControl(),
+  date: new UntypedFormControl()
 });
 
 export const DATE_TEST_MODEL_CONFIG = {
@@ -48,8 +28,7 @@ export const DATE_TEST_MODEL_CONFIG = {
   placeholder: 'Date',
   readOnly: false,
   required: true,
-  repeatable: false,
-  toggleIcon: 'fas fa-calendar',
+  toggleIcon: 'fas fa-calendar'
 };
 
 describe('DsDatePickerComponent test suite', () => {
@@ -60,36 +39,24 @@ describe('DsDatePickerComponent test suite', () => {
   let dateFixture: ComponentFixture<DsDatePickerComponent>;
   let html;
 
-  const renderer2: Renderer2 = {
-    selectRootElement: jasmine.createSpy('selectRootElement'),
-    querySelector: jasmine.createSpy('querySelector'),
-  } as unknown as Renderer2;
-
   // waitForAsync beforeEach
   beforeEach(waitForAsync(() => {
 
-    const translateServiceStub = {
-      get: () => observableOf('test-message'),
-      onLangChange: new EventEmitter(),
-      onTranslationChange: new EventEmitter(),
-      onDefaultLangChange: new EventEmitter(),
-    };
-
     TestBed.configureTestingModule({
       imports: [
-        NgbModule,
+        NgbModule
+      ],
+      declarations: [
         DsDatePickerComponent,
         TestComponent,
-      ],
+      ], // declare the test component
       providers: [
         ChangeDetectorRef,
         DsDatePickerComponent,
-        { provide: TranslateService, useValue: translateServiceStub },
         { provide: DynamicFormLayoutService, useValue: mockDynamicFormLayoutService },
-        { provide: DynamicFormValidationService, useValue: mockDynamicFormValidationService },
-        { provide: Renderer2, useValue: renderer2 },
+        { provide: DynamicFormValidationService, useValue: mockDynamicFormValidationService }
       ],
-      schemas: [CUSTOM_ELEMENTS_SCHEMA],
+      schemas: [CUSTOM_ELEMENTS_SCHEMA]
     });
 
   }));
@@ -141,7 +108,7 @@ describe('DsDatePickerComponent test suite', () => {
       it('should set year and enable month field when year field is entered', () => {
         const event = {
           field: 'year',
-          value: '1983',
+          value: '1983'
         };
         dateComp.onChange(event);
 
@@ -153,7 +120,7 @@ describe('DsDatePickerComponent test suite', () => {
       it('should set month and enable day field when month field is entered', () => {
         const event = {
           field: 'month',
-          value: '11',
+          value: '11'
         };
 
         dateComp.year = '1983';
@@ -171,7 +138,7 @@ describe('DsDatePickerComponent test suite', () => {
       it('should set day when day field is entered', () => {
         const event = {
           field: 'day',
-          value: '18',
+          value: '18'
         };
 
         dateComp.year = '1983';
@@ -228,7 +195,7 @@ describe('DsDatePickerComponent test suite', () => {
       it('should disable month and day fields when year field is canceled', () => {
         const event = {
           field: 'year',
-          value: null,
+          value: null
         };
         dateComp.onChange(event);
 
@@ -242,7 +209,7 @@ describe('DsDatePickerComponent test suite', () => {
       it('should disable day field when month field is canceled', () => {
         const event = {
           field: 'month',
-          value: null,
+          value: null
         };
         dateComp.onChange(event);
 
@@ -256,7 +223,7 @@ describe('DsDatePickerComponent test suite', () => {
       it('should not disable day field when day field is canceled', () => {
         const event = {
           field: 'day',
-          value: null,
+          value: null
         };
         dateComp.onChange(event);
 
@@ -266,102 +233,6 @@ describe('DsDatePickerComponent test suite', () => {
         expect(dateComp.disabledMonth).toBeFalsy();
         expect(dateComp.disabledDay).toBeFalsy();
       });
-
-      it('should move focus on month field when on year field and tab pressed', fakeAsync(() => {
-        const event = {
-          field: 'day',
-          value: null,
-        };
-        const event1 = {
-          field: 'month',
-          value: null,
-        };
-        dateComp.onChange(event);
-        dateComp.onChange(event1);
-
-        const yearElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_year`));
-        const monthElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_month`));
-
-        yearElement.nativeElement.focus();
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(yearElement.nativeElement);
-
-        dateFixture.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'tab' }));
-        dateFixture.detectChanges();
-
-        tick(200);
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(monthElement.nativeElement);
-      }));
-
-      it('should move focus on day field when on month field and tab pressed', fakeAsync(() => {
-        const event = {
-          field: 'day',
-          value: null,
-        };
-        dateComp.onChange(event);
-
-        const monthElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_month`));
-        const dayElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_day`));
-
-        monthElement.nativeElement.focus();
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(monthElement.nativeElement);
-
-        dateFixture.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'tab' }));
-        dateFixture.detectChanges();
-
-        tick(200);
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(dayElement.nativeElement);
-      }));
-
-      it('should move focus on month field when on day field and shift tab pressed', fakeAsync(() => {
-        const event = {
-          field: 'day',
-          value: null,
-        };
-        dateComp.onChange(event);
-
-        const monthElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_month`));
-        const dayElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_day`));
-
-        dayElement.nativeElement.focus();
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(dayElement.nativeElement);
-
-        dateFixture.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'shift.tab' }));
-        dateFixture.detectChanges();
-
-        tick(200);
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(monthElement.nativeElement);
-      }));
-
-      it('should move focus on year field when on month field and shift tab pressed', fakeAsync(() => {
-        const yearElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_year`));
-        const monthElement = dateFixture.debugElement.query(By.css(`#${dateComp.model.id}_month`));
-
-        monthElement.nativeElement.focus();
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(monthElement.nativeElement);
-
-        dateFixture.nativeElement.dispatchEvent(new KeyboardEvent('keydown', { key: 'shift.tab' }));
-        dateFixture.detectChanges();
-
-        tick(200);
-        dateFixture.detectChanges();
-
-        expect(document.activeElement).toBe(yearElement.nativeElement);
-      }));
-
     });
   });
 
@@ -370,9 +241,7 @@ describe('DsDatePickerComponent test suite', () => {
 // declare a test component
 @Component({
   selector: 'ds-test-cmp',
-  template: ``,
-  standalone: true,
-  imports: [NgbModule],
+  template: ``
 })
 class TestComponent {
 

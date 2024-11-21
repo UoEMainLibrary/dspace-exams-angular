@@ -1,20 +1,13 @@
-import {
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { provideMockActions } from '@ngrx/effects/testing';
-import { provideMockStore } from '@ngrx/store/testing';
-import {
-  cold,
-  hot,
-} from 'jasmine-marbles';
 import { Observable } from 'rxjs';
-
-import { NoOpAction } from '../../shared/ngrx/no-op.action';
+import { TestBed, waitForAsync } from '@angular/core/testing';
+import { provideMockActions } from '@ngrx/effects/testing';
+import { UUIDIndexEffects } from './index.effects';
+import { cold, hot } from 'jasmine-marbles';
 import { AddToObjectCacheAction } from '../cache/object-cache.actions';
 import { Item } from '../shared/item.model';
 import { AddToIndexAction } from './index.actions';
-import { UUIDIndexEffects } from './index.effects';
+import { provideMockStore } from '@ngrx/store/testing';
+import { NoOpAction } from '../../shared/ngrx/no-op.action';
 import { IndexName } from './index-name.model';
 
 describe('ObjectUpdatesEffects', () => {
@@ -37,8 +30,8 @@ describe('ObjectUpdatesEffects', () => {
       uuid: '3601eaed-8fdb-487f-8b89-4d7647314143',
       _links: {
         self: { href: selfLink },
-        anotherLink: { href: otherLink },
-      },
+        anotherLink: { href: otherLink }
+      }
     };
     timeCompleted = new Date().getDate();
     msToLive = 90000;
@@ -48,10 +41,10 @@ describe('ObjectUpdatesEffects', () => {
       core: {
         index: {
           [IndexName.REQUEST]: {
-            [selfLink]: requestUUID,
-          },
-        },
-      },
+            [selfLink]: requestUUID
+          }
+        }
+      }
     };
   }
 
@@ -77,7 +70,7 @@ describe('ObjectUpdatesEffects', () => {
       const newAction = new AddToIndexAction(
         IndexName.ALTERNATIVE_OBJECT_LINK,
         alternativeLink,
-        objectToCache._links.self.href,
+        objectToCache._links.self.href
       );
       actions = hot('--a-', { a: action });
       const expected = cold('--b-', { b: newAction });

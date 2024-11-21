@@ -1,8 +1,4 @@
-import {
-  Pipe,
-  PipeTransform,
-} from '@angular/core';
-
+import { Pipe, PipeTransform } from '@angular/core';
 import { hasValue } from '../empty.util';
 
 /**
@@ -10,8 +6,7 @@ import { hasValue } from '../empty.util';
  * Default value: 10
  */
 @Pipe({
-  name: 'dsTruncate',
-  standalone: true,
+  name: 'dsTruncate'
 })
 export class TruncatePipe implements PipeTransform {
 

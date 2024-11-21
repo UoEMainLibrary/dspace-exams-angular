@@ -1,31 +1,21 @@
-import {
-  cold,
-  getTestScheduler,
-  hot,
-} from 'jasmine-marbles';
-import { of as observableOf } from 'rxjs';
+import { cold, getTestScheduler, hot } from 'jasmine-marbles';
 import { TestScheduler } from 'rxjs/testing';
-
 import { getMockRequestService } from '../../shared/mocks/request.service.mock';
-import {
-  createFailedRemoteDataObject,
-  createSuccessfulRemoteDataObject,
-} from '../../shared/remote-data.utils';
 import { GetRequest } from '../data/request.models';
 import { RequestService } from '../data/request.service';
-import { RequestEntry } from '../data/request-entry.model';
-import { redirectOn4xx } from './authorized.operators';
 import {
   getAllSucceededRemoteData,
   getFirstSucceededRemoteData,
-  getRemoteDataPayload,
+  getRemoteDataPayload
 } from './operators';
+import { of as observableOf } from 'rxjs';
 import {
-  getRequestFromRequestHref,
-  getRequestFromRequestUUID,
-  getResponseFromEntry,
-  sendRequest,
-} from './request.operators';
+  createFailedRemoteDataObject,
+  createSuccessfulRemoteDataObject
+} from '../../shared/remote-data.utils';
+import { getRequestFromRequestHref, getRequestFromRequestUUID, getResponseFromEntry, sendRequest } from './request.operators';
+import { redirectOn4xx } from './authorized.operators';
+import { RequestEntry } from '../data/request-entry.model';
 
 /* eslint-disable @typescript-eslint/no-shadow */
 
@@ -42,7 +32,7 @@ describe('Core Module - RxJS Operators', () => {
     d: { response: { isSuccessful: true, resourceSelfLinks: ['j', 'k', 'l', 'm', 'n'] } },
     e: { response: { isSuccessful: 1, resourceSelfLinks: [] } },
     f: { response: undefined },
-    g: undefined,
+    g: undefined
   };
 
   const testResponses = {
@@ -50,7 +40,7 @@ describe('Core Module - RxJS Operators', () => {
     b: testRCEs.b.response,
     c: testRCEs.c.response,
     d: testRCEs.d.response,
-    e: testRCEs.e.response,
+    e: testRCEs.e.response
   };
 
   beforeEach(() => {
@@ -157,7 +147,7 @@ describe('Core Module - RxJS Operators', () => {
         b: testRCEs.b.response,
         c: testRCEs.c.response,
         d: testRCEs.d.response,
-        e: testRCEs.e.response,
+        e: testRCEs.e.response
       });
 
       expect(result).toBeObservable(expected);
@@ -193,7 +183,7 @@ describe('Core Module - RxJS Operators', () => {
       router = jasmine.createSpyObj('router', ['navigateByUrl']);
       authService = jasmine.createSpyObj('authService', {
         isAuthenticated: observableOf(true),
-        setRedirectUrl: {},
+        setRedirectUrl: {}
       });
     });
 
@@ -306,7 +296,7 @@ describe('Core Module - RxJS Operators', () => {
         b: testRCEs.b.response,
         c: testRCEs.c.response,
         d: testRCEs.d.response,
-        e: testRCEs.e.response,
+        e: testRCEs.e.response
       });
 
       expect(result).toBeObservable(expected);

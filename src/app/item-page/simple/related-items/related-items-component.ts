@@ -1,43 +1,20 @@
-import {
-  AsyncPipe,
-  isPlatformBrowser,
-  NgClass,
-  NgFor,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  ElementRef,
-  Inject,
-  Input,
-  PLATFORM_ID,
-} from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import { Observable } from 'rxjs';
-
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../../../config/app-config.interface';
-import { FindListOptions } from '../../../core/data/find-list-options.model';
-import { PaginatedList } from '../../../core/data/paginated-list.model';
-import { RelationshipDataService } from '../../../core/data/relationship-data.service';
-import { RemoteData } from '../../../core/data/remote-data';
+import { Component, ElementRef, Inject, Input, PLATFORM_ID } from '@angular/core';
 import { Item } from '../../../core/shared/item.model';
+import { Observable } from 'rxjs';
+import { RemoteData } from '../../../core/data/remote-data';
+import { PaginatedList } from '../../../core/data/paginated-list.model';
 import { ViewMode } from '../../../core/shared/view-mode.model';
-import { ThemedLoadingComponent } from '../../../shared/loading/themed-loading.component';
-import { MetadataFieldWrapperComponent } from '../../../shared/metadata-field-wrapper/metadata-field-wrapper.component';
-import { ListableObjectComponentLoaderComponent } from '../../../shared/object-collection/shared/listable-object/listable-object-component-loader.component';
-import { setPlaceHolderAttributes } from '../../../shared/utils/object-list-utils';
-import { VarDirective } from '../../../shared/utils/var.directive';
+import { RelationshipDataService } from '../../../core/data/relationship-data.service';
 import { AbstractIncrementalListComponent } from '../abstract-incremental-list/abstract-incremental-list.component';
+import { FindListOptions } from '../../../core/data/find-list-options.model';
+import { setPlaceHolderAttributes } from '../../../shared/utils/object-list-utils';
+import { APP_CONFIG, AppConfig } from '../../../../config/app-config.interface';
+import { isPlatformBrowser } from '@angular/common';
 
 @Component({
   selector: 'ds-related-items',
   styleUrls: ['./related-items.component.scss'],
-  templateUrl: './related-items.component.html',
-  standalone: true,
-  imports: [MetadataFieldWrapperComponent, NgClass, NgFor, VarDirective, ListableObjectComponentLoaderComponent, NgIf, ThemedLoadingComponent, AsyncPipe, TranslateModule],
+  templateUrl: './related-items.component.html'
 })
 /**
  * This component is used for displaying relations between items
@@ -88,8 +65,8 @@ export class RelatedItemsComponent extends AbstractIncrementalListComponent<Obse
   constructor(public relationshipService: RelationshipDataService,
               protected elementRef: ElementRef,
               @Inject(APP_CONFIG) protected appConfig: AppConfig,
-              @Inject(PLATFORM_ID) private platformId: any,
-  ) {
+              @Inject(PLATFORM_ID) private platformId: Object
+              ) {
     super();
     this.fetchThumbnail = this.appConfig.browseBy.showThumbnails;
   }

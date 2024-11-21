@@ -1,19 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { DebugElement } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import {
-  TranslateLoader,
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
+import { DebugElement } from '@angular/core';
+
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import { TranslateLoaderMock } from '../mocks/translate-loader.mock';
+
 import { ErrorComponent } from './error.component';
 
 describe('ErrorComponent (inline template)', () => {
@@ -26,17 +18,15 @@ describe('ErrorComponent (inline template)', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        CommonModule,
-        NoopAnimationsModule,
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: TranslateLoaderMock,
-          },
+            useClass: TranslateLoaderMock
+          }
         }),
-        ErrorComponent,
       ],
-      providers: [TranslateService],
+      declarations: [ErrorComponent], // declare the test component
+      providers: [TranslateService]
     }).compileComponents();  // compile template and css
   }));
 

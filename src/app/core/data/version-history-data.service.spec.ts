@@ -1,22 +1,18 @@
-import {
-  fakeAsync,
-  waitForAsync,
-} from '@angular/core/testing';
-import { of } from 'rxjs';
-
-import { getMockRequestService } from '../../shared/mocks/request.service.mock';
-import { createSuccessfulRemoteDataObject$ } from '../../shared/remote-data.utils';
-import { HALEndpointServiceStub } from '../../shared/testing/hal-endpoint-service.stub';
-import { NotificationsServiceStub } from '../../shared/testing/notifications-service.stub';
-import { createPaginatedList } from '../../shared/testing/utils.test';
+import { RequestService } from './request.service';
 import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
 import { ObjectCacheService } from '../cache/object-cache.service';
-import { Item } from '../shared/item.model';
-import { Version } from '../shared/version.model';
-import { VersionHistory } from '../shared/version-history.model';
-import { RequestService } from './request.service';
-import { VersionDataService } from './version-data.service';
 import { VersionHistoryDataService } from './version-history-data.service';
+import { NotificationsServiceStub } from '../../shared/testing/notifications-service.stub';
+import { HALEndpointServiceStub } from '../../shared/testing/hal-endpoint-service.stub';
+import { getMockRequestService } from '../../shared/mocks/request.service.mock';
+import { VersionDataService } from './version-data.service';
+import { fakeAsync, waitForAsync } from '@angular/core/testing';
+import { VersionHistory } from '../shared/version-history.model';
+import { Version } from '../shared/version.model';
+import { createSuccessfulRemoteDataObject$ } from '../../shared/remote-data.utils';
+import { createPaginatedList } from '../../shared/testing/utils.test';
+import { Item } from '../shared/item.model';
+import { of } from 'rxjs';
 import SpyObj = jasmine.SpyObj;
 
 const url = 'fake-url';
@@ -69,10 +65,6 @@ describe('VersionHistoryDataService', () => {
       },
     },
   });
-  const version1WithDraft = Object.assign(new Version(), {
-    ...version1,
-    versionhistory: createSuccessfulRemoteDataObject$(versionHistoryDraft),
-  });
   const versions = [version1, version2];
   versionHistory.versions = createSuccessfulRemoteDataObject$(createPaginatedList(versions));
   const item1 = Object.assign(new Item(), {
@@ -82,8 +74,8 @@ describe('VersionHistoryDataService', () => {
     _links: {
       self: {
         href: '/items/' + item2Uuid,
-      },
-    },
+      }
+    }
   });
   const item2 = Object.assign(new Item(), {
     uuid: item2Uuid,
@@ -92,8 +84,8 @@ describe('VersionHistoryDataService', () => {
     _links: {
       self: {
         href: '/items/' + item2Uuid,
-      },
-    },
+      }
+    }
   });
   const items = [item1, item2];
   version1.item = createSuccessfulRemoteDataObject$(item1);
@@ -194,18 +186,21 @@ describe('VersionHistoryDataService', () => {
   });
 
   describe('hasDraftVersion$', () => {
-    it('should return false if draftVersion is false', fakeAsync(() => {
+    beforeEach(waitForAsync(() => {
       versionService.findByHref.and.returnValue(createSuccessfulRemoteDataObject$<Version>(version1));
+    }));
+    it('should return false if draftVersion is false', fakeAsync(() => {
+      versionService.getHistoryFromVersion.and.returnValue(of(versionHistory));
       service.hasDraftVersion$('href').subscribe((res) => {
         expect(res).toBeFalse();
       });
     }));
-
     it('should return true if draftVersion is true', fakeAsync(() => {
-      versionService.findByHref.and.returnValue(createSuccessfulRemoteDataObject$<Version>(version1WithDraft));
+      versionService.getHistoryFromVersion.and.returnValue(of(versionHistoryDraft));
       service.hasDraftVersion$('href').subscribe((res) => {
         expect(res).toBeTrue();
       });
     }));
   });
+
 });

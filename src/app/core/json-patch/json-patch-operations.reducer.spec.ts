@@ -2,19 +2,18 @@
 import * as deepFreeze from 'deep-freeze';
 
 import {
-  CommitPatchOperationsAction,
-  DeletePendingJsonPatchOperationsAction,
+  CommitPatchOperationsAction, DeletePendingJsonPatchOperationsAction,
   FlushPatchOperationsAction,
   NewPatchAddOperationAction,
   NewPatchRemoveOperationAction,
   RollbacktPatchOperationsAction,
-  StartTransactionPatchOperationsAction,
+  StartTransactionPatchOperationsAction
 } from './json-patch-operations.actions';
 import {
   JsonPatchOperationsEntry,
   jsonPatchOperationsReducer,
   JsonPatchOperationsResourceEntry,
-  JsonPatchOperationsState,
+  JsonPatchOperationsState
 } from './json-patch-operations.reducer';
 
 class NullAction extends NewPatchAddOperationAction {
@@ -38,7 +37,7 @@ describe('jsonPatchOperationsReducer test suite', () => {
   const patchOpBody = [{
     op: 'add',
     path: '/testResourceType/testResourceId/testField',
-    value: ['test'],
+    value: ['test']
   }];
   const timestampBeforeStart = 1545994811991;
   const timestampAfterStart = 1545994837492;
@@ -52,16 +51,16 @@ describe('jsonPatchOperationsReducer test suite', () => {
               operation: {
                 op: 'add',
                 path: '/testResourceType/testResourceId/testField',
-                value: ['test'],
+                value: ['test']
               },
-              timeCompleted: timestampBeforeStart,
+              timeCompleted: timestampBeforeStart
             },
-          ],
-        } as JsonPatchOperationsEntry,
+          ]
+        } as JsonPatchOperationsEntry
       },
       transactionStartTime: null,
-      commitPending: false,
-    } as JsonPatchOperationsResourceEntry,
+      commitPending: false
+    } as JsonPatchOperationsResourceEntry
   };
 
   let initState: JsonPatchOperationsState;
@@ -75,23 +74,23 @@ describe('jsonPatchOperationsReducer test suite', () => {
               operation: {
                 op: 'add',
                 path: '/testResourceType/testResourceId/testField',
-                value: ['test'],
+                value: ['test']
               },
-              timeCompleted: timestampBeforeStart,
+              timeCompleted: timestampBeforeStart
             },
             {
               operation: {
                 op: 'remove',
-                path: '/testResourceType/testResourceId/testField',
+                path: '/testResourceType/testResourceId/testField'
               },
-              timeCompleted: timestampBeforeStart,
+              timeCompleted: timestampBeforeStart
             },
-          ],
-        } as JsonPatchOperationsEntry,
+          ]
+        } as JsonPatchOperationsEntry
       },
       transactionStartTime: null,
-      commitPending: false,
-    } as JsonPatchOperationsResourceEntry,
+      commitPending: false
+    } as JsonPatchOperationsResourceEntry
   };
   deepFreeze(testState);
 
@@ -160,8 +159,8 @@ describe('jsonPatchOperationsReducer test suite', () => {
       initState = Object.assign({}, testState, {
         [testJsonPatchResourceType]: Object.assign({}, testState[testJsonPatchResourceType], {
           transactionStartTime: startTimestamp,
-          commitPending: true,
-        }),
+          commitPending: true
+        })
       });
       const newState = jsonPatchOperationsReducer(initState, action);
 
@@ -178,8 +177,8 @@ describe('jsonPatchOperationsReducer test suite', () => {
       initState = Object.assign({}, testState, {
         [testJsonPatchResourceType]: Object.assign({}, testState[testJsonPatchResourceType], {
           transactionStartTime: startTimestamp,
-          commitPending: true,
-        }),
+          commitPending: true
+        })
       });
       const newState = jsonPatchOperationsReducer(initState, action);
 
@@ -203,32 +202,32 @@ describe('jsonPatchOperationsReducer test suite', () => {
                   operation: {
                     op: 'add',
                     path: '/testResourceType/testResourceId/testField',
-                    value: ['test'],
+                    value: ['test']
                   },
-                  timeCompleted: timestampBeforeStart,
+                  timeCompleted: timestampBeforeStart
                 },
                 {
                   operation: {
                     op: 'remove',
-                    path: '/testResourceType/testResourceId/testField',
+                    path: '/testResourceType/testResourceId/testField'
                   },
-                  timeCompleted: timestampAfterStart,
+                  timeCompleted: timestampAfterStart
                 },
-              ],
-            } as JsonPatchOperationsEntry,
+              ]
+            } as JsonPatchOperationsEntry
           },
           transactionStartTime: startTimestamp,
-          commitPending: false,
-        }),
+          commitPending: false
+        })
       });
       const newState = jsonPatchOperationsReducer(initState, action);
       const expectedBody: any = [
         {
           operation: {
             op: 'remove',
-            path: '/testResourceType/testResourceId/testField',
+            path: '/testResourceType/testResourceId/testField'
           },
-          timeCompleted: timestampAfterStart,
+          timeCompleted: timestampAfterStart
         },
       ];
       expect(newState[testJsonPatchResourceType].transactionStartTime).toBeNull();
@@ -246,18 +245,18 @@ describe('jsonPatchOperationsReducer test suite', () => {
                   operation: {
                     op: 'add',
                     path: '/testResourceType/testResourceId/testField',
-                    value: ['test'],
+                    value: ['test']
                   },
-                  timeCompleted: timestampBeforeStart,
+                  timeCompleted: timestampBeforeStart
                 },
                 {
                   operation: {
                     op: 'remove',
-                    path: '/testResourceType/testResourceId/testField',
+                    path: '/testResourceType/testResourceId/testField'
                   },
-                  timeCompleted: timestampBeforeStart,
+                  timeCompleted: timestampBeforeStart
                 },
-              ],
+              ]
             } as JsonPatchOperationsEntry,
             testResourceAnotherId: {
               body: [
@@ -265,23 +264,23 @@ describe('jsonPatchOperationsReducer test suite', () => {
                   operation: {
                     op: 'add',
                     path: '/testResourceType/testResourceAnotherId/testField',
-                    value: ['test'],
+                    value: ['test']
                   },
-                  timeCompleted: timestampBeforeStart,
+                  timeCompleted: timestampBeforeStart
                 },
                 {
                   operation: {
                     op: 'remove',
-                    path: '/testResourceType/testResourceAnotherId/testField',
+                    path: '/testResourceType/testResourceAnotherId/testField'
                   },
-                  timeCompleted: timestampBeforeStart,
+                  timeCompleted: timestampBeforeStart
                 },
-              ],
-            } as JsonPatchOperationsEntry,
+              ]
+            } as JsonPatchOperationsEntry
           },
           transactionStartTime: startTimestamp,
-          commitPending: false,
-        }),
+          commitPending: false
+        })
       });
     });
 
@@ -295,16 +294,16 @@ describe('jsonPatchOperationsReducer test suite', () => {
           operation: {
             op: 'add',
             path: '/testResourceType/testResourceAnotherId/testField',
-            value: ['test'],
+            value: ['test']
           },
-          timeCompleted: timestampBeforeStart,
+          timeCompleted: timestampBeforeStart
         },
         {
           operation: {
             op: 'remove',
-            path: '/testResourceType/testResourceAnotherId/testField',
+            path: '/testResourceType/testResourceAnotherId/testField'
           },
-          timeCompleted: timestampBeforeStart,
+          timeCompleted: timestampBeforeStart
         },
       ];
       expect(newState[testJsonPatchResourceType].transactionStartTime).toBeNull();
@@ -331,8 +330,8 @@ describe('jsonPatchOperationsReducer test suite', () => {
       initState = Object.assign({}, testState, {
         [testJsonPatchResourceType]: Object.assign({}, testState[testJsonPatchResourceType], {
           transactionStartTime: startTimestamp,
-          commitPending: true,
-        }),
+          commitPending: true
+        })
       });
       const newState = jsonPatchOperationsReducer(initState, action);
 
@@ -340,384 +339,4 @@ describe('jsonPatchOperationsReducer test suite', () => {
     });
   });
 
-  describe('dedupeOperationEntries', () => {
-    it('should not remove duplicated keys if operations are not sequential', () => {
-      initState = {
-        sections: {
-          children: {
-            publicationStep: {
-              body: [
-                {
-                  operation: {
-                    op: 'add',
-                    path: '/sections/publicationStep/dc.date.issued',
-                    value: [
-                      {
-                        value: '2024-06',
-                        language: null,
-                        authority: null,
-                        display: '2024-06',
-                        confidence: -1,
-                        place: 0,
-                        otherInformation: null,
-                      },
-                    ],
-                  },
-                  timeCompleted: timestampBeforeStart,
-                },
-                {
-                  operation: {
-                    op: 'replace',
-                    path: '/sections/publicationStep/dc.date.issued/0',
-                    value: {
-                      value: '2023-06-19',
-                      language: null,
-                      authority: null,
-                      display: '2023-06-19',
-                      confidence: -1,
-                      place: 0,
-                      otherInformation: null,
-                    },
-                  },
-                  timeCompleted: timestampBeforeStart,
-                },
-              ],
-            } as JsonPatchOperationsEntry,
-          },
-          transactionStartTime: null,
-          commitPending: false,
-        } as JsonPatchOperationsResourceEntry,
-      };
-
-      const value = [
-        {
-          value: '2024-06-19',
-          language: null,
-          authority: null,
-          display: '2024-06-19',
-          confidence: -1,
-          place: 0,
-          otherInformation: null,
-        },
-      ];
-      const action = new NewPatchAddOperationAction(
-        'sections',
-        'publicationStep',
-        '/sections/publicationStep/dc.date.issued',
-        value);
-      const newState = jsonPatchOperationsReducer(initState, action);
-
-      const expectedBody: any =  [
-        {
-          'operation': {
-            'op': 'add',
-            'path': '/sections/publicationStep/dc.date.issued',
-            'value': [
-              {
-                'value': '2024-06',
-                'language': null,
-                'authority': null,
-                'display': '2024-06',
-                'confidence': -1,
-                'place': 0,
-                'otherInformation': null,
-              },
-            ],
-          },
-          'timeCompleted': timestampBeforeStart,
-        },
-        {
-          'operation': {
-            'op': 'replace',
-            'path': '/sections/publicationStep/dc.date.issued/0',
-            'value': {
-              'value': '2023-06-19',
-              'language': null,
-              'authority': null,
-              'display': '2023-06-19',
-              'confidence': -1,
-              'place': 0,
-              'otherInformation': null,
-            },
-          },
-          'timeCompleted': timestampBeforeStart,
-        },
-        {
-          'operation': {
-            'op': 'add',
-            'path': '/sections/publicationStep/dc.date.issued',
-            'value': [
-              {
-                'value': '2024-06-19',
-                'language': null,
-                'authority': null,
-                'display': '2024-06-19',
-                'confidence': -1,
-                'place': 0,
-                'otherInformation': null,
-              },
-            ],
-          },
-          'timeCompleted': timestampBeforeStart,
-        },
-      ];
-
-      expect(newState.sections.children.publicationStep.body).toEqual(expectedBody);
-
-    });
-
-    it('should remove duplicated keys if operations are sequential', () => {
-      initState = {
-        sections: {
-          children: {
-            publicationStep: {
-              body: [
-                {
-                  operation: {
-                    op: 'add',
-                    path: '/sections/publicationStep/dc.date.issued',
-                    value: [
-                      {
-                        value: '2024-06',
-                        language: null,
-                        authority: null,
-                        display: '2024-06',
-                        confidence: -1,
-                        place: 0,
-                        otherInformation: null,
-                      },
-                    ],
-                  },
-                  timeCompleted: timestampBeforeStart,
-                },
-                {
-                  operation: {
-                    op: 'replace',
-                    path: '/sections/publicationStep/dc.date.issued/0',
-                    value: {
-                      value: '2023-06-19',
-                      language: null,
-                      authority: null,
-                      display: '2023-06-19',
-                      confidence: -1,
-                      place: 0,
-                      otherInformation: null,
-                    },
-                  },
-                  timeCompleted: timestampBeforeStart,
-                },
-                {
-                  'operation': {
-                    'op': 'add',
-                    'path': '/sections/publicationStep/dc.date.issued',
-                    'value': [
-                      {
-                        'value': '2024-06-19',
-                        'language': null,
-                        'authority': null,
-                        'display': '2024-06-19',
-                        'confidence': -1,
-                        'place': 0,
-                        'otherInformation': null,
-                      },
-                    ],
-                  },
-                  'timeCompleted': timestampBeforeStart,
-                },
-              ],
-            } as JsonPatchOperationsEntry,
-          },
-          transactionStartTime: null,
-          commitPending: false,
-        } as JsonPatchOperationsResourceEntry,
-      };
-
-      const value = [
-        {
-          value: '2024-06-20',
-          language: null,
-          authority: null,
-          display: '2024-06-20',
-          confidence: -1,
-          place: 0,
-          otherInformation: null,
-        },
-      ];
-      const action = new NewPatchAddOperationAction(
-        'sections',
-        'publicationStep',
-        '/sections/publicationStep/dc.date.issued',
-        value);
-      const newState = jsonPatchOperationsReducer(initState, action);
-
-      const expectedBody: any =  [
-        {
-          'operation': {
-            'op': 'add',
-            'path': '/sections/publicationStep/dc.date.issued',
-            'value': [
-              {
-                'value': '2024-06',
-                'language': null,
-                'authority': null,
-                'display': '2024-06',
-                'confidence': -1,
-                'place': 0,
-                'otherInformation': null,
-              },
-            ],
-          },
-          'timeCompleted': timestampBeforeStart,
-        },
-        {
-          'operation': {
-            'op': 'replace',
-            'path': '/sections/publicationStep/dc.date.issued/0',
-            'value': {
-              'value': '2023-06-19',
-              'language': null,
-              'authority': null,
-              'display': '2023-06-19',
-              'confidence': -1,
-              'place': 0,
-              'otherInformation': null,
-            },
-          },
-          'timeCompleted': timestampBeforeStart,
-        },
-        {
-          'operation': {
-            'op': 'add',
-            'path': '/sections/publicationStep/dc.date.issued',
-            'value': [
-              {
-                'value': '2024-06-20',
-                'language': null,
-                'authority': null,
-                'display': '2024-06-20',
-                'confidence': -1,
-                'place': 0,
-                'otherInformation': null,
-              },
-            ],
-          },
-          'timeCompleted': timestampBeforeStart,
-        },
-      ];
-
-      expect(newState.sections.children.publicationStep.body).toEqual(expectedBody);
-
-    });
-
-    it('should remove duplicated keys if all operations have same key', () => {
-      initState = {
-        sections: {
-          children: {
-            publicationStep: {
-              body: [
-                {
-                  operation: {
-                    op: 'add',
-                    path: '/sections/publicationStep/dc.date.issued',
-                    value: [
-                      {
-                        value: '2024',
-                        language: null,
-                        authority: null,
-                        display: '2024-06',
-                        confidence: -1,
-                        place: 0,
-                        otherInformation: null,
-                      },
-                    ],
-                  },
-                  timeCompleted: timestampBeforeStart,
-                },
-                {
-                  'operation': {
-                    'op': 'add',
-                    'path': '/sections/publicationStep/dc.date.issued',
-                    'value': [
-                      {
-                        'value': '2024-06',
-                        'language': null,
-                        'authority': null,
-                        'display': '2024-06',
-                        'confidence': -1,
-                        'place': 0,
-                        'otherInformation': null,
-                      },
-                    ],
-                  },
-                  'timeCompleted': timestampBeforeStart,
-                },
-                {
-                  'operation': {
-                    'op': 'add',
-                    'path': '/sections/publicationStep/dc.date.issued',
-                    'value': [
-                      {
-                        'value': '2024-06-19',
-                        'language': null,
-                        'authority': null,
-                        'display': '2024-06-19',
-                        'confidence': -1,
-                        'place': 0,
-                        'otherInformation': null,
-                      },
-                    ],
-                  },
-                  'timeCompleted': timestampBeforeStart,
-                },
-              ],
-            } as JsonPatchOperationsEntry,
-          },
-          transactionStartTime: null,
-          commitPending: false,
-        } as JsonPatchOperationsResourceEntry,
-      };
-
-      const value = [
-        {
-          value: '2024-06-20',
-          language: null,
-          authority: null,
-          display: '2024-06-20',
-          confidence: -1,
-          place: 0,
-          otherInformation: null,
-        },
-      ];
-      const action = new NewPatchAddOperationAction(
-        'sections',
-        'publicationStep',
-        '/sections/publicationStep/dc.date.issued',
-        value);
-      const newState = jsonPatchOperationsReducer(initState, action);
-
-      const expectedBody: any =  [
-        {
-          'operation': {
-            'op': 'add',
-            'path': '/sections/publicationStep/dc.date.issued',
-            'value': [
-              {
-                'value': '2024-06-20',
-                'language': null,
-                'authority': null,
-                'display': '2024-06-20',
-                'confidence': -1,
-                'place': 0,
-                'otherInformation': null,
-              },
-            ],
-          },
-          'timeCompleted': timestampBeforeStart,
-        },
-      ];
-
-      expect(newState.sections.children.publicationStep.body).toEqual(expectedBody);
-
-    });
-  });
 });

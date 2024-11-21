@@ -1,14 +1,7 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
 
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../../../config/app-config.interface';
+import { APP_CONFIG, AppConfig } from '../../../../config/app-config.interface';
 import { DSONameService } from '../../../core/breadcrumbs/dso-name.service';
 import { DSpaceObject } from '../../../core/shared/dspace-object.model';
 import { Metadata } from '../../../core/shared/metadata.utils';
@@ -17,21 +10,29 @@ import { AbstractListableElementComponent } from '../../object-collection/shared
 import { SearchResult } from '../../search/models/search-result.model';
 import { TruncatableService } from '../../truncatable/truncatable.service';
 
+/* Added for download link customisation */
+import { BitstreamDataService } from 'src/app/core/data/bitstream-data.service';
+
 @Component({
   selector: 'ds-search-result-list-element',
   template: ``,
-  standalone: true,
 })
 export class SearchResultListElementComponent<T extends SearchResult<K>, K extends DSpaceObject> extends AbstractListableElementComponent<T> implements OnInit {
   /**
    * The DSpaceObject of the search result
+   * Customised to get item bitstream to generate a download link
    */
   dso: K;
   dsoTitle: string;
 
+  /** 
+   * Constructor customised to initiate BitstreamDataService for download link
+   * the BitstreamDataService field is optional and can be ignored if unddefined
+  */
   public constructor(protected truncatableService: TruncatableService,
                      public dsoNameService: DSONameService,
-                     @Inject(APP_CONFIG) protected appConfig?: AppConfig) {
+                     @Inject(APP_CONFIG) protected appConfig?: AppConfig,
+                     bitstreamDataService?: BitstreamDataService ) {
     super(dsoNameService);
   }
 
@@ -46,22 +47,13 @@ export class SearchResultListElementComponent<T extends SearchResult<K>, K exten
   }
 
   /**
-   * Gets all matching metadata string values from hitHighlights or dso metadata.
+   * Gets all matching metadata string values from hitHighlights or dso metadata, preferring hitHighlights.
    *
    * @param {string|string[]} keyOrKeys The metadata key(s) in scope. Wildcards are supported; see [[Metadata]].
    * @returns {string[]} the matching string values or an empty array.
    */
   allMetadataValues(keyOrKeys: string | string[]): string[] {
-    const dsoMetadata: string[] = Metadata.allValues([this.dso.metadata], keyOrKeys);
-    const highlights: string[] = Metadata.allValues([this.object.hitHighlights], keyOrKeys);
-    const removedHighlights: string[] = highlights.map(str => str.replace(/<\/?em>/g, ''));
-    for (let i = 0; i < removedHighlights.length; i++) {
-      const index = dsoMetadata.indexOf(removedHighlights[i]);
-      if (index !== -1) {
-        dsoMetadata[index] = highlights[i];
-      }
-    }
-    return dsoMetadata;
+    return Metadata.allValues([this.object.hitHighlights, this.dso.metadata], keyOrKeys);
   }
 
   /**

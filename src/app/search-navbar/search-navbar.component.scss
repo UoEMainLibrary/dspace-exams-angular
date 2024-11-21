@@ -12,7 +12,6 @@ input[type="text"] {
   cursor: pointer;
   position: sticky;
   top: 0;
-  border: 0 !important;
 
   color: var(--ds-header-icon-color);
   &:hover, &:focus {

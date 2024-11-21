@@ -1,31 +1,12 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-} from '@angular/router';
-import {
-  combineLatest,
-  Observable,
-  of as observableOf,
-  ReplaySubject,
-} from 'rxjs';
-import {
-  filter,
-  map,
-  switchMap,
-  tap,
-} from 'rxjs/operators';
-
-import {
-  hasNoValue,
-  hasValue,
-  isUndefined,
-} from '../shared/empty.util';
-import { Breadcrumb } from './breadcrumb/breadcrumb.model';
+import {combineLatest, Observable, of as observableOf, ReplaySubject} from 'rxjs';
+import {Breadcrumb} from './breadcrumb/breadcrumb.model';
+import {ActivatedRoute, NavigationEnd, Router} from '@angular/router';
+import {filter, map, switchMap, tap} from 'rxjs/operators';
+import {hasNoValue, hasValue, isUndefined} from '../shared/empty.util';
 
 @Injectable({
-  providedIn: 'root',
+  providedIn: 'root'
 })
 export class BreadcrumbsService {
 

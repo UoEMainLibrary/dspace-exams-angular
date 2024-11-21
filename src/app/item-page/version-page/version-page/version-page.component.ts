@@ -1,35 +1,21 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
-import {
-  map,
-  switchMap,
-} from 'rxjs/operators';
-
-import { getPageNotFoundRoute } from '../../../app-routing-paths';
-import { AuthService } from '../../../core/auth/auth.service';
 import { RemoteData } from '../../../core/data/remote-data';
+import { ActivatedRoute, Router } from '@angular/router';
+import { AuthService } from '../../../core/auth/auth.service';
+import { map, switchMap } from 'rxjs/operators';
+import { getFirstCompletedRemoteData, getFirstSucceededRemoteDataPayload } from '../../../core/shared/operators';
 import { VersionDataService } from '../../../core/data/version-data.service';
-import { redirectOn4xx } from '../../../core/shared/authorized.operators';
-import { Item } from '../../../core/shared/item.model';
-import {
-  getFirstCompletedRemoteData,
-  getFirstSucceededRemoteDataPayload,
-} from '../../../core/shared/operators';
 import { Version } from '../../../core/shared/version.model';
+import { Item } from '../../../core/shared/item.model';
 import { getItemPageRoute } from '../../item-page-routing-paths';
+import { getPageNotFoundRoute } from '../../../app-routing-paths';
+import { redirectOn4xx } from '../../../core/shared/authorized.operators';
 
 @Component({
   selector: 'ds-version-page',
   templateUrl: './version-page.component.html',
-  styleUrls: ['./version-page.component.scss'],
-  standalone: true,
+  styleUrls: ['./version-page.component.scss']
 })
 export class VersionPageComponent implements OnInit {
 

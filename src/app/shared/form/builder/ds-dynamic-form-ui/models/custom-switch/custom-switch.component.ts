@@ -1,20 +1,8 @@
-import { NgClass } from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Input,
-  Output,
-} from '@angular/core';
-import {
-  ReactiveFormsModule,
-  UntypedFormGroup,
-} from '@angular/forms';
-import {
-  DynamicFormLayoutService,
-  DynamicFormValidationService,
-} from '@ng-dynamic-forms/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { UntypedFormGroup } from '@angular/forms';
+
 import { DynamicNGBootstrapCheckboxComponent } from '@ng-dynamic-forms/ui-ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { DynamicFormLayoutService, DynamicFormValidationService } from '@ng-dynamic-forms/core';
 
 import { DynamicCustomSwitchModel } from './custom-switch.model';
 
@@ -22,12 +10,6 @@ import { DynamicCustomSwitchModel } from './custom-switch.model';
   selector: 'ds-custom-switch',
   styleUrls: ['./custom-switch.component.scss'],
   templateUrl: './custom-switch.component.html',
-  imports: [
-    NgClass,
-    ReactiveFormsModule,
-    TranslateModule,
-  ],
-  standalone: true,
 })
 /**
  * Component displaying a custom switch usable in dynamic forms

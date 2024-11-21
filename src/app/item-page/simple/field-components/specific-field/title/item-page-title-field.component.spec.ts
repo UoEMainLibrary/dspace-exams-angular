@@ -1,17 +1,6 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
-
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateLoaderMock } from '../../../../../shared/testing/translate-loader.mock';
 import { MetadataValuesComponent } from '../../../../field-components/metadata-values/metadata-values.component';
 import { mockItemWithMetadataFieldsAndValue } from '../item-page-field.component.spec';
@@ -29,12 +18,13 @@ describe('ItemPageTitleFieldComponent', () => {
       imports: [TranslateModule.forRoot({
         loader: {
           provide: TranslateLoader,
-          useClass: TranslateLoaderMock,
-        },
-      }), ItemPageTitleFieldComponent, MetadataValuesComponent],
-      schemas: [NO_ERRORS_SCHEMA],
+          useClass: TranslateLoaderMock
+        }
+      })],
+      declarations: [ItemPageTitleFieldComponent, MetadataValuesComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(ItemPageTitleFieldComponent, {
-      set: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 

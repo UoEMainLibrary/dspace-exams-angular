@@ -1,18 +1,11 @@
-import { AsyncPipe } from '@angular/common';
-import {
-  Component,
-  Input,
-} from '@angular/core';
+import { Component, Input } from '@angular/core';
 
 import { Item } from '../../../../../core/shared/item.model';
-import { MetadataValuesComponent } from '../../../../field-components/metadata-values/metadata-values.component';
 import { ItemPageFieldComponent } from '../item-page-field.component';
 
 @Component({
   selector: 'ds-generic-item-page-field',
-  templateUrl: '../item-page-field.component.html',
-  standalone: true,
-  imports: [MetadataValuesComponent, AsyncPipe],
+  templateUrl: '../item-page-field.component.html'
 })
 /**
  * This component can be used to represent metadata on a simple item page.
@@ -43,7 +36,7 @@ export class GenericItemPageFieldComponent extends ItemPageFieldComponent {
   @Input() label: string;
 
   /**
-   * Whether the {@link MarkdownDirective} should be used to render this metadata.
+   * Whether the {@link MarkdownPipe} should be used to render this metadata.
    */
   @Input() enableMarkdown = false;
 

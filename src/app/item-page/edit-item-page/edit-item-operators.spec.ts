@@ -1,13 +1,12 @@
-import { hot } from 'jasmine-marbles';
-
-import { RemoteData } from '../../core/data/remote-data';
-import { Item } from '../../core/shared/item.model';
-import { isNotEmpty } from '../../shared/empty.util';
+import {RemoteData} from '../../core/data/remote-data';
+import {hot} from 'jasmine-marbles';
+import {Item} from '../../core/shared/item.model';
+import {findSuccessfulAccordingTo} from './edit-item-operators';
 import {
   createFailedRemoteDataObject,
-  createSuccessfulRemoteDataObject,
+  createSuccessfulRemoteDataObject
 } from '../../shared/remote-data.utils';
-import { findSuccessfulAccordingTo } from './edit-item-operators';
+import { isNotEmpty } from '../../shared/empty.util';
 
 describe('findSuccessfulAccordingTo', () => {
   let mockItem1;
@@ -19,7 +18,7 @@ describe('findSuccessfulAccordingTo', () => {
     mockItem1.isWithdrawn = true;
 
     mockItem2 = new Item();
-    mockItem2.isWithdrawn = false;
+    mockItem1.isWithdrawn = false;
 
     predicate = (rd: RemoteData<Item>) => isNotEmpty(rd.payload) ? rd.payload.isWithdrawn : false;
   });
@@ -35,7 +34,7 @@ describe('findSuccessfulAccordingTo', () => {
     const source = hot('abcde', testRD);
     const result = source.pipe(findSuccessfulAccordingTo(predicate));
 
-    expect(result).toBeObservable(hot('---(d|)', { d: testRD.d }));
+    result.subscribe((value) => expect(value).toEqual(testRD.d));
   });
 
 });

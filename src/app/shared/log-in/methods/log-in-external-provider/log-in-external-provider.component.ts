@@ -1,41 +1,29 @@
-import {
-  Component,
-  Inject,
-  OnInit,
-} from '@angular/core';
-import {
-  select,
-  Store,
-} from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, Inject, OnInit, } from '@angular/core';
+
 import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
 
-import { AuthService } from '../../../../core/auth/auth.service';
 import { AuthMethod } from '../../../../core/auth/models/auth.method';
-import {
-  isAuthenticated,
-  isAuthenticationLoading,
-} from '../../../../core/auth/selectors';
-import { CoreState } from '../../../../core/core-state.model';
+
+import { isAuthenticated, isAuthenticationLoading } from '../../../../core/auth/selectors';
+import { NativeWindowRef, NativeWindowService } from '../../../../core/services/window.service';
+import { isEmpty, isNotNull } from '../../../empty.util';
+import { AuthService } from '../../../../core/auth/auth.service';
 import { HardRedirectService } from '../../../../core/services/hard-redirect.service';
-import {
-  NativeWindowRef,
-  NativeWindowService,
-} from '../../../../core/services/window.service';
 import { URLCombiner } from '../../../../core/url-combiner/url-combiner';
-import {
-  isEmpty,
-  isNotNull,
-} from '../../../empty.util';
+import { CoreState } from '../../../../core/core-state.model';
+import { renderAuthMethodFor } from '../log-in.methods-decorator';
+import { AuthMethodType } from '../../../../core/auth/models/auth.method-type';
 
 @Component({
   selector: 'ds-log-in-external-provider',
   templateUrl: './log-in-external-provider.component.html',
-  styleUrls: ['./log-in-external-provider.component.scss'],
-  standalone: true,
-  imports: [TranslateModule],
+  styleUrls: ['./log-in-external-provider.component.scss']
 })
+@renderAuthMethodFor(AuthMethodType.Oidc)
+@renderAuthMethodFor(AuthMethodType.Shibboleth)
+@renderAuthMethodFor(AuthMethodType.Orcid)
 export class LogInExternalProviderComponent implements OnInit {
 
   /**
@@ -77,7 +65,7 @@ export class LogInExternalProviderComponent implements OnInit {
     @Inject(NativeWindowService) protected _window: NativeWindowRef,
     private authService: AuthService,
     private hardRedirectService: HardRedirectService,
-    private store: Store<CoreState>,
+    private store: Store<CoreState>
   ) {
     this.authMethod = injectedAuthMethodModel;
   }

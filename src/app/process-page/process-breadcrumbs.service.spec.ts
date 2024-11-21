@@ -1,11 +1,7 @@
-import {
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { waitForAsync, TestBed } from '@angular/core/testing';
 import { getTestScheduler } from 'jasmine-marbles';
-
-import { Breadcrumb } from '../breadcrumbs/breadcrumb/breadcrumb.model';
 import { ProcessBreadcrumbsService } from './process-breadcrumbs.service';
+import { Breadcrumb } from '../breadcrumbs/breadcrumb/breadcrumb.model';
 import { Process } from './processes/process.model';
 
 describe('ProcessBreadcrumbsService', () => {
@@ -18,7 +14,7 @@ describe('ProcessBreadcrumbsService', () => {
   function init() {
     exampleId = '12345';
     exampleScriptName = 'Example Script';
-    exampleProcess = Object.assign(new Process(), { processId: exampleId, scriptName: exampleScriptName });
+    exampleProcess = Object.assign(new Process(), {processId: exampleId, scriptName: exampleScriptName});
     exampleURL = 'example.com';
   }
 

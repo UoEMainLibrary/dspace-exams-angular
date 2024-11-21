@@ -1,32 +1,15 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import { NgbNavModule } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateModule } from '@ngx-translate/core';
+import { Component, OnInit } from '@angular/core';
+
 import { BehaviorSubject } from 'rxjs';
 import { take } from 'rxjs/operators';
 
-import { AlertComponent } from '../shared/alert/alert.component';
-import { AlertType } from '../shared/alert/alert-type';
 import { HealthService } from './health.service';
-import { HealthInfoComponent } from './health-info/health-info.component';
-import { HealthPanelComponent } from './health-panel/health-panel.component';
-import {
-  HealthInfoResponse,
-  HealthResponse,
-} from './models/health-component.model';
+import { HealthInfoResponse, HealthResponse } from './models/health-component.model';
 
 @Component({
   selector: 'ds-health-page',
   templateUrl: './health-page.component.html',
-  styleUrls: ['./health-page.component.scss'],
-  standalone: true,
-  imports: [NgIf, NgbNavModule, HealthPanelComponent, HealthInfoComponent, AlertComponent, AsyncPipe, TranslateModule],
+  styleUrls: ['./health-page.component.scss']
 })
 export class HealthPageComponent implements OnInit {
 
@@ -50,8 +33,6 @@ export class HealthPageComponent implements OnInit {
    */
   healthInfoResponseInitialised: BehaviorSubject<boolean> = new BehaviorSubject<boolean>(false);
 
-  readonly AlertType = AlertType;
-
   constructor(private healthDataService: HealthService) {
   }
 
@@ -67,7 +48,7 @@ export class HealthPageComponent implements OnInit {
       error: () => {
         this.healthResponse.next(null);
         this.healthResponseInitialised.next(true);
-      },
+      }
     });
 
     this.healthDataService.getInfo().pipe(take(1)).subscribe({
@@ -78,7 +59,7 @@ export class HealthPageComponent implements OnInit {
       error: () => {
         this.healthInfoResponse.next(null);
         this.healthInfoResponseInitialised.next(true);
-      },
+      }
     });
 
   }

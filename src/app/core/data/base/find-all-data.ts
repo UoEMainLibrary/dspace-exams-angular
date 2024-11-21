@@ -7,23 +7,18 @@
  */
 
 import { Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-} from 'rxjs/operators';
-
-import { isNotEmpty } from '../../../shared/empty.util';
+import { FindListOptions } from '../find-list-options.model';
 import { FollowLinkConfig } from '../../../shared/utils/follow-link-config.model';
-import { RemoteDataBuildService } from '../../cache/builders/remote-data-build.service';
+import { RemoteData } from '../remote-data';
+import { PaginatedList } from '../paginated-list.model';
 import { CacheableObject } from '../../cache/cacheable-object.model';
+import { BaseDataService } from './base-data.service';
+import { distinctUntilChanged, filter, map } from 'rxjs/operators';
+import { isNotEmpty } from '../../../shared/empty.util';
+import { RequestService } from '../request.service';
+import { RemoteDataBuildService } from '../../cache/builders/remote-data-build.service';
 import { ObjectCacheService } from '../../cache/object-cache.service';
 import { HALEndpointService } from '../../shared/hal-endpoint.service';
-import { FindListOptions } from '../find-list-options.model';
-import { PaginatedList } from '../paginated-list.model';
-import { RemoteData } from '../remote-data';
-import { RequestService } from '../request.service';
-import { BaseDataService } from './base-data.service';
 
 /**
  * Interface for a data service that list all of its objects.
@@ -47,7 +42,7 @@ export interface FindAllData<T extends CacheableObject> {
 }
 
 /**
- * A UpdateDataServiceImpl feature to list all objects.
+ * A DataService feature to list all objects.
  *
  * Concrete data services can use this feature by implementing {@link FindAllData}
  * and delegating its method to an inner instance of this class.
@@ -92,9 +87,10 @@ export class FindAllDataImpl<T extends CacheableObject> extends BaseDataService<
    * @param linksToFollow   List of {@link FollowLinkConfig} that indicate which {@link HALLink}s should be automatically resolved
    */
   getFindAllHref(options: FindListOptions = {}, linkPath?: string, ...linksToFollow: FollowLinkConfig<T>[]): Observable<string> {
+    let endpoint$: Observable<string>;
     const args = [];
 
-    const endpoint$ = this.getBrowseEndpoint(options).pipe(
+    endpoint$ = this.getBrowseEndpoint(options).pipe(
       filter((href: string) => isNotEmpty(href)),
       map((href: string) => isNotEmpty(linkPath) ? `${href}/${linkPath}` : href),
       distinctUntilChanged(),

@@ -1,60 +1,24 @@
-import {
-  AsyncPipe,
-  NgClass,
-  NgForOf,
-  NgIf,
-} from '@angular/common';
 import { Component } from '@angular/core';
-import {
-  Router,
-  RouterLink,
-} from '@angular/router';
-import {
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import {
-  BehaviorSubject,
-  combineLatest as observableCombineLatest,
-  Observable,
-  zip,
-} from 'rxjs';
-import {
-  filter,
-  map,
-  switchMap,
-  take,
-} from 'rxjs/operators';
-
-import { PaginatedList } from '../../../core/data/paginated-list.model';
-import { RemoteData } from '../../../core/data/remote-data';
-import { MetadataSchema } from '../../../core/metadata/metadata-schema.model';
-import { PaginationService } from '../../../core/pagination/pagination.service';
 import { RegistryService } from '../../../core/registry/registry.service';
-import { NoContent } from '../../../core/shared/NoContent.model';
-import { getFirstCompletedRemoteData } from '../../../core/shared/operators';
+import { BehaviorSubject, combineLatest as observableCombineLatest, Observable, zip } from 'rxjs';
+import { RemoteData } from '../../../core/data/remote-data';
+import { PaginatedList } from '../../../core/data/paginated-list.model';
+import { PaginationComponentOptions } from '../../../shared/pagination/pagination-component-options.model';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import { hasValue } from '../../../shared/empty.util';
 import { NotificationsService } from '../../../shared/notifications/notifications.service';
-import { PaginationComponent } from '../../../shared/pagination/pagination.component';
+import { Router } from '@angular/router';
+import { TranslateService } from '@ngx-translate/core';
+import { MetadataSchema } from '../../../core/metadata/metadata-schema.model';
 import { toFindListOptions } from '../../../shared/pagination/pagination.utils';
-import { PaginationComponentOptions } from '../../../shared/pagination/pagination-component-options.model';
-import { MetadataSchemaFormComponent } from './metadata-schema-form/metadata-schema-form.component';
+import { NoContent } from '../../../core/shared/NoContent.model';
+import { getFirstCompletedRemoteData } from '../../../core/shared/operators';
+import { PaginationService } from '../../../core/pagination/pagination.service';
 
 @Component({
   selector: 'ds-metadata-registry',
   templateUrl: './metadata-registry.component.html',
-  styleUrls: ['./metadata-registry.component.scss'],
-  imports: [
-    MetadataSchemaFormComponent,
-    TranslateModule,
-    AsyncPipe,
-    PaginationComponent,
-    NgIf,
-    NgForOf,
-    NgClass,
-    RouterLink,
-  ],
-  standalone: true,
+  styleUrls: ['./metadata-registry.component.scss']
 })
 /**
  * A component used for managing all existing metadata schemas within the repository.
@@ -72,7 +36,7 @@ export class MetadataRegistryComponent {
    */
   config: PaginationComponentOptions = Object.assign(new PaginationComponentOptions(), {
     id: 'rm',
-    pageSize: 25,
+    pageSize: 25
   });
 
   /**
@@ -96,7 +60,7 @@ export class MetadataRegistryComponent {
     this.metadataSchemas = this.needsUpdate$.pipe(
       filter((update) => update === true),
       switchMap(() => this.paginationService.getCurrentPagination(this.config.id, this.config)),
-      switchMap((currentPagination) => this.registryService.getMetadataSchemas(toFindListOptions(currentPagination))),
+      switchMap((currentPagination) => this.registryService.getMetadataSchemas(toFindListOptions(currentPagination)))
     );
   }
 
@@ -128,7 +92,7 @@ export class MetadataRegistryComponent {
    */
   isActive(schema: MetadataSchema): Observable<boolean> {
     return this.getActiveSchema().pipe(
-      map((activeSchema) => schema === activeSchema),
+      map((activeSchema) => schema === activeSchema)
     );
   }
 
@@ -156,7 +120,7 @@ export class MetadataRegistryComponent {
    */
   isSelected(schema: MetadataSchema): Observable<boolean> {
     return this.registryService.getSelectedMetadataSchemas().pipe(
-      map((schemas) => schemas.find((selectedSchema) => selectedSchema === schema) != null),
+      map((schemas) => schemas.find((selectedSchema) => selectedSchema === schema) != null)
     );
   }
 
@@ -184,7 +148,7 @@ export class MetadataRegistryComponent {
           this.registryService.deselectAllMetadataSchema();
           this.registryService.cancelEditMetadataSchema();
         });
-      },
+      }
     );
   }
 
@@ -198,7 +162,7 @@ export class MetadataRegistryComponent {
     const suffix = success ? 'success' : 'failure';
     const messages = observableCombineLatest(
       this.translateService.get(success ? `${prefix}.${suffix}` : `${prefix}.${suffix}`),
-      this.translateService.get(`${prefix}.deleted.${suffix}`, { amount: amount }),
+      this.translateService.get(`${prefix}.deleted.${suffix}`, {amount: amount})
     );
     messages.subscribe(([head, content]) => {
       if (success) {

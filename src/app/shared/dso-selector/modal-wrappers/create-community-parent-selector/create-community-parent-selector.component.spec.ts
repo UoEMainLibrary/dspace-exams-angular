@@ -1,25 +1,13 @@
-import {
-  DebugElement,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { TranslateModule } from '@ngx-translate/core';
-
+import { DebugElement, NO_ERRORS_SCHEMA } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
+import { ActivatedRoute, Router } from '@angular/router';
+import { RouterStub } from '../../../testing/router.stub';
 import { Community } from '../../../../core/shared/community.model';
+import { CreateCommunityParentSelectorComponent } from './create-community-parent-selector.component';
 import { MetadataValue } from '../../../../core/shared/metadata.models';
 import { createSuccessfulRemoteDataObject } from '../../../remote-data.utils';
-import { RouterStub } from '../../../testing/router.stub';
-import { DSOSelectorComponent } from '../../dso-selector/dso-selector.component';
-import { CreateCommunityParentSelectorComponent } from './create-community-parent-selector.component';
 
 describe('CreateCommunityParentSelectorComponent', () => {
   let component: CreateCommunityParentSelectorComponent;
@@ -31,8 +19,8 @@ describe('CreateCommunityParentSelectorComponent', () => {
   community.metadata = {
     'dc.title': [Object.assign(new MetadataValue(), {
       value: 'Community title',
-      language: undefined,
-    })],
+      language: undefined
+    })]
   };
   const router = new RouterStub();
   const communityRD = createSuccessfulRemoteDataObject(community);
@@ -41,7 +29,8 @@ describe('CreateCommunityParentSelectorComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), CreateCommunityParentSelectorComponent],
+      imports: [TranslateModule.forRoot()],
+      declarations: [CreateCommunityParentSelectorComponent],
       providers: [
         { provide: NgbActiveModal, useValue: modalStub },
         {
@@ -53,19 +42,15 @@ describe('CreateCommunityParentSelectorComponent', () => {
                   dso: communityRD,
                 },
               },
-            },
+            }
           },
         },
         {
-          provide: Router, useValue: router,
-        },
+          provide: Router, useValue: router
+        }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(CreateCommunityParentSelectorComponent, {
-        remove: { imports: [DSOSelectorComponent] },
-      })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
 
   }));
 

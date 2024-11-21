@@ -1,35 +1,15 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
 import { of as observableOf } from 'rxjs';
-
-import { APP_CONFIG } from '../../../../../../../config/app-config.interface';
-import { AuthService } from '../../../../../../core/auth/auth.service';
-import { DSONameService } from '../../../../../../core/breadcrumbs/dso-name.service';
-import { AuthorizationDataService } from '../../../../../../core/data/feature-authorization/authorization-data.service';
-import { Item } from '../../../../../../core/shared/item.model';
-import {
-  DSONameServiceMock,
-  UNDEFINED_NAME,
-} from '../../../../../mocks/dso-name.service.mock';
-import { mockTruncatableService } from '../../../../../mocks/mock-trucatable.service';
-import { getMockThemeService } from '../../../../../mocks/theme-service.mock';
-import { ItemSearchResult } from '../../../../../object-collection/shared/item-search-result.model';
-import { ActivatedRouteStub } from '../../../../../testing/active-router.stub';
-import { AuthServiceStub } from '../../../../../testing/auth-service.stub';
-import { ThemeService } from '../../../../../theme-support/theme.service';
-import { TruncatableService } from '../../../../../truncatable/truncatable.service';
-import { TruncatePipe } from '../../../../../utils/truncate.pipe';
 import { ItemSearchResultListElementComponent } from './item-search-result-list-element.component';
+import { Item } from '../../../../../../core/shared/item.model';
+import { TruncatePipe } from '../../../../../utils/truncate.pipe';
+import { TruncatableService } from '../../../../../truncatable/truncatable.service';
+import { ItemSearchResult } from '../../../../../object-collection/shared/item-search-result.model';
+import { DSONameService } from '../../../../../../core/breadcrumbs/dso-name.service';
+import { DSONameServiceMock, UNDEFINED_NAME } from '../../../../../mocks/dso-name.service.mock';
+import { APP_CONFIG } from '../../../../../../../config/app-config.interface';
 
 let publicationListElementComponent: ItemSearchResultListElementComponent;
 let fixture: ComponentFixture<ItemSearchResultListElementComponent>;
@@ -37,7 +17,7 @@ const dcTitle = 'This is just another <em>title</em>';
 const mockItemWithMetadata: ItemSearchResult = Object.assign(new ItemSearchResult(), {
   hitHighlights: {
     'dc.title': [{
-      value: dcTitle,
+      value: dcTitle
     }],
   },
   indexableObject:
@@ -47,47 +27,47 @@ const mockItemWithMetadata: ItemSearchResult = Object.assign(new ItemSearchResul
         'dc.title': [
           {
             language: 'en_US',
-            value: dcTitle,
-          },
+            value: dcTitle
+          }
         ],
         'dc.contributor.author': [
           {
             language: 'en_US',
-            value: 'Smith, Donald',
-          },
+            value: 'Smith, Donald'
+          }
         ],
         'dc.publisher': [
           {
             language: 'en_US',
-            value: 'a publisher',
-          },
+            value: 'a publisher'
+          }
         ],
         'dc.date.issued': [
           {
             language: 'en_US',
-            value: '2015-06-26',
-          },
+            value: '2015-06-26'
+          }
         ],
         'dc.description.abstract': [
           {
             language: 'en_US',
-            value: 'This is the abstract',
-          },
-        ],
-      },
-    }),
+            value: 'This is the abstract'
+          }
+        ]
+      }
+    })
 });
 const mockItemWithoutMetadata: ItemSearchResult = Object.assign(new ItemSearchResult(), {
   indexableObject:
     Object.assign(new Item(), {
       bundles: observableOf({}),
-      metadata: {},
-    }),
+      metadata: {}
+    })
 });
 const mockPerson: ItemSearchResult = Object.assign(new ItemSearchResult(), {
   hitHighlights: {
     'person.familyName': [{
-      value: '<em>Michel</em>',
+      value: '<em>Michel</em>'
     }],
   },
   indexableObject:
@@ -98,50 +78,50 @@ const mockPerson: ItemSearchResult = Object.assign(new ItemSearchResult(), {
         'dc.title': [
           {
             language: 'en_US',
-            value: 'This is just another title',
-          },
+            value: 'This is just another title'
+          }
         ],
         'dc.contributor.author': [
           {
             language: 'en_US',
-            value: 'Smith, Donald',
-          },
+            value: 'Smith, Donald'
+          }
         ],
         'dc.publisher': [
           {
             language: 'en_US',
-            value: 'a publisher',
-          },
+            value: 'a publisher'
+          }
         ],
         'dc.date.issued': [
           {
             language: 'en_US',
-            value: '2015-06-26',
-          },
+            value: '2015-06-26'
+          }
         ],
         'dc.description.abstract': [
           {
             language: 'en_US',
-            value: 'This is the abstract',
-          },
+            value: 'This is the abstract'
+          }
         ],
         'person.familyName': [
           {
-            value: 'Michel',
-          },
+            value: 'Michel'
+          }
         ],
         'dspace.entity.type': [
           {
-            value: 'Person',
-          },
-        ],
-      },
-    }),
+            value: 'Person'
+          }
+        ]
+      }
+    })
 });
 const mockOrgUnit: ItemSearchResult = Object.assign(new ItemSearchResult(), {
   hitHighlights: {
     'organization.legalName': [{
-      value: '<em>Science</em>',
+      value: '<em>Science</em>'
     }],
   },
   indexableObject:
@@ -152,83 +132,71 @@ const mockOrgUnit: ItemSearchResult = Object.assign(new ItemSearchResult(), {
         'dc.title': [
           {
             language: 'en_US',
-            value: 'This is just another title',
-          },
+            value: 'This is just another title'
+          }
         ],
         'dc.contributor.author': [
           {
             language: 'en_US',
-            value: 'Smith, Donald',
-          },
+            value: 'Smith, Donald'
+          }
         ],
         'dc.publisher': [
           {
             language: 'en_US',
-            value: 'a publisher',
-          },
+            value: 'a publisher'
+          }
         ],
         'dc.date.issued': [
           {
             language: 'en_US',
-            value: '2015-06-26',
-          },
+            value: '2015-06-26'
+          }
         ],
         'dc.description.abstract': [
           {
             language: 'en_US',
-            value: 'This is the abstract',
-          },
+            value: 'This is the abstract'
+          }
         ],
         'organization.legalName': [
           {
-            value: 'Science',
-          },
+            value: 'Science'
+          }
         ],
         'dspace.entity.type': [
           {
-            value: 'OrgUnit',
-          },
-        ],
-      },
-    }),
+            value: 'OrgUnit'
+          }
+        ]
+      }
+    })
 });
 const environmentUseThumbs = {
   browseBy: {
-    showThumbnails: true,
-  },
+    showThumbnails: true
+  }
 };
 
 const enviromentNoThumbs = {
   browseBy: {
-    showThumbnails: false,
-  },
+    showThumbnails: false
+  }
 };
 
 describe('ItemSearchResultListElementComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        TranslateModule.forRoot(),
-        TruncatePipe,
-        ItemSearchResultListElementComponent,
-      ],
+      declarations: [ItemSearchResultListElementComponent, TruncatePipe],
       providers: [
-        { provide: TruncatableService, useValue: mockTruncatableService },
+        { provide: TruncatableService, useValue: {} },
         { provide: DSONameService, useClass: DSONameServiceMock },
-        { provide: APP_CONFIG, useValue: environmentUseThumbs },
-        { provide: ThemeService, useValue: getMockThemeService() },
-        { provide: AuthService, useValue: new AuthServiceStub() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-        {
-          provide: AuthorizationDataService,
-          useValue: jasmine.createSpyObj('AuthorizationDataService', [
-            'invalidateAuthorizationsRequestCache',
-          ]),
-        },
+        { provide: APP_CONFIG, useValue: environmentUseThumbs }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(ItemSearchResultListElementComponent, {
-      add: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 
@@ -247,7 +215,7 @@ describe('ItemSearchResultListElementComponent', () => {
       expect(publicationListElementComponent.showThumbnails).toBeTrue();
     });
 
-    it('should add thumbnail element', () => {
+    it('should add ds-thumbnail element', () => {
       const thumbnailElement = fixture.debugElement.query(By.css('ds-thumbnail'));
       expect(thumbnailElement).toBeTruthy();
     });
@@ -402,17 +370,16 @@ describe('ItemSearchResultListElementComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [TruncatePipe, TranslateModule.forRoot(), ItemSearchResultListElementComponent],
+      declarations: [ItemSearchResultListElementComponent, TruncatePipe],
       providers: [
-        { provide: TruncatableService, useValue: mockTruncatableService },
-        { provide: DSONameService, useClass: DSONameServiceMock },
-        { provide: APP_CONFIG, useValue: enviromentNoThumbs },
-        { provide: ThemeService, useValue: getMockThemeService() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+        {provide: TruncatableService, useValue: {}},
+        {provide: DSONameService, useClass: DSONameServiceMock},
+        { provide: APP_CONFIG, useValue: enviromentNoThumbs }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(ItemSearchResultListElementComponent, {
-      set: { changeDetection: ChangeDetectionStrategy.Default },
+      set: {changeDetection: ChangeDetectionStrategy.Default}
     }).compileComponents();
   }));
 
@@ -428,7 +395,7 @@ describe('ItemSearchResultListElementComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should not add thumbnail element', () => {
+    it('should not add ds-thumbnail element', () => {
       const thumbnailElement = fixture.debugElement.query(By.css('ds-thumbnail'));
       expect(thumbnailElement).toBeFalsy();
     });

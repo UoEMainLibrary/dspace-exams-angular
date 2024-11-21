@@ -1,31 +1,20 @@
-import {
-  Component,
-  EventEmitter,
-  Injector,
-  Input,
-  Output,
-} from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
-import {
-  BehaviorSubject,
-  Subscription,
-} from 'rxjs';
-import {
-  take,
-  tap,
-} from 'rxjs/operators';
+import { Component, EventEmitter, Injector, Input, Output } from '@angular/core';
 
-import { IdentifiableDataService } from '../../core/data/base/identifiable-data.service';
+import { take, tap } from 'rxjs/operators';
+
+import { MyDSpaceActionsServiceFactory } from './mydspace-actions-service.factory';
 import { RemoteData } from '../../core/data/remote-data';
-import { RequestService } from '../../core/data/request.service';
 import { DSpaceObject } from '../../core/shared/dspace-object.model';
-import { getFirstSucceededRemoteData } from '../../core/shared/operators';
 import { ResourceType } from '../../core/shared/resource-type';
-import { SearchService } from '../../core/shared/search/search.service';
 import { NotificationOptions } from '../notifications/models/notification-options.model';
 import { NotificationsService } from '../notifications/notifications.service';
-import { MyDSpaceActionsServiceFactory } from './mydspace-actions-service.factory';
+import { TranslateService } from '@ngx-translate/core';
+import { RequestService } from '../../core/data/request.service';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { SearchService } from '../../core/shared/search/search.service';
+import { getFirstSucceededRemoteData } from '../../core/shared/operators';
+import { IdentifiableDataService } from '../../core/data/base/identifiable-data.service';
 
 export interface MyDSpaceActionsResult {
   result: boolean;
@@ -58,7 +47,7 @@ export abstract class MyDSpaceActionsComponent<T extends DSpaceObject, TService 
   public processing$ = new BehaviorSubject<boolean>(false);
 
   /**
-   * Instance of UpdateDataServiceImpl related to mydspace object
+   * Instance of DataService related to mydspace object
    */
   protected objectDataService: TService;
 
@@ -110,7 +99,7 @@ export abstract class MyDSpaceActionsComponent<T extends DSpaceObject, TService 
     // See https://github.com/DSpace/dspace-angular/pull/468
     this.searchService.getEndpoint().pipe(
       take(1),
-      tap((cachedHref: string) => this.requestService.removeByHrefSubstring(cachedHref)),
+      tap((cachedHref: string) => this.requestService.removeByHrefSubstring(cachedHref))
     ).subscribe(() => this.router.navigateByUrl(url));
   }
 

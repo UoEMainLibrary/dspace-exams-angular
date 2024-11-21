@@ -1,39 +1,8 @@
 import { Injectable } from '@angular/core';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-} from '@angular/router';
-import {
-  createSelector,
-  MemoizedSelector,
-  select,
-  Store,
-} from '@ngrx/store';
-import {
-  combineLatest as observableCombineLatest,
-  Observable,
-} from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  map,
-  switchMap,
-  take,
-} from 'rxjs/operators';
-
-import {
-  AppState,
-  keySelector,
-} from '../../app.reducer';
-import { compareArraysUsingIds } from '../../item-page/simple/item-types/shared/item-relationships-utils';
-import {
-  hasNoValue,
-  hasValue,
-  hasValueOperator,
-  isEmpty,
-  isNotEmpty,
-} from '../empty.util';
+import { createSelector, MemoizedSelector, select, Store } from '@ngrx/store';
+import { AppState, keySelector } from '../../app.reducer';
+import { combineLatest as observableCombineLatest, Observable } from 'rxjs';
+import { filter, map, switchMap, take } from 'rxjs/operators';
 import {
   ActivateMenuSectionAction,
   AddMenuSectionAction,
@@ -42,18 +11,18 @@ import {
   DeactivateMenuSectionAction,
   ExpandMenuAction,
   ExpandMenuPreviewAction,
-  HideMenuAction,
-  HideMenuSectionAction,
+  HideMenuAction, HideMenuSectionAction,
   RemoveMenuSectionAction,
-  ShowMenuAction,
-  ShowMenuSectionAction,
+  ShowMenuAction, ShowMenuSectionAction,
   ToggleActiveMenuSectionAction,
   ToggleMenuAction,
 } from './menu.actions';
-import { MenuID } from './menu-id.model';
-import { MenuSection } from './menu-section.model';
-import { MenuSections } from './menu-sections.model';
+import { hasNoValue, hasValue, hasValueOperator, isNotEmpty, isEmpty } from '../empty.util';
 import { MenuState } from './menu-state.model';
+import { MenuSections } from './menu-sections.model';
+import { MenuSection } from './menu-section.model';
+import { MenuID } from './menu-id.model';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 
 export function menuKeySelector<T>(key: string, selector): MemoizedSelector<MenuState, T> {
   return createSelector(selector, (state) => {
@@ -83,7 +52,7 @@ const getSubSectionsFromSectionSelector = (id: string): MemoizedSelector<MenuSta
   return menuKeySelector<string[]>(id, menuSectionIndexStateSelector);
 };
 
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class MenuService {
 
   constructor(
@@ -112,14 +81,12 @@ export class MenuService {
     return this.store.pipe(
       select(menuByIDSelector(menuID)),
       select(menuSectionStateSelector),
-      map((sections: MenuSections) => Object.values(sections)),
-      distinctUntilChanged(compareArraysUsingIds()),
-      map((sections: MenuSection[]) => {
-        return sections
-          .filter((section: MenuSection) => hasNoValue(section.parentID))
-          .filter((section: MenuSection) => !mustBeVisible || section.visible);
-      },
-      ),
+      map((sections: MenuSections) => {
+          return Object.values(sections)
+            .filter((section: MenuSection) => hasNoValue(section.parentID))
+            .filter((section: MenuSection) => !mustBeVisible || section.visible);
+        }
+      )
     );
   }
 
@@ -136,9 +103,9 @@ export class MenuService {
       select(getSubSectionsFromSectionSelector(parentID)),
       map((ids: string[]) => isNotEmpty(ids) ? ids : []),
       switchMap((ids: string[]) =>
-        observableCombineLatest(ids.map((id: string) => this.getMenuSection(menuID, id))),
+        observableCombineLatest(ids.map((id: string) => this.getMenuSection(menuID, id)))
       ),
-      map((sections: MenuSection[]) => sections.filter((section: MenuSection) => hasValue(section) && (!mustBeVisible || section.visible))),
+      map((sections: MenuSection[]) => sections.filter((section: MenuSection) => hasValue(section) && (!mustBeVisible || section.visible)))
     );
   }
 
@@ -152,7 +119,7 @@ export class MenuService {
     return this.store.pipe(
       select(menuByIDSelector(menuID)),
       select(getSubSectionsFromSectionSelector(parentID)),
-      map((ids: string[]) => isNotEmpty(ids)),
+      map((ids: string[]) => isNotEmpty(ids))
     );
   }
 
@@ -175,7 +142,7 @@ export class MenuService {
    */
   getNonPersistentMenuSections(menuID: MenuID): Observable<MenuSection[]> {
     return this.getMenu(menuID).pipe(
-      map((state: MenuState) => Object.values(state.sections).filter((section: MenuSection) => !section.shouldPersistOnRouteChange)),
+      map((state: MenuState) => Object.values(state.sections).filter((section: MenuSection) => !section.shouldPersistOnRouteChange))
     );
   }
 
@@ -204,7 +171,7 @@ export class MenuService {
    */
   isMenuCollapsed(menuID: MenuID): Observable<boolean> {
     return this.getMenu(menuID).pipe(
-      map((state: MenuState) => hasValue(state) ? state.collapsed : undefined),
+      map((state: MenuState) => hasValue(state) ? state.collapsed : undefined)
     );
   }
 
@@ -215,7 +182,7 @@ export class MenuService {
    */
   isMenuPreviewCollapsed(menuID: MenuID): Observable<boolean> {
     return this.getMenu(menuID).pipe(
-      map((state: MenuState) => hasValue(state) ? state.previewCollapsed : undefined),
+      map((state: MenuState) => hasValue(state) ? state.previewCollapsed : undefined)
     );
   }
 
@@ -227,7 +194,7 @@ export class MenuService {
    */
   isMenuVisibleWithVisibleSections(menuID: MenuID): Observable<boolean> {
     return observableCombineLatest([this.isMenuVisible(menuID), this.menuHasVisibleSections(menuID)]).pipe(
-      map(([menuVisible, visibleSections]) => menuVisible && visibleSections),
+      map(([menuVisible, visibleSections]) => menuVisible && visibleSections)
     );
   }
 
@@ -238,7 +205,7 @@ export class MenuService {
    */
   isMenuVisible(menuID: MenuID): Observable<boolean> {
     return this.getMenu(menuID).pipe(
-      map((state: MenuState) => hasValue(state) ? state.visible : undefined),
+      map((state: MenuState) => hasValue(state) ? state.visible : undefined)
     );
   }
 
@@ -252,7 +219,7 @@ export class MenuService {
       map((state: MenuState) => hasValue(state)
         ? Object.values(state.sections)
           .some(section => section.visible && section.parentID === undefined)
-        : undefined),
+        : undefined)
     );
   }
 
@@ -396,7 +363,7 @@ export class MenuService {
   buildRouteMenuSections(menuID: MenuID) {
     this.getNonPersistentMenuSections(menuID).pipe(
       map((sections) => sections.map((section) => section.id)),
-      take(1),
+      take(1)
     ).subscribe((shouldNotPersistIDs: string[]) => {
       const resolvedSections = this.resolveRouteMenuSections(this.route.root, menuID);
       resolvedSections.forEach((section) => {
@@ -432,8 +399,7 @@ export class MenuService {
       }
 
       if (!last) {
-        const childMenuSections = this.resolveRouteMenuSections(route.firstChild, menuID);
-        return [...menuSections.filter(menu => !(childMenuSections).map(childMenu => childMenu.id).includes(menu.id)), ...childMenuSections];
+        return [...menuSections, ...this.resolveRouteMenuSections(route.firstChild, menuID)];
       } else {
         return [...menuSections];
       }
@@ -449,7 +415,7 @@ export class MenuService {
     } else if (typeof object === 'string') {
       resolved = object;
       Object.entries(params).forEach(([key, value]: [string, string]) =>
-        resolved = resolved.replaceAll(`:${key}`, value),
+        resolved = resolved.replaceAll(`:${key}`, value)
       );
     } else if (Array.isArray(object)) {
       resolved = [];

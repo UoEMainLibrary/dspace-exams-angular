@@ -1,11 +1,7 @@
-import {
-  autoserialize,
-  inheritSerialization,
-} from 'cerialize';
-
-import { FormFieldModel } from '../../../shared/form/builder/models/form-field.model';
+import { autoserialize, inheritSerialization } from 'cerialize';
 import { typedObject } from '../../cache/builders/build-decorators';
 import { ConfigObject } from './config.model';
+import { FormFieldModel } from '../../../shared/form/builder/models/form-field.model';
 import { SUBMISSION_FORM_TYPE } from './config-type';
 
 /**

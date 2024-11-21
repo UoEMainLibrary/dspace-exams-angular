@@ -1,17 +1,13 @@
-import { Component } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { NoopAnimationsModule } from '@angular/platform-browser/animations';
-import { of as observableOf } from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
+import { NavbarSectionComponent } from './navbar-section.component';
 import { HostWindowService } from '../../shared/host-window.service';
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 import { MenuService } from '../../shared/menu/menu.service';
 import { HostWindowServiceStub } from '../../shared/testing/host-window-service.stub';
+import { Component } from '@angular/core';
 import { MenuServiceStub } from '../../shared/testing/menu-service.stub';
-import { NavbarSectionComponent } from './navbar-section.component';
+import { of as observableOf } from 'rxjs';
 
 describe('NavbarSectionComponent', () => {
   let component: NavbarSectionComponent;
@@ -20,13 +16,19 @@ describe('NavbarSectionComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [NoopAnimationsModule, NavbarSectionComponent, TestComponent],
+      imports: [NoopAnimationsModule],
+      declarations: [NavbarSectionComponent, TestComponent],
       providers: [
         { provide: 'sectionDataProvider', useValue: {} },
         { provide: MenuService, useValue: menuService },
-        { provide: HostWindowService, useValue: new HostWindowServiceStub(800) },
-      ],
-    }).compileComponents();
+        { provide: HostWindowService, useValue: new HostWindowServiceStub(800) }
+      ]
+    }).overrideComponent(NavbarSectionComponent, {
+      set: {
+        entryComponents: [TestComponent]
+      }
+    })
+      .compileComponents();
   }));
 
   beforeEach(() => {
@@ -46,8 +48,7 @@ describe('NavbarSectionComponent', () => {
 // declare a test component
 @Component({
   selector: 'ds-test-cmp',
-  template: ``,
-  standalone: true,
+  template: ``
 })
 class TestComponent {
 }

@@ -1,27 +1,18 @@
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  inject,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { Router } from '@angular/router';
-import {
-  Store,
-  StoreModule,
-} from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
+import { ComponentFixture, inject, TestBed, waitForAsync } from '@angular/core/testing';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
-import { AppState } from '../../app.reducer';
+import { Store, StoreModule } from '@ngrx/store';
+
 import { authReducer } from '../../core/auth/auth.reducer';
-import { EPerson } from '../../core/eperson/models/eperson.model';
 import { EPersonMock } from '../testing/eperson.mock';
-import { RouterStub } from '../testing/router.stub';
+import { EPerson } from '../../core/eperson/models/eperson.model';
+import { TranslateModule } from '@ngx-translate/core';
+import { Router } from '@angular/router';
+import { AppState } from '../../app.reducer';
 import { LogOutComponent } from './log-out.component';
+import { RouterStub } from '../testing/router.stub';
+import { BrowserOnlyMockPipe } from '../testing/browser-only-mock.pipe';
 
 describe('LogOutComponent', () => {
 
@@ -50,18 +41,21 @@ describe('LogOutComponent', () => {
         StoreModule.forRoot(authReducer, {
           runtimeChecks: {
             strictStateImmutability: false,
-            strictActionImmutability: false,
-          },
+            strictActionImmutability: false
+          }
         }),
-        TranslateModule.forRoot(),
+        TranslateModule.forRoot()
+      ],
+      declarations: [
         LogOutComponent,
+        BrowserOnlyMockPipe,
       ],
       providers: [
         { provide: Router, useValue: routerStub },
       ],
       schemas: [
-        CUSTOM_ELEMENTS_SCHEMA,
-      ],
+        CUSTOM_ELEMENTS_SCHEMA
+      ]
     })
       .compileComponents();
 

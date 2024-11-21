@@ -1,14 +1,11 @@
-import {
-  fakeAsync,
-  TestBed,
-  tick,
-} from '@angular/core/testing';
+import { fakeAsync, TestBed, tick } from '@angular/core/testing';
+
 import { of } from 'rxjs';
 
-import { APP_CONFIG } from '../../../config/app-config.interface';
-import { DspaceRestService } from '../dspace-rest/dspace-rest.service';
 import { SignpostingDataService } from './signposting-data.service';
+import { DspaceRestService } from '../dspace-rest/dspace-rest.service';
 import { SignpostingLink } from './signposting-links.model';
+import { APP_CONFIG } from '../../../config/app-config.interface';
 
 describe('SignpostingDataService', () => {
   let service: SignpostingDataService;
@@ -17,28 +14,28 @@ describe('SignpostingDataService', () => {
   const mocklink = {
     href: 'http://test.org',
     rel: 'test',
-    type: 'test',
+    type: 'test'
   };
 
   const mocklink2 = {
     href: 'http://test2.org',
     rel: 'test',
-    type: 'test',
+    type: 'test'
   };
 
   const mockResponse: any = {
     statusCode: 200,
-    payload: [mocklink, mocklink2],
+    payload: [mocklink, mocklink2]
   };
 
   const mockErrResponse: any = {
-    statusCode: 500,
+    statusCode: 500
   };
 
   const environmentRest = {
     rest: {
-      baseUrl: 'http://localhost:8080',
-    },
+      baseUrl: 'http://localhost:8080'
+    }
   };
 
   beforeEach(() => {
@@ -48,8 +45,8 @@ describe('SignpostingDataService', () => {
       providers: [
         SignpostingDataService,
         { provide: APP_CONFIG, useValue: environmentRest },
-        { provide: DspaceRestService, useValue: restSpy },
-      ],
+        { provide: DspaceRestService, useValue: restSpy }
+      ]
     });
 
     service = TestBed.inject(SignpostingDataService);

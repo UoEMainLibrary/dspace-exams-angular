@@ -1,49 +1,35 @@
-import { Component } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { MenuServiceStub } from '../../../testing/menu-service.stub';
 import { TranslateModule } from '@ngx-translate/core';
+import { MenuService } from '../../../menu/menu.service';
+import { CSSVariableService } from '../../../sass-helper/css-variable.service';
+import { CSSVariableServiceStub } from '../../../testing/css-variable-service.stub';
+import { Router } from '@angular/router';
+import { RouterStub } from '../../../testing/router.stub';
 import { of as observableOf } from 'rxjs';
+import { Component } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { DsoEditMenuSectionComponent } from './dso-edit-menu-section.component';
+import { OnClickMenuItemModel } from '../../../menu/menu-item/models/onclick.model';
 import { MenuItemType } from 'src/app/shared/menu/menu-item-type.model';
 
-import { MenuService } from '../../../menu/menu.service';
-import { OnClickMenuItemModel } from '../../../menu/menu-item/models/onclick.model';
-import { CSSVariableService } from '../../../sass-helper/css-variable.service';
-import { ActivatedRouteStub } from '../../../testing/active-router.stub';
-import { CSSVariableServiceStub } from '../../../testing/css-variable-service.stub';
-import { MenuServiceStub } from '../../../testing/menu-service.stub';
-import { RouterStub } from '../../../testing/router.stub';
-import { DsoEditMenuSectionComponent } from './dso-edit-menu-section.component';
-
-function initAsync(dummySectionText: {
-  visible: boolean;
-  icon: string;
-  active: boolean;
-  model: { disabled: boolean; text: string; type: MenuItemType };
-  id: string
-}, menuService: MenuServiceStub) {
+function initAsync(dummySectionText: { visible: boolean; icon: string; active: boolean; model: { disabled: boolean; text: string; type: MenuItemType }; id: string }, menuService: MenuServiceStub) {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [
-        TranslateModule.forRoot(),
-        DsoEditMenuSectionComponent,
-        TestComponent,
-      ],
+      imports: [TranslateModule.forRoot()],
+      declarations: [DsoEditMenuSectionComponent, TestComponent],
       providers: [
-        { provide: 'sectionDataProvider', useValue: dummySectionText },
-        { provide: MenuService, useValue: menuService },
-        { provide: CSSVariableService, useClass: CSSVariableServiceStub },
-        { provide: Router, useValue: new RouterStub() },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
-      ],
-    }).compileComponents();
+        {provide: 'sectionDataProvider', useValue: dummySectionText},
+        {provide: MenuService, useValue: menuService},
+        {provide: CSSVariableService, useClass: CSSVariableServiceStub},
+        {provide: Router, useValue: new RouterStub()},
+      ]
+    }).overrideComponent(DsoEditMenuSectionComponent, {
+      set: {
+        entryComponents: [TestComponent]
+      }
+    })
+      .compileComponents();
   }));
 }
 
@@ -60,9 +46,9 @@ describe('DsoEditMenuSectionComponent', () => {
     model: {
       type: MenuItemType.TEXT,
       disabled: false,
-      text: 'text',
+      text: 'text'
     },
-    icon: iconString,
+    icon: iconString
   };
   const dummySectionLink = {
     id: 'dummy',
@@ -72,10 +58,11 @@ describe('DsoEditMenuSectionComponent', () => {
       type: MenuItemType.LINK,
       disabled: false,
       text: 'text',
-      link: 'link',
+      link: 'link'
     },
-    icon: iconString,
+    icon: iconString
   };
+
   const dummySectionClick = {
     id: 'dummy',
     active: false,
@@ -84,14 +71,13 @@ describe('DsoEditMenuSectionComponent', () => {
       type: MenuItemType.ONCLICK,
       disabled: false,
       text: 'text',
-      function: () => 'test',
+      function: () => 'test'
     },
-    icon: iconString,
+    icon: iconString
   };
 
   describe('text model', () => {
     initAsync(dummySectionText, menuService);
-
     beforeEach(() => {
       spyOn(menuService, 'getSubSectionsByParentID').and.returnValue(observableOf([]));
       fixture = TestBed.createComponent(DsoEditMenuSectionComponent);
@@ -108,10 +94,9 @@ describe('DsoEditMenuSectionComponent', () => {
       const button = fixture.debugElement.query(By.css('.btn-dark'));
       expect(button.nativeElement.innerHTML).toContain('fa-' + iconString);
     });
-
     describe('when the section model in a disabled link or text', () => {
       it('should show just the button', () => {
-        const textButton = fixture.debugElement.query(By.css('div a'));
+        const textButton = fixture.debugElement.query(By.css('div div button'));
         expect(textButton.nativeElement.innerHTML).toContain('fa-' + iconString);
       });
     });
@@ -159,7 +144,7 @@ describe('DsoEditMenuSectionComponent', () => {
 
   });
 
-  describe('when the section model in a non disabled link', () => {
+  describe('link model', () => {
     initAsync(dummySectionLink, menuService);
     beforeEach(() => {
       spyOn(menuService, 'getSubSectionsByParentID').and.returnValue(observableOf([]));
@@ -169,8 +154,11 @@ describe('DsoEditMenuSectionComponent', () => {
       fixture.detectChanges();
     });
 
-    it('should show the link element', () => {
-      expect(fixture.debugElement.query(By.css('a'))).not.toBeNull();
+    describe('when the section model in a non disabled link', () => {
+      it('should show a link element with the button in it', () => {
+        const link = fixture.debugElement.query(By.css('a'));
+        expect(link.nativeElement.innerHTML).toContain('button');
+      });
     });
 
   });
@@ -179,8 +167,7 @@ describe('DsoEditMenuSectionComponent', () => {
 // declare a test component
 @Component({
   selector: 'ds-test-cmp',
-  template: ``,
-  standalone: true,
+  template: ``
 })
 class TestComponent {
 }

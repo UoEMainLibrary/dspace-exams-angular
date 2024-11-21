@@ -1,22 +1,15 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { TranslateLoaderMock } from '../../../shared/mocks/translate-loader.mock';
+import { ProcessParametersComponent } from './process-parameters.component';
 import { ProcessParameter } from '../../processes/process-parameter.model';
+import { By } from '@angular/platform-browser';
+import { ParameterSelectComponent } from './parameter-select/parameter-select.component';
+import { FormsModule } from '@angular/forms';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { Script } from '../../scripts/script.model';
 import { ScriptParameter } from '../../scripts/script-parameter.model';
-import { ParameterSelectComponent } from './parameter-select/parameter-select.component';
-import { ProcessParametersComponent } from './process-parameters.component';
+import { TranslateLoaderMock } from '../../../shared/mocks/translate-loader.mock';
 
 describe('ProcessParametersComponent', () => {
   let component: ProcessParametersComponent;
@@ -42,12 +35,11 @@ describe('ProcessParametersComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: TranslateLoaderMock,
-          },
-        }),
-        ProcessParametersComponent, ParameterSelectComponent,
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
+            useClass: TranslateLoaderMock
+          }
+        })],
+      declarations: [ProcessParametersComponent, ParameterSelectComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

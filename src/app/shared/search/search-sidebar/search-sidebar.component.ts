@@ -1,39 +1,12 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import {
-  BehaviorSubject,
-  Observable,
-} from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../../../config/app-config.interface';
-import { SortOptions } from '../../../core/cache/models/sort-options.model';
-import { RemoteData } from '../../../core/data/remote-data';
-import { SearchConfigurationService } from '../../../core/shared/search/search-configuration.service';
-import { FilterConfig } from '../../../core/shared/search/search-filters/search-config.model';
-import { ViewMode } from '../../../core/shared/view-mode.model';
-import { ViewModeSwitchComponent } from '../../view-mode-switch/view-mode-switch.component';
-import { AdvancedSearchComponent } from '../advanced-search/advanced-search.component';
-import { PaginatedSearchOptions } from '../models/paginated-search-options.model';
-import { SearchFilterConfig } from '../models/search-filter-config.model';
-import { ThemedSearchFiltersComponent } from '../search-filters/themed-search-filters.component';
-import { ThemedSearchSettingsComponent } from '../search-settings/themed-search-settings.component';
 import { SearchConfigurationOption } from '../search-switch-configuration/search-configuration-option.model';
-import { SearchSwitchConfigurationComponent } from '../search-switch-configuration/search-switch-configuration.component';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { PaginatedSearchOptions } from '../models/paginated-search-options.model';
+import { SortOptions } from '../../../core/cache/models/sort-options.model';
+import { ViewMode } from '../../../core/shared/view-mode.model';
+import { RemoteData } from '../../../core/data/remote-data';
+import { SearchFilterConfig } from '../models/search-filter-config.model';
 
 /**
  * This component renders a simple item page.
@@ -42,22 +15,20 @@ import { SearchSwitchConfigurationComponent } from '../search-switch-configurati
  */
 
 @Component({
-  selector: 'ds-base-search-sidebar',
+  selector: 'ds-search-sidebar',
   styleUrls: ['./search-sidebar.component.scss'],
   templateUrl: './search-sidebar.component.html',
-  standalone: true,
-  imports: [NgIf, ViewModeSwitchComponent, SearchSwitchConfigurationComponent, ThemedSearchFiltersComponent, ThemedSearchSettingsComponent, TranslateModule, AdvancedSearchComponent, AsyncPipe],
 })
 
 /**
  * Component representing the sidebar on the search page
  */
-export class SearchSidebarComponent implements OnInit {
+export class SearchSidebarComponent {
 
   /**
    * The configuration to use for the search options
    */
-  @Input() configuration: string;
+  @Input() configuration;
 
   /**
    * The list of available configuration options
@@ -82,7 +53,7 @@ export class SearchSidebarComponent implements OnInit {
   /**
    * The total amount of results
    */
-  @Input() resultCount: number;
+  @Input() resultCount;
 
   /**
    * The list of available view mode options
@@ -97,7 +68,7 @@ export class SearchSidebarComponent implements OnInit {
   /**
    * True when the search component should show results on the current page
    */
-  @Input() inPlaceSearch = true;
+  @Input() inPlaceSearch;
 
   /**
    * The configuration for the current paginated search results
@@ -128,19 +99,5 @@ export class SearchSidebarComponent implements OnInit {
    * Emits event when the user select a new view mode
    */
   @Output() changeViewMode: EventEmitter<ViewMode> = new EventEmitter<ViewMode>();
-
-  showAdvancedSearch$: Observable<boolean>;
-
-  constructor(
-    @Inject(APP_CONFIG) protected appConfig: AppConfig,
-    protected searchConfigurationService: SearchConfigurationService,
-  ) {
-  }
-
-  ngOnInit(): void {
-    this.showAdvancedSearch$ = this.searchConfigurationService.getConfigurationAdvancedSearchFilters(this.configuration, this.currentScope).pipe(
-      map((advancedFilters: FilterConfig[]) => this.appConfig.search.advancedFilters.enabled && advancedFilters.length > 0),
-    );
-  }
 
 }

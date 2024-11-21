@@ -1,5 +1,4 @@
 import { TestBed } from '@angular/core/testing';
-
 import { ServerHardRedirectService } from './server-hard-redirect.service';
 
 describe('ServerHardRedirectService', () => {

@@ -1,63 +1,20 @@
-import {
-  AsyncPipe,
-  NgClass,
-  NgForOf,
-} from '@angular/common';
-import {
-  Component,
-  EventEmitter,
-  Inject,
-  Input,
-  OnChanges,
-  OnDestroy,
-  OnInit,
-  Output,
-} from '@angular/core';
-import { TranslateModule } from '@ngx-translate/core';
-import {
-  BehaviorSubject,
-  Observable,
-  Subscription,
-} from 'rxjs';
-
-import {
-  APP_CONFIG,
-  AppConfig,
-} from '../../../../config/app-config.interface';
-import { ObjectUpdatesService } from '../../../core/data/object-updates/object-updates.service';
-import { Item } from '../../../core/shared/item.model';
-import { MetadataValue } from '../../../core/shared/metadata.models';
-import { hasValue } from '../../../shared/empty.util';
-import { ListableObjectComponentLoaderComponent } from '../../../shared/object-collection/shared/listable-object/listable-object-component-loader.component';
-import { VarDirective } from '../../../shared/utils/var.directive';
-
-interface ItemDTO {
-
-  item: Item;
-
-  isSelectedVirtualMetadataItem$: Observable<boolean>;
-
-}
+import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core';
+import {Observable} from 'rxjs';
+import {Item} from '../../../core/shared/item.model';
+import {MetadataValue} from '../../../core/shared/metadata.models';
+import {ObjectUpdatesService} from '../../../core/data/object-updates/object-updates.service';
+import { APP_CONFIG, AppConfig } from '../../../../config/app-config.interface';
 
 @Component({
   selector: 'ds-virtual-metadata',
-  templateUrl: './virtual-metadata.component.html',
-  imports: [
-    NgClass,
-    TranslateModule,
-    NgForOf,
-    VarDirective,
-    AsyncPipe,
-    ListableObjectComponentLoaderComponent,
-  ],
-  standalone: true,
+  templateUrl: './virtual-metadata.component.html'
 })
 /**
  * Component that lists both items of a relationship, along with their virtual metadata of the relationship.
  * The component is shown when a relationship is marked to be deleted.
  * Each item has a checkbox to indicate whether its virtual metadata should be saved as real metadata.
  */
-export class VirtualMetadataComponent implements OnInit, OnChanges, OnDestroy {
+export class VirtualMetadataComponent implements OnInit {
 
   /**
    * The current url of this page
@@ -98,9 +55,9 @@ export class VirtualMetadataComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Get an array of the left and the right item of the relationship to be deleted.
    */
-  itemDTOs$: BehaviorSubject<ItemDTO[]> = new BehaviorSubject([]);
-
-  subs: Subscription[] = [];
+  get items() {
+    return [this.leftItem, this.rightItem];
+  }
 
   public virtualMetadata: Map<string, VirtualMetadata[]> = new Map<string, VirtualMetadata[]>();
 
@@ -127,7 +84,7 @@ export class VirtualMetadataComponent implements OnInit, OnChanges, OnDestroy {
               metadataField: key,
               metadataValue: metadata,
             };
-          }),
+          })
       )
       .reduce((previous, current) => previous.concat(current), []);
   }
@@ -152,33 +109,14 @@ export class VirtualMetadataComponent implements OnInit, OnChanges, OnDestroy {
   /**
    * Prevent unnecessary rerendering so fields don't lose focus
    */
-  trackItemDTO(index, itemDTO: ItemDTO): string {
-    return itemDTO?.item?.uuid;
+  trackItem(index, item: Item) {
+    return item && item.uuid;
   }
 
   ngOnInit(): void {
-    this.subs.push(this.itemDTOs$.subscribe((itemDTOs: ItemDTO[]) => {
-      itemDTOs.forEach((itemDTO: ItemDTO) => this.virtualMetadata.set(itemDTO.item.uuid, this.getVirtualMetadata(itemDTO.item)));
-    }));
-  }
-
-  ngOnChanges(): void {
-    if (hasValue(this.leftItem) && hasValue(this.rightItem)) {
-      this.itemDTOs$.next([
-        {
-          item: this.leftItem,
-          isSelectedVirtualMetadataItem$: this.isSelectedVirtualMetadataItem(this.leftItem),
-        },
-        {
-          item: this.rightItem,
-          isSelectedVirtualMetadataItem$: this.isSelectedVirtualMetadataItem(this.rightItem),
-        },
-      ]);
-    }
-  }
-
-  ngOnDestroy(): void {
-    this.subs.forEach((sub: Subscription) => sub.unsubscribe());
+    this.items.forEach((item) => {
+      this.virtualMetadata.set(item.uuid, this.getVirtualMetadata(item));
+    });
   }
 }
 

@@ -1,64 +1,23 @@
-import {
-  AsyncPipe,
-  NgClass,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import {
-  RouterLink,
-  RouterLinkActive,
-} from '@angular/router';
-import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-import { RouterReducerState } from '@ngrx/router-store';
-import {
-  select,
-  Store,
-} from '@ngrx/store';
-import { TranslateModule } from '@ngx-translate/core';
-import {
-  Observable,
-  of as observableOf,
-  Subscription,
-} from 'rxjs';
-import {
-  filter,
-  map,
-} from 'rxjs/operators';
+import { Observable, of as observableOf, Subscription } from 'rxjs';
 
-import {
-  AppState,
-  routerStateSelector,
-} from '../../app.reducer';
-import {
-  AuthService,
-  LOGIN_ROUTE,
-  LOGOUT_ROUTE,
-} from '../../core/auth/auth.service';
-import {
-  isAuthenticated,
-  isAuthenticationLoading,
-} from '../../core/auth/selectors';
-import { EPerson } from '../../core/eperson/models/eperson.model';
-import {
-  fadeInOut,
-  fadeOut,
-} from '../animations/fade';
-import { isNotUndefined } from '../empty.util';
+import { filter, map } from 'rxjs/operators';
+import { Component, OnInit } from '@angular/core';
+import { RouterReducerState } from '@ngrx/router-store';
+import { select, Store } from '@ngrx/store';
+
+import { fadeInOut, fadeOut } from '../animations/fade';
 import { HostWindowService } from '../host-window.service';
-import { ThemedLogInComponent } from '../log-in/themed-log-in.component';
-import { BrowserOnlyPipe } from '../utils/browser-only.pipe';
-import { ThemedUserMenuComponent } from './user-menu/themed-user-menu.component';
+import { AppState, routerStateSelector } from '../../app.reducer';
+import { isNotUndefined } from '../empty.util';
+import { isAuthenticated, isAuthenticationLoading } from '../../core/auth/selectors';
+import { EPerson } from '../../core/eperson/models/eperson.model';
+import { AuthService, LOGIN_ROUTE, LOGOUT_ROUTE } from '../../core/auth/auth.service';
 
 @Component({
-  selector: 'ds-base-auth-nav-menu',
+  selector: 'ds-auth-nav-menu',
   templateUrl: './auth-nav-menu.component.html',
   styleUrls: ['./auth-nav-menu.component.scss'],
-  animations: [fadeInOut, fadeOut],
-  standalone: true,
-  imports: [NgClass, NgIf, NgbDropdownModule, ThemedLogInComponent, RouterLink, RouterLinkActive, ThemedUserMenuComponent, AsyncPipe, TranslateModule, BrowserOnlyPipe],
+  animations: [fadeInOut, fadeOut]
 })
 export class AuthNavMenuComponent implements OnInit {
   /**
@@ -73,7 +32,7 @@ export class AuthNavMenuComponent implements OnInit {
    */
   public loading: Observable<boolean>;
 
-  public isMobile$: Observable<boolean>;
+  public isXsOrSm$: Observable<boolean>;
 
   public showAuth = observableOf(false);
 
@@ -83,9 +42,9 @@ export class AuthNavMenuComponent implements OnInit {
 
   constructor(private store: Store<AppState>,
               private windowService: HostWindowService,
-              private authService: AuthService,
+              private authService: AuthService
   ) {
-    this.isMobile$ = this.windowService.isMobile();
+    this.isXsOrSm$ = this.windowService.isXsOrSm();
   }
 
   ngOnInit(): void {
@@ -101,8 +60,8 @@ export class AuthNavMenuComponent implements OnInit {
       select(routerStateSelector),
       filter((router: RouterReducerState) => isNotUndefined(router) && isNotUndefined(router.state)),
       map((router: RouterReducerState) => (!router.state.url.startsWith(LOGIN_ROUTE)
-        && !router.state.url.startsWith(LOGOUT_ROUTE)),
-      ),
+        && !router.state.url.startsWith(LOGOUT_ROUTE))
+      )
     );
   }
 }

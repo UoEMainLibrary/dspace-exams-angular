@@ -1,7 +1,4 @@
-import {
-  MissingTranslationHandler,
-  MissingTranslationHandlerParams,
-} from '@ngx-translate/core';
+import { MissingTranslationHandler, MissingTranslationHandlerParams } from '@ngx-translate/core';
 
 /**
  * Class to handle missing translations for the ngx-translate library

@@ -1,50 +1,30 @@
 import { Injectable } from '@angular/core';
-import {
-  createSelector,
-  select,
-  Store,
-} from '@ngrx/store';
+import { createSelector, select, Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
-import {
-  distinctUntilChanged,
-  map,
-  tap,
-} from 'rxjs/operators';
-import { FollowLinkConfig } from 'src/app/shared/utils/follow-link-config.model';
-
-import {
-  BitstreamFormatsRegistryDeselectAction,
-  BitstreamFormatsRegistryDeselectAllAction,
-  BitstreamFormatsRegistrySelectAction,
-} from '../../admin/admin-registries/bitstream-formats/bitstream-format.actions';
+import { distinctUntilChanged, map, tap } from 'rxjs/operators';
+import { BitstreamFormatsRegistryDeselectAction, BitstreamFormatsRegistryDeselectAllAction, BitstreamFormatsRegistrySelectAction } from '../../admin/admin-registries/bitstream-formats/bitstream-format.actions';
 import { BitstreamFormatRegistryState } from '../../admin/admin-registries/bitstream-formats/bitstream-format.reducers';
 import { NotificationsService } from '../../shared/notifications/notifications.service';
 import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
 import { ObjectCacheService } from '../cache/object-cache.service';
 import { coreSelector } from '../core.selectors';
-import { CoreState } from '../core-state.model';
-import { Bitstream } from '../shared/bitstream.model';
 import { BitstreamFormat } from '../shared/bitstream-format.model';
+import { BITSTREAM_FORMAT } from '../shared/bitstream-format.resource-type';
+import { Bitstream } from '../shared/bitstream.model';
 import { HALEndpointService } from '../shared/hal-endpoint.service';
-import { NoContent } from '../shared/NoContent.model';
+import { RemoteData } from './remote-data';
+import { PostRequest, PutRequest } from './request.models';
+import { RequestService } from './request.service';
 import { sendRequest } from '../shared/request.operators';
-import {
-  DeleteData,
-  DeleteDataImpl,
-} from './base/delete-data';
-import {
-  FindAllData,
-  FindAllDataImpl,
-} from './base/find-all-data';
+import { CoreState } from '../core-state.model';
 import { IdentifiableDataService } from './base/identifiable-data.service';
+import { DeleteData, DeleteDataImpl } from './base/delete-data';
+import { FindAllData, FindAllDataImpl } from './base/find-all-data';
+import { FollowLinkConfig } from 'src/app/shared/utils/follow-link-config.model';
 import { FindListOptions } from './find-list-options.model';
 import { PaginatedList } from './paginated-list.model';
-import { RemoteData } from './remote-data';
-import {
-  PostRequest,
-  PutRequest,
-} from './request.models';
-import { RequestService } from './request.service';
+import { NoContent } from '../shared/NoContent.model';
+import { dataService } from './base/data-service.decorator';
 
 const bitstreamFormatsStateSelector = createSelector(
   coreSelector,
@@ -58,7 +38,8 @@ const selectedBitstreamFormatSelector = createSelector(
 /**
  * A service responsible for fetching/sending data from/to the REST API on the bitstreamformats endpoint
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
+@dataService(BITSTREAM_FORMAT)
 export class BitstreamFormatDataService extends IdentifiableDataService<BitstreamFormat> implements FindAllData<BitstreamFormat>, DeleteData<BitstreamFormat> {
 
   protected linkPath = 'bitstreamformats';
@@ -125,7 +106,7 @@ export class BitstreamFormatDataService extends IdentifiableDataService<Bitstrea
       map((endpointURL: string) => {
         return new PostRequest(requestId, endpointURL, bitstreamFormat);
       }),
-      sendRequest(this.requestService),
+      sendRequest(this.requestService)
     ).subscribe();
 
     return this.rdbService.buildFromRequestUUID(requestId);
@@ -136,7 +117,7 @@ export class BitstreamFormatDataService extends IdentifiableDataService<Bitstrea
    */
   public clearBitStreamFormatRequests(): Observable<string> {
     return this.getBrowseEndpoint().pipe(
-      tap((href: string) => this.requestService.removeByHrefSubstring(href)),
+      tap((href: string) => this.requestService.removeByHrefSubstring(href))
     );
   }
 

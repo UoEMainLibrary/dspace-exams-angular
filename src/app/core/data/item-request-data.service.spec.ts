@@ -1,13 +1,12 @@
-import { of as observableOf } from 'rxjs';
-
-import { RequestCopyEmail } from '../../request-copy/email-request-copy/request-copy-email.model';
-import { createSuccessfulRemoteDataObject$ } from '../../shared/remote-data.utils';
-import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
-import { HALEndpointService } from '../shared/hal-endpoint.service';
-import { ItemRequest } from '../shared/item-request.model';
 import { ItemRequestDataService } from './item-request-data.service';
-import { PostRequest } from './request.models';
+import { HALEndpointService } from '../shared/hal-endpoint.service';
 import { RequestService } from './request.service';
+import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
+import { of as observableOf } from 'rxjs';
+import { createSuccessfulRemoteDataObject$ } from '../../shared/remote-data.utils';
+import { ItemRequest } from '../shared/item-request.model';
+import { PostRequest } from './request.models';
+import { RequestCopyEmail } from '../../request-copy/email-request-copy/request-copy-email.model';
 import { RestRequestMethod } from './rest-request-method';
 
 describe('ItemRequestDataService', () => {

@@ -5,26 +5,19 @@
  *
  * http://www.dspace.org/license/
  */
-import { Observable } from 'rxjs';
-import { switchMap } from 'rxjs/operators';
-
-import {
-  hasNoValue,
-  hasValue,
-} from '../../../shared/empty.util';
-import { NotificationsService } from '../../../shared/notifications/notifications.service';
-import { RemoteDataBuildService } from '../../cache/builders/remote-data-build.service';
 import { CacheableObject } from '../../cache/cacheable-object.model';
-import { ObjectCacheService } from '../../cache/object-cache.service';
-import { HALEndpointService } from '../../shared/hal-endpoint.service';
-import { NoContent } from '../../shared/NoContent.model';
+import { Observable } from 'rxjs';
 import { RemoteData } from '../remote-data';
+import { NoContent } from '../../shared/NoContent.model';
+import { switchMap } from 'rxjs/operators';
 import { DeleteRequest } from '../request.models';
+import { hasNoValue, hasValue } from '../../../shared/empty.util';
 import { RequestService } from '../request.service';
-import {
-  ConstructIdEndpoint,
-  IdentifiableDataService,
-} from './identifiable-data.service';
+import { RemoteDataBuildService } from '../../cache/builders/remote-data-build.service';
+import { HALEndpointService } from '../../shared/hal-endpoint.service';
+import { NotificationsService } from '../../../shared/notifications/notifications.service';
+import { ObjectCacheService } from '../../cache/object-cache.service';
+import { ConstructIdEndpoint, IdentifiableDataService } from './identifiable-data.service';
 
 export interface DeleteData<T extends CacheableObject> {
   /**
@@ -75,16 +68,15 @@ export class DeleteDataImpl<T extends CacheableObject> extends IdentifiableDataS
   deleteByHref(href: string, copyVirtualMetadata?: string[]): Observable<RemoteData<NoContent>> {
     const requestId = this.requestService.generateRequestId();
 
-    let deleteHref: string = href;
     if (copyVirtualMetadata) {
       copyVirtualMetadata.forEach((id) =>
-        deleteHref += (deleteHref.includes('?') ? '&' : '?')
+        href += (href.includes('?') ? '&' : '?')
           + 'copyVirtualMetadata='
           + id,
       );
     }
 
-    const request = new DeleteRequest(requestId, deleteHref);
+    const request = new DeleteRequest(requestId, href);
     if (hasValue(this.responseMsToLive)) {
       request.responseMsToLive = this.responseMsToLive;
     }

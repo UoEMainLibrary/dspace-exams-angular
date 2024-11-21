@@ -1,7 +1,7 @@
-import { testCreateDataImplementation } from './base/create-data.spec';
+import { SystemWideAlertDataService } from './system-wide-alert-data.service';
 import { testFindAllDataImplementation } from './base/find-all-data.spec';
 import { testPutDataImplementation } from './base/put-data.spec';
-import { SystemWideAlertDataService } from './system-wide-alert-data.service';
+import { testCreateDataImplementation } from './base/create-data.spec';
 
 describe('SystemWideAlertDataService', () => {
   describe('composition', () => {

@@ -1,38 +1,20 @@
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import { FormsModule } from '@angular/forms';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../core/auth/auth.service';
+import { map, switchMap, take } from 'rxjs/operators';
+import { ActivatedRoute, Router } from '@angular/router';
 import { Store } from '@ngrx/store';
-import {
-  TranslateModule,
-  TranslateService,
-} from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-import {
-  map,
-  switchMap,
-  take,
-} from 'rxjs/operators';
-
 import { AppState } from '../../app.reducer';
 import { LogOutAction } from '../../core/auth/auth.actions';
-import { AuthService } from '../../core/auth/auth.service';
 import { EndUserAgreementService } from '../../core/end-user-agreement/end-user-agreement.service';
-import { isNotEmpty } from '../../shared/empty.util';
 import { NotificationsService } from '../../shared/notifications/notifications.service';
-import { EndUserAgreementContentComponent } from './end-user-agreement-content/end-user-agreement-content.component';
+import { TranslateService } from '@ngx-translate/core';
+import { of as observableOf } from 'rxjs';
+import { isNotEmpty } from '../../shared/empty.util';
 
 @Component({
-  selector: 'ds-base-end-user-agreement',
+  selector: 'ds-end-user-agreement',
   templateUrl: './end-user-agreement.component.html',
-  styleUrls: ['./end-user-agreement.component.scss'],
-  standalone: true,
-  imports: [EndUserAgreementContentComponent, FormsModule, TranslateModule],
+  styleUrls: ['./end-user-agreement.component.scss']
 })
 /**
  * Component displaying the End User Agreement and an option to accept it
@@ -84,7 +66,7 @@ export class EndUserAgreementComponent implements OnInit {
           return observableOf(undefined);
         }
       }),
-      take(1),
+      take(1)
     ).subscribe((redirectUrl) => {
       if (isNotEmpty(redirectUrl)) {
         this.router.navigateByUrl(decodeURIComponent(redirectUrl));

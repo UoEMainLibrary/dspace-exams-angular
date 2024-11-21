@@ -1,19 +1,8 @@
-import {
-  AsyncPipe,
-  NgClass,
-} from '@angular/common';
-import {
-  Component,
-  OnInit,
-} from '@angular/core';
-import { Observable } from 'rxjs';
-
-import { ThemedHeaderComponent } from '../header/themed-header.component';
-import { ThemedNavbarComponent } from '../navbar/themed-navbar.component';
-import {
-  HostWindowService,
-  WidthCategory,
-} from '../shared/host-window.service';
+import { Component, HostBinding, OnDestroy, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { AppState } from '../app.reducer';
+import { hasValue } from '../shared/empty.util';
+import { Observable, Subscription } from 'rxjs';
 import { MenuService } from '../shared/menu/menu.service';
 import { MenuID } from '../shared/menu/menu-id.model';
 
@@ -21,28 +10,30 @@ import { MenuID } from '../shared/menu/menu-id.model';
  * This component represents a wrapper for the horizontal navbar and the header
  */
 @Component({
-  selector: 'ds-base-header-navbar-wrapper',
+  selector: 'ds-header-navbar-wrapper',
   styleUrls: ['header-navbar-wrapper.component.scss'],
   templateUrl: 'header-navbar-wrapper.component.html',
-  standalone: true,
-  imports: [NgClass, ThemedHeaderComponent, ThemedNavbarComponent, AsyncPipe],
 })
-export class HeaderNavbarWrapperComponent implements OnInit {
-  public isNavBarCollapsed$: Observable<boolean>;
-  public isMobile$: Observable<boolean>;
-
+export class HeaderNavbarWrapperComponent implements OnInit, OnDestroy {
+  @HostBinding('class.open') isOpen = false;
+  private sub: Subscription;
+  public isNavBarCollapsed: Observable<boolean>;
   menuID = MenuID.PUBLIC;
-  maxMobileWidth = WidthCategory.SM;
 
   constructor(
-    private menuService: MenuService,
-    protected windowService: HostWindowService,
+    private store: Store<AppState>,
+    private menuService: MenuService
   ) {
   }
 
   ngOnInit(): void {
-    this.isMobile$ = this.windowService.isUpTo(this.maxMobileWidth);
-    this.isNavBarCollapsed$ = this.menuService.isMenuCollapsed(this.menuID);
+    this.isNavBarCollapsed = this.menuService.isMenuCollapsed(this.menuID);
+    this.sub = this.isNavBarCollapsed.subscribe((isCollapsed) => this.isOpen = !isCollapsed);
   }
 
+  ngOnDestroy() {
+    if (hasValue(this.sub)) {
+      this.sub.unsubscribe();
+    }
+  }
 }

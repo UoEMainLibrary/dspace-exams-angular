@@ -8,7 +8,7 @@
          [ngbTooltip]="'workflow-item.search.result.list.element.supervised.remove-tooltip' | translate"
          (click)="$event.preventDefault(); $event.stopImmediatePropagation(); deleteSupervisionOrder(supervisionOrder)" aria-label="Close">
         {{ dsoNameService.getName(supervisionOrder.group) }}
-        <span aria-hidden="true"> ×</span>
+        <span aria-hidden="true" class="filter-span"> ×</span>
       </a>
     </div>
   </div>

@@ -1,16 +1,10 @@
-import {
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { Component, Input, OnInit, OnDestroy } from '@angular/core';
 import { Angulartics2 } from 'angulartics2';
-import { Subscription } from 'rxjs';
-import { take } from 'rxjs/operators';
-
-import { ReferrerService } from '../../../core/services/referrer.service';
 import { DSpaceObject } from '../../../core/shared/dspace-object.model';
+import { Subscription } from 'rxjs/internal/Subscription';
+import { take } from 'rxjs/operators';
 import { hasValue } from '../../../shared/empty.util';
+import { ReferrerService } from '../../../core/services/referrer.service';
 
 /**
  * This component triggers a page view statistic
@@ -19,7 +13,6 @@ import { hasValue } from '../../../shared/empty.util';
   selector: 'ds-view-tracker',
   styleUrls: ['./view-tracker.component.scss'],
   templateUrl: './view-tracker.component.html',
-  standalone: true,
 })
 export class ViewTrackerComponent implements OnInit, OnDestroy {
   /**
@@ -35,7 +28,7 @@ export class ViewTrackerComponent implements OnInit, OnDestroy {
 
   constructor(
     public angulartics2: Angulartics2,
-    public referrerService: ReferrerService,
+    public referrerService: ReferrerService
   ) {
   }
 
@@ -47,7 +40,7 @@ export class ViewTrackerComponent implements OnInit, OnDestroy {
           action: 'page_view',
           properties: {
             object: this.object,
-            referrer,
+            referrer
           },
         });
       });

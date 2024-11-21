@@ -1,42 +1,23 @@
+import { merge as observableMerge, Observable } from 'rxjs';
+import { distinctUntilChanged, filter, find, map, mergeMap, partition, take, tap } from 'rxjs/operators';
 import { Store } from '@ngrx/store';
-import {
-  merge as observableMerge,
-  Observable,
-} from 'rxjs';
-import {
-  distinctUntilChanged,
-  filter,
-  find,
-  map,
-  mergeMap,
-  partition,
-  take,
-  tap,
-} from 'rxjs/operators';
 
-import {
-  hasValue,
-  isEmpty,
-  isNotEmpty,
-  isNotUndefined,
-  isUndefined,
-} from '../../shared/empty.util';
-import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
-import { CoreState } from '../core-state.model';
-import { RemoteData } from '../data/remote-data';
+import { hasValue, isEmpty, isNotEmpty, isNotUndefined, isUndefined } from '../../shared/empty.util';
 import { PatchRequest } from '../data/request.models';
 import { RequestService } from '../data/request.service';
 import { HALEndpointService } from '../shared/hal-endpoint.service';
-import { getFirstCompletedRemoteData } from '../shared/operators';
-import { JsonPatchOperationModel } from './json-patch.model';
-import {
-  CommitPatchOperationsAction,
-  DeletePendingJsonPatchOperationsAction,
-  RollbacktPatchOperationsAction,
-  StartTransactionPatchOperationsAction,
-} from './json-patch-operations.actions';
-import { JsonPatchOperationsResourceEntry } from './json-patch-operations.reducer';
 import { jsonPatchOperationsByResourceType } from './selectors';
+import { JsonPatchOperationsResourceEntry } from './json-patch-operations.reducer';
+import {
+  CommitPatchOperationsAction, DeletePendingJsonPatchOperationsAction,
+  RollbacktPatchOperationsAction,
+  StartTransactionPatchOperationsAction
+} from './json-patch-operations.actions';
+import { JsonPatchOperationModel } from './json-patch.model';
+import { getFirstCompletedRemoteData } from '../shared/operators';
+import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
+import { RemoteData } from '../data/remote-data';
+import { CoreState } from '../core-state.model';
 
 /**
  * An abstract class that provides methods to make JSON Patch requests.
@@ -118,9 +99,9 @@ export abstract class JsonPatchOperationsService<ResponseDefinitionDomain, Patch
                 return rd.payload.dataDefinition;
               }
             }),
-            distinctUntilChanged(),
-          );
-        })),
+            distinctUntilChanged()
+        );
+        }))
     );
   }
 

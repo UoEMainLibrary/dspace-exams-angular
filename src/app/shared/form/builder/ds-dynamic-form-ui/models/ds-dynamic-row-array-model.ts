@@ -3,11 +3,10 @@ import {
   DynamicFormArrayModelConfig,
   DynamicFormControlLayout,
   DynamicFormControlRelation,
-  serializable,
+  serializable
 } from '@ng-dynamic-forms/core';
-
-import { hasValue } from '../../../../empty.util';
 import { RelationshipOptions } from '../../models/relationship-options.model';
+import { hasValue } from '../../../../empty.util';
 
 export interface DynamicRowArrayModelConfig extends DynamicFormArrayModelConfig {
   notRepeatable: boolean;

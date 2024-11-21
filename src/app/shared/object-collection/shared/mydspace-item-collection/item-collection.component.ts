@@ -1,31 +1,16 @@
-import {
-  AsyncPipe,
-  NgIf,
-} from '@angular/common';
-import {
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
-import { RouterLink } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import {
-  EMPTY,
-  Observable,
-} from 'rxjs';
-import {
-  map,
-  mergeMap,
-} from 'rxjs/operators';
+import { Component, Input, OnInit } from '@angular/core';
 
-import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
-import { LinkService } from '../../../../core/cache/builders/link.service';
+import { EMPTY, Observable } from 'rxjs';
+import { map, mergeMap } from 'rxjs/operators';
+
 import { RemoteData } from '../../../../core/data/remote-data';
+import { isNotEmpty } from '../../../empty.util';
+import { WorkflowItem } from '../../../../core/submission/models/workflowitem.model';
 import { Collection } from '../../../../core/shared/collection.model';
 import { getFirstCompletedRemoteData } from '../../../../core/shared/operators';
-import { WorkflowItem } from '../../../../core/submission/models/workflowitem.model';
-import { isNotEmpty } from '../../../empty.util';
+import { LinkService } from '../../../../core/cache/builders/link.service';
 import { followLink } from '../../../utils/follow-link-config.model';
+import { DSONameService } from '../../../../core/breadcrumbs/dso-name.service';
 
 /**
  * This component represents a badge with collection information.
@@ -33,9 +18,7 @@ import { followLink } from '../../../utils/follow-link-config.model';
 @Component({
   selector: 'ds-item-collection',
   styleUrls: ['./item-collection.component.scss'],
-  templateUrl: './item-collection.component.html',
-  standalone: true,
-  imports: [NgIf, RouterLink, AsyncPipe, TranslateModule],
+  templateUrl: './item-collection.component.html'
 })
 export class ItemCollectionComponent implements OnInit {
 
@@ -61,9 +44,9 @@ export class ItemCollectionComponent implements OnInit {
   ngOnInit() {
 
     this.linkService.resolveLinks(this.object, followLink('workflowitem', {
-      isOptional: true,
+      isOptional: true
     },
-    followLink('collection',{}),
+      followLink('collection',{})
     ));
     this.collection$ = (this.object.workflowitem as Observable<RemoteData<WorkflowItem>>).pipe(
       getFirstCompletedRemoteData(),
@@ -77,7 +60,7 @@ export class ItemCollectionComponent implements OnInit {
               } else {
                 return null;
               }
-            }),
+            })
           );
         } else {
           return EMPTY;

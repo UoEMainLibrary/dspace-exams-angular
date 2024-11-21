@@ -1,20 +1,16 @@
-import { of as observableOf } from 'rxjs';
-
-import { getMockRemoteDataBuildService } from '../../shared/mocks/remote-data-build.service.mock';
-import { NotificationsService } from '../../shared/notifications/notifications.service';
-import { HALEndpointServiceStub } from '../../shared/testing/hal-endpoint-service.stub';
-import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
-import { RestResponse } from '../cache/response.models';
-import { MetadataSchema } from '../metadata/metadata-schema.model';
-import { HALEndpointService } from '../shared/hal-endpoint.service';
-import { testDeleteDataImplementation } from './base/delete-data.spec';
-import { testFindAllDataImplementation } from './base/find-all-data.spec';
-import { MetadataSchemaDataService } from './metadata-schema-data.service';
-import {
-  CreateRequest,
-  PutRequest,
-} from './request.models';
 import { RequestService } from './request.service';
+import { HALEndpointService } from '../shared/hal-endpoint.service';
+import { NotificationsService } from '../../shared/notifications/notifications.service';
+import { MetadataSchemaDataService } from './metadata-schema-data.service';
+import { of as observableOf } from 'rxjs';
+import { RestResponse } from '../cache/response.models';
+import { HALEndpointServiceStub } from '../../shared/testing/hal-endpoint-service.stub';
+import { MetadataSchema } from '../metadata/metadata-schema.model';
+import { CreateRequest, PutRequest } from './request.models';
+import { RemoteDataBuildService } from '../cache/builders/remote-data-build.service';
+import { getMockRemoteDataBuildService } from '../../shared/mocks/remote-data-build.service.mock';
+import { testFindAllDataImplementation } from './base/find-all-data.spec';
+import { testDeleteDataImplementation } from './base/delete-data.spec';
 
 describe('MetadataSchemaDataService', () => {
   let metadataSchemaService: MetadataSchemaDataService;
@@ -65,8 +61,8 @@ describe('MetadataSchemaDataService', () => {
         prefix: 'dc',
         namespace: 'namespace',
         _links: {
-          self: { href: 'selflink' },
-        },
+          self: { href: 'selflink' }
+        }
       });
     });
 
@@ -82,7 +78,7 @@ describe('MetadataSchemaDataService', () => {
     describe('called with an existing metadata schema', () => {
       beforeEach(() => {
         schema = Object.assign(schema, {
-          id: 'id-of-existing-schema',
+          id: 'id-of-existing-schema'
         });
       });
 

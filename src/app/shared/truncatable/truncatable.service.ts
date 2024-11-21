@@ -1,30 +1,21 @@
-import { Injectable } from '@angular/core';
-import {
-  createSelector,
-  MemoizedSelector,
-  select,
-  Store,
-} from '@ngrx/store';
-import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-
-import { hasValue } from '../empty.util';
+import { Injectable } from '@angular/core';
+import { createSelector, MemoizedSelector, select, Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { TruncatablesState, TruncatableState } from './truncatable.reducer';
 import {
-  TruncatableCollapseAction,
   TruncatableExpandAction,
   TruncatableToggleAction,
+  TruncatableCollapseAction
 } from './truncatable.actions';
-import {
-  TruncatablesState,
-  TruncatableState,
-} from './truncatable.reducer';
+import { hasValue } from '../empty.util';
 
 const truncatableStateSelector = (state: TruncatablesState) => state.truncatable;
 
 /**
  * Service responsible for truncating/clamping text and performing actions on truncatable elements
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class TruncatableService {
 
   constructor(private store: Store<TruncatablesState>) {
@@ -44,7 +35,7 @@ export class TruncatableService {
         } else {
           return false;
         }
-      }),
+      })
     );
   }
 

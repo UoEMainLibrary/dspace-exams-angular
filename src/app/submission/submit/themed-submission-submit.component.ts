@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { ThemedComponent } from '../../shared/theme-support/themed.component';
 import { SubmissionSubmitComponent } from './submission-submit.component';
 
@@ -7,11 +6,9 @@ import { SubmissionSubmitComponent } from './submission-submit.component';
  * Themed wrapper for SubmissionSubmitComponent
  */
 @Component({
-  selector: 'ds-submission-submit',
+  selector: 'ds-themed-submission-submit',
   styleUrls: [],
-  templateUrl: './../../shared/theme-support/themed.component.html',
-  standalone: true,
-  imports: [SubmissionSubmitComponent],
+  templateUrl: './../../shared/theme-support/themed.component.html'
 })
 export class ThemedSubmissionSubmitComponent extends ThemedComponent<SubmissionSubmitComponent> {
   protected getComponentName(): string {

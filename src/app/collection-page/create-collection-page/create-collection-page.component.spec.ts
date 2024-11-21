@@ -1,27 +1,20 @@
-import { CommonModule } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { Router } from '@angular/router';
-import { RouterTestingModule } from '@angular/router/testing';
 import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { AuthService } from '../../core/auth/auth.service';
-import { DSONameService } from '../../core/breadcrumbs/dso-name.service';
-import { CollectionDataService } from '../../core/data/collection-data.service';
-import { CommunityDataService } from '../../core/data/community-data.service';
-import { RequestService } from '../../core/data/request.service';
+import { CommonModule } from '@angular/common';
+import { RouterTestingModule } from '@angular/router/testing';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { RouteService } from '../../core/services/route.service';
-import { AuthServiceMock } from '../../shared/mocks/auth.service.mock';
-import { DSONameServiceMock } from '../../shared/mocks/dso-name.service.mock';
+import { SharedModule } from '../../shared/shared.module';
+import { CollectionDataService } from '../../core/data/collection-data.service';
+import { of as observableOf } from 'rxjs';
+import { CommunityDataService } from '../../core/data/community-data.service';
+import { CreateCollectionPageComponent } from './create-collection-page.component';
 import { NotificationsService } from '../../shared/notifications/notifications.service';
 import { NotificationsServiceStub } from '../../shared/testing/notifications-service.stub';
-import { CollectionFormComponent } from '../collection-form/collection-form.component';
-import { CreateCollectionPageComponent } from './create-collection-page.component';
+import { RequestService } from '../../core/data/request.service';
+import { DSONameService } from '../../core/breadcrumbs/dso-name.service';
+import { DSONameServiceMock } from '../../shared/mocks/dso-name.service.mock';
 
 describe('CreateCollectionPageComponent', () => {
   let comp: CreateCollectionPageComponent;
@@ -29,28 +22,22 @@ describe('CreateCollectionPageComponent', () => {
 
   beforeEach(waitForAsync(() => {
     return TestBed.configureTestingModule({
-      imports: [TranslateModule.forRoot(), CommonModule, RouterTestingModule, CreateCollectionPageComponent],
+      imports: [TranslateModule.forRoot(), SharedModule, CommonModule, RouterTestingModule],
+      declarations: [CreateCollectionPageComponent],
       providers: [
         { provide: DSONameService, useValue: new DSONameServiceMock() },
         { provide: CollectionDataService, useValue: {} },
         {
           provide: CommunityDataService,
-          useValue: { findById: () => observableOf({ payload: { name: 'test' } }) },
+          useValue: { findById: () => observableOf({ payload: { name: 'test' } }) }
         },
         { provide: RouteService, useValue: { getQueryParameterValue: () => observableOf('1234') } },
         { provide: Router, useValue: {} },
         { provide: NotificationsService, useValue: new NotificationsServiceStub() },
-        { provide: RequestService, useValue: {} },
-        { provide: AuthService, useValue: new AuthServiceMock() },
+        { provide: RequestService, useValue: {}}
       ],
-      schemas: [NO_ERRORS_SCHEMA],
-    })
-      .overrideComponent(CreateCollectionPageComponent, {
-        remove: {
-          imports: [CollectionFormComponent],
-        },
-      })
-      .compileComponents();
+      schemas: [NO_ERRORS_SCHEMA]
+    }).compileComponents();
   }));
 
   beforeEach(() => {

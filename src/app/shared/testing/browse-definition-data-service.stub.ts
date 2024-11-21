@@ -1,43 +1,35 @@
-import {
-  EMPTY,
-  Observable,
-  of as observableOf,
-} from 'rxjs';
-
-import { BrowseService } from '../../core/browse/browse.service';
-import {
-  buildPaginatedList,
-  PaginatedList,
-} from '../../core/data/paginated-list.model';
+import { EMPTY, Observable, of as observableOf } from 'rxjs';
 import { RemoteData } from '../../core/data/remote-data';
+import { buildPaginatedList, PaginatedList } from '../../core/data/paginated-list.model';
 import { BrowseDefinition } from '../../core/shared/browse-definition.model';
-import { FlatBrowseDefinition } from '../../core/shared/flat-browse-definition.model';
-import { PageInfo } from '../../core/shared/page-info.model';
-import { ValueListBrowseDefinition } from '../../core/shared/value-list-browse-definition.model';
+import { BrowseService } from '../../core/browse/browse.service';
 import { createSuccessfulRemoteDataObject } from '../remote-data.utils';
+import { PageInfo } from '../../core/shared/page-info.model';
+import { FlatBrowseDefinition } from '../../core/shared/flat-browse-definition.model';
+import { ValueListBrowseDefinition } from '../../core/shared/value-list-browse-definition.model';
 
 // This data is in post-serialized form (metadata -> metadataKeys)
 export const mockData: BrowseDefinition[] = [
-  Object.assign(new FlatBrowseDefinition(), {
-    'id' : 'dateissued',
-    'browseType': 'flatBrowse',
-    'dataType' : 'date',
-    'sortOptions' : EMPTY,
-    'order' : 'ASC',
-    'type' : 'browse',
-    'metadataKeys' : [ 'dc.date.issued' ],
-    '_links' : EMPTY,
-  }),
-  Object.assign(new ValueListBrowseDefinition(), {
-    'id' : 'author',
-    'browseType' : 'valueList',
-    'dataType' : 'text',
-    'sortOptions' : EMPTY,
-    'order' : 'ASC',
-    'type' : 'browse',
-    'metadataKeys' : [ 'dc.contributor.*', 'dc.creator' ],
-    '_links' : EMPTY,
-  }),
+      Object.assign(new FlatBrowseDefinition(), {
+      'id' : 'dateissued',
+      'browseType': 'flatBrowse',
+      'dataType' : 'date',
+      'sortOptions' : EMPTY,
+      'order' : 'ASC',
+      'type' : 'browse',
+      'metadataKeys' : [ 'dc.date.issued' ],
+      '_links' : EMPTY
+     }),
+     Object.assign(new ValueListBrowseDefinition(), {
+      'id' : 'author',
+      'browseType' : 'valueList',
+      'dataType' : 'text',
+      'sortOptions' : EMPTY,
+      'order' : 'ASC',
+      'type' : 'browse',
+      'metadataKeys' : [ 'dc.contributor.*', 'dc.creator' ],
+      '_links' : EMPTY
+    })
 ];
 
 export const BrowseDefinitionDataServiceStub: any = {
@@ -68,6 +60,6 @@ export const BrowseDefinitionDataServiceStub: any = {
     });
     // Return just the first, as a pretend match
     return observableOf(createSuccessfulRemoteDataObject(mockData[0]));
-  },
+  }
 
 };

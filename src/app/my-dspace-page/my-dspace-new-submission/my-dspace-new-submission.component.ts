@@ -1,31 +1,21 @@
-import { NgIf } from '@angular/common';
-import {
-  ChangeDetectorRef,
-  Component,
-  EventEmitter,
-  OnDestroy,
-  OnInit,
-  Output,
-  ViewChild,
-} from '@angular/core';
-import { Router } from '@angular/router';
-import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
-import { TranslateService } from '@ngx-translate/core';
+import { ChangeDetectorRef, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+
 import { Subscription } from 'rxjs';
 import { first } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import { AuthService } from '../../core/auth/auth.service';
 import { DSpaceObject } from '../../core/shared/dspace-object.model';
+import { NotificationsService } from '../../shared/notifications/notifications.service';
+import { UploaderOptions } from '../../shared/upload/uploader/uploader-options.model';
 import { HALEndpointService } from '../../core/shared/hal-endpoint.service';
 import { hasValue } from '../../shared/empty.util';
-import { NotificationsService } from '../../shared/notifications/notifications.service';
 import { SearchResult } from '../../shared/search/models/search-result.model';
+import { CollectionSelectorComponent } from '../collection-selector/collection-selector.component';
 import { UploaderComponent } from '../../shared/upload/uploader/uploader.component';
 import { UploaderError } from '../../shared/upload/uploader/uploader-error.model';
-import { UploaderOptions } from '../../shared/upload/uploader/uploader-options.model';
-import { CollectionSelectorComponent } from '../collection-selector/collection-selector.component';
-import { MyDSpaceNewExternalDropdownComponent } from './my-dspace-new-external-dropdown/my-dspace-new-external-dropdown.component';
-import { MyDSpaceNewSubmissionDropdownComponent } from './my-dspace-new-submission-dropdown/my-dspace-new-submission-dropdown.component';
+import { Router } from '@angular/router';
 
 /**
  * This component represents the whole mydspace page header
@@ -33,14 +23,7 @@ import { MyDSpaceNewSubmissionDropdownComponent } from './my-dspace-new-submissi
 @Component({
   selector: 'ds-my-dspace-new-submission',
   styleUrls: ['./my-dspace-new-submission.component.scss'],
-  templateUrl: './my-dspace-new-submission.component.html',
-  imports: [
-    MyDSpaceNewExternalDropdownComponent,
-    MyDSpaceNewSubmissionDropdownComponent,
-    UploaderComponent,
-    NgIf,
-  ],
-  standalone: true,
+  templateUrl: './my-dspace-new-submission.component.html'
 })
 export class MyDSpaceNewSubmissionComponent implements OnDestroy, OnInit {
   /**
@@ -89,10 +72,10 @@ export class MyDSpaceNewSubmissionComponent implements OnDestroy, OnInit {
   ngOnInit() {
     this.uploadFilesOptions.autoUpload = false;
     this.sub = this.halService.getEndpoint('workspaceitems').pipe(first()).subscribe((url) => {
-      this.uploadFilesOptions.url = url;
-      this.uploadFilesOptions.authToken = this.authService.buildAuthHeader();
-      this.changeDetectorRef.detectChanges();
-    },
+        this.uploadFilesOptions.url = url;
+        this.uploadFilesOptions.authToken = this.authService.buildAuthHeader();
+        this.changeDetectorRef.detectChanges();
+      }
     );
   }
 
@@ -109,7 +92,7 @@ export class MyDSpaceNewSubmissionComponent implements OnDestroy, OnInit {
         // To avoid confusion and ambiguity, redirect the user on the publication page.
         this.router.navigateByUrl(link);
       } else if (workspaceitems.length > 1) {
-        this.notificationsService.success(null, this.translate.get('mydspace.upload.upload-multiple-successful', { qty: workspaceitems.length }));
+        this.notificationsService.success(null, this.translate.get('mydspace.upload.upload-multiple-successful', {qty: workspaceitems.length}));
       }
 
     } else {

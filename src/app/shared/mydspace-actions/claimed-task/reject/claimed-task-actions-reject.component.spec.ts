@@ -1,44 +1,27 @@
-import {
-  ChangeDetectionStrategy,
-  Injector,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import {
-  ReactiveFormsModule,
-  UntypedFormBuilder,
-  UntypedFormGroup,
-} from '@angular/forms';
+import { ChangeDetectionStrategy, Injector, NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { UntypedFormBuilder, UntypedFormGroup, ReactiveFormsModule } from '@angular/forms';
 import { By } from '@angular/platform-browser';
-import { Router } from '@angular/router';
-import {
-  NgbModal,
-  NgbModule,
-} from '@ng-bootstrap/ng-bootstrap';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
-import { of } from 'rxjs';
 
-import { RequestService } from '../../../../core/data/request.service';
-import { SearchService } from '../../../../core/shared/search/search.service';
-import { ClaimedTaskDataService } from '../../../../core/tasks/claimed-task-data.service';
+import { NgbModal, NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
+import { ClaimedTaskActionsRejectComponent } from './claimed-task-actions-reject.component';
+import { TranslateLoaderMock } from '../../../mocks/translate-loader.mock';
 import { ClaimedTask } from '../../../../core/tasks/models/claimed-task-object.model';
 import { ProcessTaskResponse } from '../../../../core/tasks/models/process-task-response';
-import { PoolTaskDataService } from '../../../../core/tasks/pool-task-data.service';
-import { getMockRequestService } from '../../../mocks/request.service.mock';
-import { getMockSearchService } from '../../../mocks/search-service.mock';
-import { TranslateLoaderMock } from '../../../mocks/translate-loader.mock';
+import { ClaimedTaskDataService } from '../../../../core/tasks/claimed-task-data.service';
 import { NotificationsService } from '../../../notifications/notifications.service';
-import { ClaimedDeclinedTaskSearchResult } from '../../../object-collection/shared/claimed-declined-task-search-result.model';
 import { NotificationsServiceStub } from '../../../testing/notifications-service.stub';
+import { Router } from '@angular/router';
 import { RouterStub } from '../../../testing/router.stub';
-import { ClaimedTaskActionsRejectComponent } from './claimed-task-actions-reject.component';
+import { SearchService } from '../../../../core/shared/search/search.service';
+import { RequestService } from '../../../../core/data/request.service';
+import { PoolTaskDataService } from '../../../../core/tasks/pool-task-data.service';
+import { getMockSearchService } from '../../../mocks/search-service.mock';
+import { getMockRequestService } from '../../../mocks/request.service.mock';
+import { of } from 'rxjs';
+import { ClaimedDeclinedTaskSearchResult } from '../../../object-collection/shared/claimed-declined-task-search-result.model';
 
 let component: ClaimedTaskActionsRejectComponent;
 let fixture: ComponentFixture<ClaimedTaskActionsRejectComponent>;
@@ -52,7 +35,7 @@ const requestService = getMockRequestService();
 const object = Object.assign(new ClaimedTask(), { id: 'claimed-task-1' });
 
 const claimedTaskService = jasmine.createSpyObj('claimedTaskService', {
-  submitTask: of(new ProcessTaskResponse(true)),
+  submitTask: of(new ProcessTaskResponse(true))
 });
 
 let mockPoolTaskDataService: PoolTaskDataService;
@@ -70,8 +53,8 @@ describe('ClaimedTaskActionsRejectComponent', () => {
             useClass: TranslateLoaderMock,
           },
         }),
-        ClaimedTaskActionsRejectComponent,
       ],
+      declarations: [ClaimedTaskActionsRejectComponent],
       providers: [
         { provide: ClaimedTaskDataService, useValue: claimedTaskService },
         Injector,
@@ -83,9 +66,9 @@ describe('ClaimedTaskActionsRejectComponent', () => {
         UntypedFormBuilder,
         NgbModal,
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(ClaimedTaskActionsRejectComponent, {
-      set: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
     fixture = TestBed.createComponent(ClaimedTaskActionsRejectComponent);
     component = fixture.componentInstance;
@@ -139,7 +122,7 @@ describe('ClaimedTaskActionsRejectComponent', () => {
 
       expectedBody = {
         [component.option]: 'true',
-        reason: null,
+        reason: null
       };
 
       const btn = fixture.debugElement.query(By.css('.btn-danger'));
@@ -164,10 +147,10 @@ describe('ClaimedTaskActionsRejectComponent', () => {
     let expectedBody;
 
     beforeEach(() => {
-      spyOn((component.rejectForm as any), 'get').and.returnValue({ value: 'required' });
+      spyOn((component.rejectForm as any), 'get').and.returnValue({value: 'required'});
       expectedBody = {
         [component.option]: 'true',
-        reason: 'required',
+        reason: 'required'
       };
     });
 

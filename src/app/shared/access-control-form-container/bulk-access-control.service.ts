@@ -1,18 +1,19 @@
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { TranslateService } from '@ngx-translate/core';
+
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { TranslateService } from '@ngx-translate/core';
 
 import { ScriptDataService } from '../../core/data/processes/script-data.service';
-import { RemoteData } from '../../core/data/remote-data';
-import { getFirstCompletedRemoteData } from '../../core/shared/operators';
-import { getProcessDetailRoute } from '../../process-page/process-page-routing.paths';
-import { Process } from '../../process-page/processes/process.model';
 import { ProcessParameter } from '../../process-page/processes/process-parameter.model';
-import { isNotEmpty } from '../empty.util';
-import { NotificationsService } from '../notifications/notifications.service';
 import { AccessControlFormState } from './access-control-form-container-intial-state';
+import { getFirstCompletedRemoteData } from '../../core/shared/operators';
+import { RemoteData } from '../../core/data/remote-data';
+import { Process } from '../../process-page/processes/process.model';
+import { isNotEmpty } from '../empty.util';
+import { getProcessDetailRoute } from '../../process-page/process-page-routing.paths';
+import { NotificationsService } from '../notifications/notifications.service';
 
 export interface BulkAccessPayload {
   state: AccessControlFormState;
@@ -29,7 +30,7 @@ export class BulkAccessControlService {
     private notificationsService: NotificationsService,
     private router: Router,
     private scriptService: ScriptDataService,
-    private translationService: TranslateService,
+    private translationService: TranslateService
   ) {}
 
   /**
@@ -62,7 +63,7 @@ export class BulkAccessControlService {
     console.log('execute', { uuids, file });
 
     const params: ProcessParameter[] = [
-      { name: '-f', value: file.name },
+      { name: '-f', value: file.name }
     ];
     uuids.forEach((uuid) => {
       params.push({ name: '-u', value: uuid });
@@ -85,7 +86,7 @@ export class BulkAccessControlService {
           this.notificationsService.error(title, content);
           return false;
         }
-      }),
+      })
     );
   }
 }
@@ -95,7 +96,7 @@ export class BulkAccessControlService {
  * @param payload
  */
 export const convertToBulkAccessControlFileModel = (payload: { state: AccessControlFormState, bitstreamAccess: AccessCondition[], itemAccess: AccessCondition[] }): BulkAccessControlFileModel => {
-  const finalPayload: BulkAccessControlFileModel = {};
+  let finalPayload: BulkAccessControlFileModel = {};
 
   const itemEnabled = payload.state.item.toggleStatus;
   const bitstreamEnabled = payload.state.bitstream.toggleStatus;
@@ -103,7 +104,7 @@ export const convertToBulkAccessControlFileModel = (payload: { state: AccessCont
   if (itemEnabled) {
     finalPayload.item = {
       mode: payload.state.item.accessMode,
-      accessConditions: payload.itemAccess,
+      accessConditions: payload.itemAccess
     };
   }
 
@@ -118,7 +119,7 @@ export const convertToBulkAccessControlFileModel = (payload: { state: AccessCont
     finalPayload.bitstream = {
       constraints,
       mode: payload.state.bitstream.accessMode,
-      accessConditions: payload.bitstreamAccess,
+      accessConditions: payload.bitstreamAccess
     };
   }
 

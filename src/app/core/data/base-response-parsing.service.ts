@@ -1,21 +1,14 @@
 /* eslint-disable max-classes-per-file */
-import { environment } from '../../../environments/environment';
-import {
-  hasNoValue,
-  hasValue,
-  isNotEmpty,
-} from '../../shared/empty.util';
-import { getClassForType } from '../cache/builders/build-decorators';
-import { CacheableObject } from '../cache/cacheable-object.model';
-import { ObjectCacheService } from '../cache/object-cache.service';
+import { hasNoValue, hasValue, isNotEmpty } from '../../shared/empty.util';
 import { DSpaceSerializer } from '../dspace-rest/dspace.serializer';
 import { Serializer } from '../serializer';
-import { GenericConstructor } from '../shared/generic-constructor';
 import { PageInfo } from '../shared/page-info.model';
-import {
-  buildPaginatedList,
-  PaginatedList,
-} from './paginated-list.model';
+import { ObjectCacheService } from '../cache/object-cache.service';
+import { GenericConstructor } from '../shared/generic-constructor';
+import { PaginatedList, buildPaginatedList } from './paginated-list.model';
+import { getClassForType } from '../cache/builders/build-decorators';
+import { environment } from '../../../environments/environment';
+import { CacheableObject } from '../cache/cacheable-object.model';
 import { RestRequest } from './rest-request.model';
 
 
@@ -71,7 +64,7 @@ export abstract class BaseResponseParsingService {
                 } else if (isRestDataObject(data._embedded[property])) {
                   object[property] = this.retrieveObjectOrUrl(parsedObj);
                 } else if (Array.isArray(parsedObj)) {
-                  object[property] = parsedObj.map((obj) => this.retrieveObjectOrUrl(obj));
+                    object[property] = parsedObj.map((obj) => this.retrieveObjectOrUrl(obj));
                 }
               }
             });
@@ -103,14 +96,14 @@ export abstract class BaseResponseParsingService {
       list = this.flattenSingleKeyObject(list);
     }
     const page: ObjectDomain[] = this.processArray(list, request);
-    return buildPaginatedList<ObjectDomain>(pageInfo, page);
+    return buildPaginatedList<ObjectDomain>(pageInfo, page,);
   }
 
   protected processArray<ObjectDomain>(data: any, request: RestRequest): ObjectDomain[] {
     let array: ObjectDomain[] = [];
     data.forEach((datum) => {
-      array = [...array, this.process(datum, request)];
-    },
+        array = [...array, this.process(datum, request)];
+      }
     );
     return array;
   }
@@ -146,7 +139,7 @@ export abstract class BaseResponseParsingService {
       let dataJSON: string;
       if (hasValue(data._embedded)) {
         dataJSON = JSON.stringify(Object.assign({}, data, {
-          _embedded: '...',
+          _embedded: '...'
         }));
       } else {
         dataJSON = JSON.stringify(data);

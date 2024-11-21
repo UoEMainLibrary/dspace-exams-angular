@@ -1,23 +1,6 @@
-import {
-  AsyncPipe,
-  NgClass,
-  NgFor,
-} from '@angular/common';
-import {
-  Component,
-  forwardRef,
-  Input,
-  OnInit,
-} from '@angular/core';
-import {
-  FormsModule,
-  NG_VALUE_ACCESSOR,
-} from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { NG_VALUE_ACCESSOR } from '@angular/forms';
 import { InputSuggestionsComponent } from '../../../../../../shared/input-suggestions/input-suggestions.component';
-import { ClickOutsideDirective } from '../../../../../../shared/utils/click-outside.directive';
-import { DebounceDirective } from '../../../../../../shared/utils/debounce.directive';
 
 @Component({
   selector: 'ds-org-unit-input-suggestions',
@@ -29,11 +12,9 @@ import { DebounceDirective } from '../../../../../../shared/utils/debounce.direc
       // Usage of forwardRef necessary https://github.com/angular/angular.io/issues/1151
       // eslint-disable-next-line @angular-eslint/no-forward-ref
       useExisting: forwardRef(() => OrgUnitInputSuggestionsComponent),
-      multi: true,
-    },
-  ],
-  standalone: true,
-  imports: [FormsModule, ClickOutsideDirective, DebounceDirective, NgClass, NgFor, AsyncPipe, TranslateModule],
+      multi: true
+    }
+  ]
 })
 
 /**

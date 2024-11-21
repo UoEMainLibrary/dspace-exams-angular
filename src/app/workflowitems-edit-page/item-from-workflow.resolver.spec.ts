@@ -1,36 +1,35 @@
 import { first } from 'rxjs/operators';
-
 import { WorkflowItemDataService } from '../core/submission/workflowitem-data.service';
 import { createSuccessfulRemoteDataObject$ } from '../shared/remote-data.utils';
-import { itemFromWorkflowResolver } from './item-from-workflow.resolver';
+import { ItemFromWorkflowResolver } from './item-from-workflow.resolver';
 
-describe('itemFromWorkflowResolver', () => {
+describe('ItemFromWorkflowResolver', () => {
   describe('resolve', () => {
-    let resolver: any;
+    let resolver: ItemFromWorkflowResolver;
     let wfiService: WorkflowItemDataService;
     const uuid = '1234-65487-12354-1235';
     const itemUuid = '8888-8888-8888-8888';
     const wfi = {
       id: uuid,
-      item: createSuccessfulRemoteDataObject$({ id: itemUuid }),
+      item: createSuccessfulRemoteDataObject$({ id: itemUuid })
     };
 
 
     beforeEach(() => {
       wfiService = {
-        findById: (id: string) => createSuccessfulRemoteDataObject$(wfi),
+        findById: (id: string) => createSuccessfulRemoteDataObject$(wfi)
       } as any;
-      resolver = itemFromWorkflowResolver;
+      resolver = new ItemFromWorkflowResolver(wfiService, null);
     });
 
     it('should resolve a an item from from the workflow item with the correct id', (done) => {
-      resolver({ params: { id: uuid } } as any, undefined, wfiService)
+      resolver.resolve({ params: { id: uuid } } as any, undefined)
         .pipe(first())
         .subscribe(
           (resolved) => {
             expect(resolved.payload.id).toEqual(itemUuid);
             done();
-          },
+          }
         );
     });
   });

@@ -1,0 +1,32 @@
+.uoe-logo {
+    margin-bottom: var(--ds-content-spacing);
+}
+.uoe-logo img {
+    width: 50%;
+}
+.uoe-logo img:hover {
+    opacity: .6;
+}
+.jumbotron {
+    background-image:url(/assets/exams/images/exampapersbanner.png);
+    background-repeat: no-repeat;
+    background-size: cover;
+    background-position: center;
+}
+.jumbotron:hover {
+    opacity: .7;
+}
+.banner-link:hover {
+    text-decoration: none;
+}
+.banner-link:hover h1 {
+    color: #FFF;
+}
+.display-3 {
+    font-weight: bold;
+    text-shadow: 0 0 20px #FFF, 0 0 20px #FFF;
+}
+.display-3:hover {
+    color: #FFF;
+    text-decoration: none;
+}

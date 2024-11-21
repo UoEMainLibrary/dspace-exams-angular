@@ -1,11 +1,10 @@
 import { WorkspaceitemSectionAccessesObject } from './workspaceitem-section-accesses.model';
-import { WorkspaceitemSectionCcLicenseObject } from './workspaceitem-section-cc-license.model';
-import { WorkspaceitemSectionDuplicatesObject } from './workspaceitem-section-duplicates.model';
 import { WorkspaceitemSectionFormObject } from './workspaceitem-section-form.model';
-import { WorkspaceitemSectionIdentifiersObject } from './workspaceitem-section-identifiers.model';
 import { WorkspaceitemSectionLicenseObject } from './workspaceitem-section-license.model';
-import { WorkspaceitemSectionSherpaPoliciesObject } from './workspaceitem-section-sherpa-policies.model';
 import { WorkspaceitemSectionUploadObject } from './workspaceitem-section-upload.model';
+import { WorkspaceitemSectionCcLicenseObject } from './workspaceitem-section-cc-license.model';
+import {WorkspaceitemSectionIdentifiersObject} from './workspaceitem-section-identifiers.model';
+import { WorkspaceitemSectionSherpaPoliciesObject } from './workspaceitem-section-sherpa-policies.model';
 
 /**
  * An interface to represent submission's section object.
@@ -26,7 +25,4 @@ export type WorkspaceitemSectionDataType
   | WorkspaceitemSectionAccessesObject
   | WorkspaceitemSectionSherpaPoliciesObject
   | WorkspaceitemSectionIdentifiersObject
-  | WorkspaceitemSectionDuplicatesObject
   | string;
-
-

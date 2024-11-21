@@ -1,21 +1,10 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import { ActivatedRoute } from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-
-import { LinkService } from '../../../core/cache/builders/link.service';
-import { Community } from '../../../core/shared/community.model';
-import { ThemedThumbnailComponent } from '../../../thumbnail/themed-thumbnail.component';
-import { ActivatedRouteStub } from '../../testing/active-router.stub';
 import { CommunityGridElementComponent } from './community-grid-element.component';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
+import { By } from '@angular/platform-browser';
+import { Community } from '../../../core/shared/community.model';
+import { LinkService } from '../../../core/cache/builders/link.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 let communityGridElementComponent: CommunityGridElementComponent;
 let fixture: ComponentFixture<CommunityGridElementComponent>;
@@ -25,10 +14,10 @@ const mockCommunityWithAbstract: Community = Object.assign(new Community(), {
     'dc.description.abstract': [
       {
         language: 'en_US',
-        value: 'Short description',
-      },
-    ],
-  },
+        value: 'Short description'
+      }
+    ]
+  }
 });
 
 const mockCommunityWithoutAbstract: Community = Object.assign(new Community(), {
@@ -36,34 +25,31 @@ const mockCommunityWithoutAbstract: Community = Object.assign(new Community(), {
     'dc.title': [
       {
         language: 'en_US',
-        value: 'Test title',
-      },
-    ],
-  },
+        value: 'Test title'
+      }
+    ]
+  }
 });
 
 const linkService = jasmine.createSpyObj('linkService', {
-  resolveLink: mockCommunityWithAbstract,
+  resolveLink: mockCommunityWithAbstract
 });
 
 describe('CommunityGridElementComponent', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       imports: [
-        TranslateModule.forRoot(),
-        CommunityGridElementComponent,
+        TranslateModule.forRoot()
       ],
+      declarations: [CommunityGridElementComponent],
       providers: [
         { provide: 'objectElementProvider', useValue: (mockCommunityWithAbstract) },
-        { provide: LinkService, useValue: linkService },
-        { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
+        { provide: LinkService, useValue: linkService }
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(CommunityGridElementComponent, {
-      add: { changeDetection: ChangeDetectionStrategy.Default },
-      remove: {
-        imports: [ThemedThumbnailComponent],
-      },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 

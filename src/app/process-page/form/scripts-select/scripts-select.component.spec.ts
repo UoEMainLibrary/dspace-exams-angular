@@ -1,30 +1,18 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core';
-import {
-  ComponentFixture,
-  fakeAsync,
-  TestBed,
-  tick,
-  waitForAsync,
-} from '@angular/core/testing';
-import { FormsModule } from '@angular/forms';
-import { By } from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-import {
-  TranslateLoader,
-  TranslateModule,
-} from '@ngx-translate/core';
+import { waitForAsync, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 
-import { buildPaginatedList } from '../../../core/data/paginated-list.model';
-import { ScriptDataService } from '../../../core/data/processes/script-data.service';
-import { TranslateLoaderMock } from '../../../shared/mocks/translate-loader.mock';
-import { createSuccessfulRemoteDataObject$ } from '../../../shared/remote-data.utils';
-import { ActivatedRouteStub } from '../../../shared/testing/active-router.stub';
-import { RouterStub } from '../../../shared/testing/router.stub';
-import { Script } from '../../scripts/script.model';
+import { FormsModule } from '@angular/forms';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { By } from '@angular/platform-browser';
 import { ScriptsSelectComponent } from './scripts-select.component';
+import { Script } from '../../scripts/script.model';
+import { ScriptDataService } from '../../../core/data/processes/script-data.service';
+import { ActivatedRoute, Router } from '@angular/router';
+import { buildPaginatedList } from '../../../core/data/paginated-list.model';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { createSuccessfulRemoteDataObject$ } from '../../../shared/remote-data.utils';
+import { TranslateLoaderMock } from '../../../shared/mocks/translate-loader.mock';
+import { RouterStub } from '../../../shared/testing/router.stub';
+import { ActivatedRouteStub } from '../../../shared/testing/active-router.stub';
 
 describe('ScriptsSelectComponent', () => {
   let component: ScriptsSelectComponent;
@@ -38,8 +26,8 @@ describe('ScriptsSelectComponent', () => {
     script2 = new Script();
     scriptService = jasmine.createSpyObj('scriptService',
       {
-        findAll: createSuccessfulRemoteDataObject$(buildPaginatedList(undefined, [script1, script2])),
-      },
+        findAll: createSuccessfulRemoteDataObject$(buildPaginatedList(undefined, [script1, script2]))
+      }
     );
   }
 
@@ -51,17 +39,16 @@ describe('ScriptsSelectComponent', () => {
         TranslateModule.forRoot({
           loader: {
             provide: TranslateLoader,
-            useClass: TranslateLoaderMock,
-          },
-        }),
-        ScriptsSelectComponent,
-      ],
+            useClass: TranslateLoaderMock
+          }
+        })],
+      declarations: [ScriptsSelectComponent],
       providers: [
         { provide: ScriptDataService, useValue: scriptService },
         { provide: Router, useClass: RouterStub },
         { provide: ActivatedRoute, useValue: new ActivatedRouteStub() },
       ],
-      schemas: [NO_ERRORS_SCHEMA],
+      schemas: [NO_ERRORS_SCHEMA]
     })
       .compileComponents();
   }));

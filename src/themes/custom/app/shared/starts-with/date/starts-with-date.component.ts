@@ -1,12 +1,8 @@
-import { NgFor } from '@angular/common';
 import { Component } from '@angular/core';
+import { renderStartsWithFor, StartsWithType } from '../../../../../../app/shared/starts-with/starts-with-decorator';
 import {
-  FormsModule,
-  ReactiveFormsModule,
-} from '@angular/forms';
-import { TranslateModule } from '@ngx-translate/core';
-
-import { StartsWithDateComponent as BaseComponent } from '../../../../../../app/shared/starts-with/date/starts-with-date.component';
+  StartsWithDateComponent as BaseComponent
+} from '../../../../../../app/shared/starts-with/date/starts-with-date.component';
 
 @Component({
   selector: 'ds-starts-with-date',
@@ -14,8 +10,7 @@ import { StartsWithDateComponent as BaseComponent } from '../../../../../../app/
   styleUrls: ['../../../../../../app/shared/starts-with/date/starts-with-date.component.scss'],
   // templateUrl: './starts-with-date.component.html',
   templateUrl: '../../../../../../app/shared/starts-with/date/starts-with-date.component.html',
-  standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgFor, TranslateModule],
 })
+@renderStartsWithFor(StartsWithType.date)
 export class StartsWithDateComponent extends BaseComponent {
 }

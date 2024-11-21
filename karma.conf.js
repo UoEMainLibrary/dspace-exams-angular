@@ -15,10 +15,7 @@ module.exports = function (config) {
     ],
     client: {
       clearContext: false, // leave Jasmine Spec Runner output visible in browser
-      captureConsole: false,
-      jasmine: {
-        failSpecWithNoExpectations: true
-      }
+      captureConsole: false
     },
     coverageIstanbulReporter: {
       dir: require('path').join(__dirname, './coverage/dspace-angular'),

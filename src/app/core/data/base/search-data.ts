@@ -5,26 +5,19 @@
  *
  * http://www.dspace.org/license/
  */
-import { Observable } from 'rxjs';
-import {
-  filter,
-  map,
-} from 'rxjs/operators';
-
-import {
-  hasNoValue,
-  isNotEmpty,
-} from '../../../shared/empty.util';
-import { FollowLinkConfig } from '../../../shared/utils/follow-link-config.model';
-import { RemoteDataBuildService } from '../../cache/builders/remote-data-build.service';
 import { CacheableObject } from '../../cache/cacheable-object.model';
+import { BaseDataService } from './base-data.service';
+import { Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+import { hasNoValue, isNotEmpty } from '../../../shared/empty.util';
+import { FindListOptions } from '../find-list-options.model';
+import { FollowLinkConfig } from '../../../shared/utils/follow-link-config.model';
+import { RemoteData } from '../remote-data';
+import { PaginatedList } from '../paginated-list.model';
+import { RequestService } from '../request.service';
+import { RemoteDataBuildService } from '../../cache/builders/remote-data-build.service';
 import { ObjectCacheService } from '../../cache/object-cache.service';
 import { HALEndpointService } from '../../shared/hal-endpoint.service';
-import { FindListOptions } from '../find-list-options.model';
-import { PaginatedList } from '../paginated-list.model';
-import { RemoteData } from '../remote-data';
-import { RequestService } from '../request.service';
-import { BaseDataService } from './base-data.service';
 
 /**
  * Shorthand type for method to construct a search endpoint
@@ -58,7 +51,7 @@ export interface SearchData<T extends CacheableObject> {
 }
 
 /**
- * A UpdateDataServiceImpl feature to search for objects.
+ * A DataService feature to search for objects.
  *
  * Concrete data services can use this feature by implementing {@link SearchData}
  * and delegating its method to an inner instance of this class.
@@ -119,9 +112,10 @@ export class SearchDataImpl<T extends CacheableObject> extends BaseDataService<T
    * @param linksToFollow   List of {@link FollowLinkConfig} that indicate which {@link HALLink}s should be automatically resolved
    */
   getSearchByHref(searchMethod: string, options: FindListOptions = {}, ...linksToFollow: FollowLinkConfig<T>[]): Observable<string> {
+    let result$: Observable<string>;
     const args = [];
 
-    const result$ = this.getSearchEndpoint(searchMethod);
+    result$ = this.getSearchEndpoint(searchMethod);
 
     return result$.pipe(map((result: string) => this.buildHrefFromFindOptions(result, options, args, ...linksToFollow)));
   }

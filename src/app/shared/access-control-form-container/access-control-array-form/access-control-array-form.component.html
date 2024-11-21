@@ -88,11 +88,10 @@
       </div>
 
       <div>
-        <span aria-hidden="true" class="mb-2 d-inline-block">&nbsp;</span>
+        <label>&nbsp;</label>
         <div class="input-group">
 
           <button type="button" class="btn btn-outline-danger"
-                  [attr.aria-label]="'access-control-remove' | translate"
                   [disabled]="ngForm.disabled || form.accessControls.length === 1"
                   (click)="removeAccessControlItem(control.id)">
             <i class="fas fa-trash"></i>

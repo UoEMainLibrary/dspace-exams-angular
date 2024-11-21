@@ -1,22 +1,13 @@
-import { inject } from '@angular/core';
-import {
-  ActivatedRouteSnapshot,
-  ResolveFn,
-  RouterStateSnapshot,
-} from '@angular/router';
-import { Store } from '@ngrx/store';
+import { Injectable } from '@angular/core';
+import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot } from '@angular/router';
+import { Collection } from '../core/shared/collection.model';
 import { Observable } from 'rxjs';
-
-import { AppState } from '../app.reducer';
 import { CollectionDataService } from '../core/data/collection-data.service';
 import { RemoteData } from '../core/data/remote-data';
-import { ResolvedAction } from '../core/resolving/resolver.actions';
-import { Collection } from '../core/shared/collection.model';
+import { followLink, FollowLinkConfig } from '../shared/utils/follow-link-config.model';
 import { getFirstCompletedRemoteData } from '../core/shared/operators';
-import {
-  followLink,
-  FollowLinkConfig,
-} from '../shared/utils/follow-link-config.model';
+import { Store } from '@ngrx/store';
+import { ResolvedAction } from '../core/resolving/resolver.actions';
 
 /**
  * The self links defined in this list are expected to be requested somewhere in the near future
@@ -24,38 +15,43 @@ import {
  */
 export const COLLECTION_PAGE_LINKS_TO_FOLLOW: FollowLinkConfig<Collection>[] = [
   followLink('parentCommunity', {},
-    followLink('parentCommunity'),
+    followLink('parentCommunity')
   ),
   followLink('logo'),
 ];
 
 /**
- * Method for resolving a collection based on the parameters in the current route
- * @param {ActivatedRouteSnapshot} route The current ActivatedRouteSnapshot
- * @param {RouterStateSnapshot} state The current RouterStateSnapshot
- * @param collectionService
- * @param store
- * @returns Observable<<RemoteData<Collection>> Emits the found collection based on the parameters in the current route,
- * or an error if something went wrong
+ * This class represents a resolver that requests a specific collection before the route is activated
  */
-export const collectionPageResolver: ResolveFn<RemoteData<Collection>> = (
-  route: ActivatedRouteSnapshot,
-  state: RouterStateSnapshot,
-  collectionService: CollectionDataService = inject(CollectionDataService),
-  store: Store<AppState> = inject(Store<AppState>),
-): Observable<RemoteData<Collection>> => {
-  const collectionRD$ = collectionService.findById(
-    route.params.id,
-    true,
-    false,
-    ...COLLECTION_PAGE_LINKS_TO_FOLLOW,
-  ).pipe(
-    getFirstCompletedRemoteData(),
-  );
+@Injectable()
+export class CollectionPageResolver implements Resolve<RemoteData<Collection>> {
+  constructor(
+    private collectionService: CollectionDataService,
+    private store: Store<any>
+  ) {
+  }
 
-  collectionRD$.subscribe((collectionRD: RemoteData<Collection>) => {
-    store.dispatch(new ResolvedAction(state.url, collectionRD.payload));
-  });
+  /**
+   * Method for resolving a collection based on the parameters in the current route
+   * @param {ActivatedRouteSnapshot} route The current ActivatedRouteSnapshot
+   * @param {RouterStateSnapshot} state The current RouterStateSnapshot
+   * @returns Observable<<RemoteData<Collection>> Emits the found collection based on the parameters in the current route,
+   * or an error if something went wrong
+   */
+  resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<RemoteData<Collection>> {
+    const collectionRD$ = this.collectionService.findById(
+      route.params.id,
+      true,
+      false,
+      ...COLLECTION_PAGE_LINKS_TO_FOLLOW
+    ).pipe(
+      getFirstCompletedRemoteData()
+    );
 
-  return collectionRD$;
-};
+    collectionRD$.subscribe((collectionRD: RemoteData<Collection>) => {
+      this.store.dispatch(new ResolvedAction(state.url, collectionRD.payload));
+    });
+
+    return collectionRD$;
+  }
+}

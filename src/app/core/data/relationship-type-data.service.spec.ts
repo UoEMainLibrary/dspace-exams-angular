@@ -1,20 +1,15 @@
 import { of as observableOf } from 'rxjs';
-
-import { hasValueOperator } from '../../shared/empty.util';
 import { getMockRemoteDataBuildService } from '../../shared/mocks/remote-data-build.service.mock';
 import { getMockRequestService } from '../../shared/mocks/request.service.mock';
-import {
-  createSuccessfulRemoteDataObject,
-  createSuccessfulRemoteDataObject$,
-} from '../../shared/remote-data.utils';
 import { HALEndpointServiceStub } from '../../shared/testing/hal-endpoint-service.stub';
-import { ObjectCacheServiceStub } from '../../shared/testing/object-cache-service.stub';
-import { createPaginatedList } from '../../shared/testing/utils.test';
-import { ObjectCacheService } from '../cache/object-cache.service';
+import { createSuccessfulRemoteDataObject, createSuccessfulRemoteDataObject$ } from '../../shared/remote-data.utils';
 import { ItemType } from '../shared/item-relationships/item-type.model';
 import { RelationshipType } from '../shared/item-relationships/relationship-type.model';
 import { RelationshipTypeDataService } from './relationship-type-data.service';
 import { RequestService } from './request.service';
+import { createPaginatedList } from '../../shared/testing/utils.test';
+import { hasValueOperator } from '../../shared/empty.util';
+import { ObjectCacheService } from '../cache/object-cache.service';
 
 describe('RelationshipTypeDataService', () => {
   let service: RelationshipTypeDataService;
@@ -33,7 +28,7 @@ describe('RelationshipTypeDataService', () => {
 
   let buildList;
   let rdbService;
-  let objectCache: ObjectCacheServiceStub;
+  let objectCache;
 
   function init() {
     restEndpointURL = 'https://rest.api/relationshiptypes';
@@ -51,7 +46,7 @@ describe('RelationshipTypeDataService', () => {
       leftwardType: 'isAuthorOfPublication',
       rightwardType: 'isPublicationOfAuthor',
       leftType: createSuccessfulRemoteDataObject$(publicationType),
-      rightType: createSuccessfulRemoteDataObject$(personType),
+      rightType: createSuccessfulRemoteDataObject$(personType)
     });
 
     relationshipType2 = Object.assign(new RelationshipType(), {
@@ -60,19 +55,26 @@ describe('RelationshipTypeDataService', () => {
       leftwardType: 'isOrgUnitOfPublication',
       rightwardType: 'isPublicationOfOrgUnit',
       leftType: createSuccessfulRemoteDataObject$(publicationType),
-      rightType: createSuccessfulRemoteDataObject$(orgUnitType),
+      rightType: createSuccessfulRemoteDataObject$(orgUnitType)
     });
 
     buildList = createSuccessfulRemoteDataObject(createPaginatedList([relationshipType1, relationshipType2]));
     rdbService = getMockRemoteDataBuildService(undefined, observableOf(buildList));
-    objectCache = new ObjectCacheServiceStub();
+    objectCache = Object.assign({
+      /* eslint-disable no-empty,@typescript-eslint/no-empty-function */
+      remove: () => {
+      },
+      hasBySelfLinkObservable: () => observableOf(false)
+      /* eslint-enable no-empty, @typescript-eslint/no-empty-function */
+    }) as ObjectCacheService;
+
   }
 
   function initTestService() {
     return new RelationshipTypeDataService(
       requestService,
       rdbService,
-      objectCache as ObjectCacheService,
+      objectCache,
       halService,
     );
   }
@@ -87,7 +89,7 @@ describe('RelationshipTypeDataService', () => {
 
     it('should return the type filtered by label and type strings', (done) => {
       service.getRelationshipTypeByLabelAndTypes(relationshipType1.leftwardType, publicationTypeString, personTypeString).pipe(
-        hasValueOperator(),
+        hasValueOperator()
       ).subscribe((e) => {
         expect(e.id).toEqual(relationshipType1.id);
         done();

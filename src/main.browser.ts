@@ -2,18 +2,17 @@ import 'zone.js';
 import 'reflect-metadata';
 import 'core-js/es/reflect';
 
-import { enableProdMode } from '@angular/core';
-import { bootstrapApplication } from '@angular/platform-browser';
+import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 
-import { AppComponent } from './app/app.component';
+import { BrowserAppModule } from './modules/app/browser-app.module';
+
+import { environment } from './environments/environment';
 import { AppConfig } from './config/app-config.interface';
 import { extendEnvironmentWithAppConfig } from './config/config.util';
-import { environment } from './environments/environment';
-import { browserAppConfig } from './modules/app/browser-app.config';
+import { enableProdMode } from '@angular/core';
 
-/*const bootstrap = () => platformBrowserDynamic()
-  .bootstrapModule(BrowserAppModule, {});*/
-const bootstrap = () => bootstrapApplication(AppComponent, browserAppConfig);
+const bootstrap = () => platformBrowserDynamic()
+  .bootstrapModule(BrowserAppModule, {});
 
 /**
  * We use this to determine have been serven SSR HTML or not.
@@ -35,9 +34,9 @@ const main = () => {
     // Configuration must be fetched explicitly
     return fetch('assets/config.json')
       .then((response) => response.json())
-      .then((config: AppConfig) => {
+      .then((appConfig: AppConfig) => {
         // extend environment with app config for browser when not prerendered
-        extendEnvironmentWithAppConfig(environment, config);
+        extendEnvironmentWithAppConfig(environment, appConfig);
         return bootstrap();
       });
   }

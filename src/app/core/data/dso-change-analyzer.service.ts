@@ -1,19 +1,15 @@
+import { compare, Operation } from 'fast-json-patch';
+import { ChangeAnalyzer } from './change-analyzer';
 import { Injectable } from '@angular/core';
-import {
-  compare,
-  Operation,
-} from 'fast-json-patch';
-import cloneDeep from 'lodash/cloneDeep';
-
 import { DSpaceObject } from '../shared/dspace-object.model';
 import { MetadataMap } from '../shared/metadata.models';
-import { ChangeAnalyzer } from './change-analyzer';
+import cloneDeep from 'lodash/cloneDeep';
 
 /**
  * A class to determine what differs between two
  * DSpaceObjects
  */
-@Injectable({ providedIn: 'root' })
+@Injectable()
 export class DSOChangeAnalyzer<T extends DSpaceObject> implements ChangeAnalyzer<T> {
 
   /**

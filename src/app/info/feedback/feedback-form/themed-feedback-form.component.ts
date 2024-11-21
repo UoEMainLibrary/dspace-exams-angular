@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 import { ThemedComponent } from '../../../shared/theme-support/themed.component';
 import { FeedbackFormComponent } from './feedback-form.component';
 
@@ -7,11 +6,9 @@ import { FeedbackFormComponent } from './feedback-form.component';
  * Themed wrapper for {@link FeedbackFormComponent}
  */
 @Component({
-  selector: 'ds-feedback-form',
+  selector: 'ds-themed-feedback-form',
   styleUrls: [],
   templateUrl: '../../../shared/theme-support/themed.component.html',
-  standalone: true,
-  imports: [FeedbackFormComponent],
 })
 export class ThemedFeedbackFormComponent extends ThemedComponent<FeedbackFormComponent> {
 

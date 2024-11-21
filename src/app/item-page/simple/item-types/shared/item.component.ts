@@ -1,46 +1,30 @@
-import {
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
-import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
-import {
-  map,
-  take,
-} from 'rxjs/operators';
-
+import { Component, Input, OnInit } from '@angular/core';
 import { environment } from '../../../../../environments/environment';
-import { RouteService } from '../../../../core/services/route.service';
 import { Item } from '../../../../core/shared/item.model';
-import { ViewMode } from '../../../../core/shared/view-mode.model';
 import { getItemPageRoute } from '../../../item-page-routing-paths';
-import {
-  getDSpaceQuery,
-  isIiifEnabled,
-  isIiifSearchEnabled,
-} from './item-iiif-utils';
+import { RouteService } from '../../../../core/services/route.service';
+import { Observable } from 'rxjs';
+import { getDSpaceQuery, isIiifEnabled, isIiifSearchEnabled } from './item-iiif-utils';
+import { filter, map, take } from 'rxjs/operators';
+import { Router } from '@angular/router';
+
+import { isAuthenticated } from '../../../../core/auth/selectors';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../../../app.reducer';
+import { AuthorizationDataService } from '../../../../core/data/feature-authorization/authorization-data.service';
+import { FeatureID } from '../../../../core/data/feature-authorization/feature-id';
+
+
 
 @Component({
   selector: 'ds-item',
-  template: '',
-  standalone: true,
+  template: ''
 })
 /**
  * A generic component for displaying metadata and relations of an item
  */
 export class ItemComponent implements OnInit {
   @Input() object: Item;
-
-  /**
-   * Whether to show the badge label or not
-   */
-  @Input() showLabel = true;
-
-  /**
-   * The viewmode we matched on to get this component
-   */
-  @Input() viewMode: ViewMode;
 
   /**
    * This regex matches previous routes. The button is shown
@@ -51,7 +35,7 @@ export class ItemComponent implements OnInit {
   /**
    * Used to show or hide the back to results button in the view.
    */
-  showBackButton$: Observable<boolean>;
+  showBackButton: Observable<boolean>;
 
   /**
    * Route to the item page
@@ -75,8 +59,21 @@ export class ItemComponent implements OnInit {
 
   mediaViewer;
 
+  /**
+   * Whether user is authenticated.
+   * @type {Observable<string>}
+   */
+  public isAuthenticated: Observable<boolean>;
+
+  /**
+   * Whether the current user is an admin or not
+   */
+  isAdmin$: Observable<boolean>;
+
   constructor(protected routeService: RouteService,
-              protected router: Router) {
+              protected router: Router,
+              public store: Store<AppState>,
+              protected authorizationService: AuthorizationDataService,) {
     this.mediaViewer = environment.mediaViewer;
   }
 
@@ -85,21 +82,25 @@ export class ItemComponent implements OnInit {
    */
   back = () => {
     this.routeService.getPreviousUrl().pipe(
-      take(1),
-    ).subscribe(
-      (url => {
-        this.router.navigateByUrl(url);
-      }),
-    );
+          take(1)
+        ).subscribe(
+          (url => {
+            this.router.navigateByUrl(url);
+          })
+        );
   };
 
   ngOnInit(): void {
 
     this.itemPageRoute = getItemPageRoute(this.object);
+    // check if user is authenticated, used to hide/show back button
+    this.isAuthenticated = this.store.pipe(select(isAuthenticated));
+    this.isAdmin$ = this.authorizationService.isAuthorized(FeatureID.AdministratorOf);
     // hide/show the back button
-    this.showBackButton$ = this.routeService.getPreviousUrl().pipe(
-      map((url: string) => this.previousRoute.test(url)),
+    this.showBackButton = this.routeService.getPreviousUrl().pipe(
+      filter(url => this.previousRoute.test(url)),
       take(1),
+      map(() => true)
     );
     // check to see if iiif viewer is required.
     this.iiifEnabled = isIiifEnabled(this.object);
@@ -107,5 +108,7 @@ export class ItemComponent implements OnInit {
     if (this.iiifSearchEnabled) {
       this.iiifQuery$ = getDSpaceQuery(this.object, this.routeService);
     }
+
+    
   }
 }

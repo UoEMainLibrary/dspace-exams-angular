@@ -1,20 +1,12 @@
-import { AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input,
-  OnInit,
-} from '@angular/core';
-import { TranslateService } from '@ngx-translate/core';
+import { ChangeDetectionStrategy, Component, Input, OnInit } from '@angular/core';
 import { Observable } from 'rxjs';
+import { TranslateService } from '@ngx-translate/core';
 
 @Component({
-  selector: 'ds-base-results-back-button',
+  selector: 'ds-results-back-button',
   styleUrls: ['./results-back-button.component.scss'],
   templateUrl: './results-back-button.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  standalone: true,
-  imports: [AsyncPipe],
 })
 /**
  * Component for creating a back to result list button.

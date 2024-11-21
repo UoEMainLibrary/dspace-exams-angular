@@ -2,9 +2,10 @@ form {
     &:before {
         pointer-events: none; // prevent the icon from ‘catching‘ the click
         position: absolute;
-        font: var(--fa-font-solid);
+        font-weight: 900;
+        font-family: "Font Awesome 5 Free";
         content: "\f0d7";
-        top: 10px;
+        top: 7px;
         right: 0;
         height: 20px;
         width: 20px;

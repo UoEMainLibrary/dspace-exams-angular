@@ -1,31 +1,28 @@
-import { Location } from '@angular/common';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
-  ComponentFixture,
-  TestBed,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-import {
-  ActivatedRoute,
-  Router,
-} from '@angular/router';
-import { TranslateModule } from '@ngx-translate/core';
-import { of as observableOf } from 'rxjs';
-
-import { RequestService } from '../../../../core/data/request.service';
-import { SearchService } from '../../../../core/shared/search/search.service';
-import { WorkflowItem } from '../../../../core/submission/models/workflowitem.model';
-import { ClaimedTaskDataService } from '../../../../core/tasks/claimed-task-data.service';
-import { ClaimedTask } from '../../../../core/tasks/models/claimed-task-object.model';
-import { ADVANCED_WORKFLOW_ACTION_SELECT_REVIEWER } from '../../../../workflowitems-edit-page/advanced-workflow-action/advanced-workflow-action-select-reviewer/advanced-workflow-action-select-reviewer.component';
-import { NotificationsService } from '../../../notifications/notifications.service';
-import { ActivatedRouteStub } from '../../../testing/active-router.stub';
-import { ClaimedTaskDataServiceStub } from '../../../testing/claimed-task-data-service.stub';
-import { NotificationsServiceStub } from '../../../testing/notifications-service.stub';
+  AdvancedClaimedTaskActionSelectReviewerComponent
+} from './advanced-claimed-task-action-select-reviewer.component';
+import { Router, ActivatedRoute } from '@angular/router';
 import { RouterStub } from '../../../testing/router.stub';
+import { NotificationsServiceStub } from '../../../testing/notifications-service.stub';
+import { NotificationsService } from '../../../notifications/notifications.service';
+import { TranslateModule } from '@ngx-translate/core';
 import { SearchServiceStub } from '../../../testing/search-service.stub';
-import { AdvancedClaimedTaskActionSelectReviewerComponent } from './advanced-claimed-task-action-select-reviewer.component';
-
+import { SearchService } from '../../../../core/shared/search/search.service';
+import { RequestService } from '../../../../core/data/request.service';
+import { ClaimedTaskDataService } from '../../../../core/tasks/claimed-task-data.service';
+import { ClaimedTaskDataServiceStub } from '../../../testing/claimed-task-data-service.stub';
+import { ClaimedTask } from '../../../../core/tasks/models/claimed-task-object.model';
+import { By } from '@angular/platform-browser';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
+import { Location } from '@angular/common';
+import {
+  ADVANCED_WORKFLOW_ACTION_SELECT_REVIEWER
+} from '../../../../workflowitems-edit-page/advanced-workflow-action/advanced-workflow-action-select-reviewer/advanced-workflow-action-select-reviewer.component';
+import { WorkflowItem } from '../../../../core/submission/models/workflowitem.model';
+import { of as observableOf } from 'rxjs';
+import { ActivatedRouteStub } from '../../../testing/active-router.stub';
 
 const taskId = 'claimed-task-1';
 const workflowId = 'workflow-1';
@@ -56,7 +53,10 @@ describe('AdvancedClaimedTaskActionSelectReviewerComponent', () => {
     await TestBed.configureTestingModule({
       imports: [
         TranslateModule.forRoot(),
+      ],
+      declarations: [
         AdvancedClaimedTaskActionSelectReviewerComponent,
+        NgbTooltip,
       ],
       providers: [
         { provide: ActivatedRoute, useValue: route },

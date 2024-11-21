@@ -1,10 +1,7 @@
+import { MetadataRepresentation, MetadataRepresentationType } from '../metadata-representation.model';
 import { hasValue } from '../../../../shared/empty.util';
-import { BrowseDefinition } from '../../browse-definition.model';
 import { MetadataValue } from '../../metadata.models';
-import {
-  MetadataRepresentation,
-  MetadataRepresentationType,
-} from '../metadata-representation.model';
+import { BrowseDefinition } from '../../browse-definition.model';
 
 /**
  * This class defines the way the metadatum it extends should be represented

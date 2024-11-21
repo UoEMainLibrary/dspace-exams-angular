@@ -1,17 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  NO_ERRORS_SCHEMA,
-} from '@angular/core';
-import {
-  ComponentFixture,
-  TestBed,
-  waitForAsync,
-} from '@angular/core/testing';
-import { By } from '@angular/platform-browser';
-
-import { ItemMetadataRepresentation } from '../../../../core/shared/metadata-representation/item/item-metadata-representation.model';
-import { ListableObjectComponentLoaderComponent } from '../../../../shared/object-collection/shared/listable-object/listable-object-component-loader.component';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ChangeDetectionStrategy, NO_ERRORS_SCHEMA } from '@angular/core';
 import { ItemMetadataListElementComponent } from './item-metadata-list-element.component';
+import { By } from '@angular/platform-browser';
+import { ItemMetadataRepresentation } from '../../../../core/shared/metadata-representation/item/item-metadata-representation.model';
 
 const mockItemMetadataRepresentation = new ItemMetadataRepresentation(Object.assign({}));
 
@@ -21,11 +12,11 @@ describe('ItemMetadataListElementComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      imports: [ItemMetadataListElementComponent],
-      schemas: [NO_ERRORS_SCHEMA],
+      imports: [],
+      declarations: [ItemMetadataListElementComponent],
+      schemas: [NO_ERRORS_SCHEMA]
     }).overrideComponent(ItemMetadataListElementComponent, {
-      remove: { imports: [ListableObjectComponentLoaderComponent] },
-      add: { changeDetection: ChangeDetectionStrategy.Default },
+      set: { changeDetection: ChangeDetectionStrategy.Default }
     }).compileComponents();
   }));
 

@@ -1,24 +1,11 @@
-import {
-  Component,
-  EventEmitter,
-  Input,
-  OnInit,
-  Output,
-} from '@angular/core';
-import {
-  ActivatedRoute,
-  ActivatedRouteSnapshot,
-} from '@angular/router';
-import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
-
-import { SortOptions } from '../../../core/cache/models/sort-options.model';
-import { RemoteData } from '../../../core/data/remote-data';
+import { Component, Input, OnInit } from '@angular/core';
+import { ActivatedRoute, ActivatedRouteSnapshot } from '@angular/router';
 import { DSpaceObject } from '../../../core/shared/dspace-object.model';
+import { RemoteData } from '../../../core/data/remote-data';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 import { DSpaceObjectType } from '../../../core/shared/dspace-object-type.model';
-import {
-  hasValue,
-  isNotEmpty,
-} from '../../empty.util';
+import { hasValue, isNotEmpty } from '../../empty.util';
+import { SortOptions } from '../../../core/cache/models/sort-options.model';
 
 export enum SelectorActionType {
   CREATE = 'create',
@@ -34,18 +21,13 @@ export enum SelectorActionType {
  */
 @Component({
   selector: 'ds-dso-selector-modal',
-  template: '',
+  template: ''
 })
 export abstract class DSOSelectorModalWrapperComponent implements OnInit {
   /**
    * The current page's DSO
    */
   @Input() dsoRD: RemoteData<DSpaceObject>;
-
-  /**
-   * Representing if component should emit value of selected entries or navigate
-   */
-  @Input() emitOnly = false;
 
   /**
    * Optional header to display above the selection list
@@ -69,11 +51,6 @@ export abstract class DSOSelectorModalWrapperComponent implements OnInit {
   action: SelectorActionType;
 
   /**
-   * Event emitted when a DSO entry is selected if emitOnly is set to true
-   */
-  @Output() select: EventEmitter<DSpaceObject> = new EventEmitter<DSpaceObject>();
-
-  /**
    * Default DSO ordering
    */
   defaultSort: SortOptions;
@@ -87,7 +64,7 @@ export abstract class DSOSelectorModalWrapperComponent implements OnInit {
   ngOnInit(): void {
     const matchingRoute = this.findRouteData(
       (route: ActivatedRouteSnapshot) => hasValue(route.data.dso),
-      this.route.root.snapshot,
+      this.route.root.snapshot
     );
     if (hasValue(matchingRoute)) {
       this.dsoRD = matchingRoute.data.dso;
@@ -116,11 +93,7 @@ export abstract class DSOSelectorModalWrapperComponent implements OnInit {
    */
   selectObject(dso: DSpaceObject) {
     this.close();
-    if (this.emitOnly) {
-      this.select.emit(dso);
-    } else {
-      this.navigate(dso);
-    }
+    this.navigate(dso);
   }
 
   /**
