@@ -95,6 +95,7 @@ export class PaginatedList<T> extends CacheableObject {
     next?: HALLink;
     last?: HALLink;
   };
+  payload: any;
 
   get elementsPerPage(): number {
     if (hasValue(this.pageInfo) && hasValue(this.pageInfo.elementsPerPage)) {

@@ -53,11 +53,11 @@
         </ds-truncatable>
 
         <!-- custom download link -->
-        <div *ngIf="dso.firstMetadataValue('dc.format.original') !== undefined &&
+        <!-- <div *ngIf="dso.firstMetadataValue('dc.format.original') !== undefined &&
             dso.firstMetadataValue('dc.format.original').includes('pdf');
             else unavailable" class="dwnld-container">
             <a target="_blank" [routerLink]="[examPaperLink]">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>
-        </div>
+        </div> -->
         <!-- <div *ngIf="examPaperLink !== undefined;
             else unavailable" class="dwnld-container">
             <a [routerLink]="[examPaperLink]" target="_blank">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>

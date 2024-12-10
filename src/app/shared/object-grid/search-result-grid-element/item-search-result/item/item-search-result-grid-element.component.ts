@@ -40,7 +40,7 @@ export class ItemSearchResultGridElementComponent extends SearchResultGridElemen
   /**
    * Exam paper link.
    */
-  examPaperLink = '';
+  // examPaperLink = '';
 
   constructor(
     public dsoNameService: DSONameService,
@@ -60,13 +60,13 @@ export class ItemSearchResultGridElementComponent extends SearchResultGridElemen
      * Attempt to get Bundle 'ORIGINAL' and use bitstream to generate download link
      * opperates under the assumption there is only ever one bitstream attached to an item
      */
-    try{
-      this.bitstreamDataService.findAllByItemAndBundleName(this.dso, 'ORIGINAL', { currentPage: 1, elementsPerPage: 1 })
-        .subscribe((bi) => {
-          this.examPaperLink = getBitstreamDownloadRoute(bi.payload.page[0]);
-        });
-      } catch (error) {
-        // do nothing if no bitstreams are found
-      }
+    // try{
+    //   this.bitstreamDataService.findAllByItemAndBundleName(this.dso, 'ORIGINAL', { currentPage: 1, elementsPerPage: 1 })
+    //     .subscribe((bi) => {
+    //       this.examPaperLink = getBitstreamDownloadRoute(bi.payload.page[0]);
+    //     });
+    //   } catch (error) {
+    //     // do nothing if no bitstreams are found
+    //   }
   }
 }
