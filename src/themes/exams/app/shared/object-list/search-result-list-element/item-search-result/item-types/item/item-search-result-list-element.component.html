@@ -1,4 +1,4 @@
-<div id="myDiv" class="row">
+<div class="row">
     <div class="meta-container col-sm-9">
         <ds-truncatable [id]="dso.id" *ngIf="object !== undefined && object !== null">
             <span *ngIf="dso.firstMetadataValue('dc.coverage.temporal')">
@@ -31,25 +31,12 @@
         </ds-truncatable>
     </div>
     <!-- custom download link -->
-    <div>
-        <div *ngVar="(examPaperLink$ | async) || 'PAGE_UNAVAILABLE' as examPaperLink" class="dwnld-container col-sm-3">
-            <!-- <div *ngIf="!examPaperLink?.includes('PAGE_UNAVAILABLE')">
+        <div *ngVar="(examPaperLink$ | async) as examPaperLink" class=" col-sm-3">
+            <div *ngIf="!examPaperLink?.includes('/info/unavailable')" class="dwnld-container">
                 <a [routerLink]="[examPaperLink]">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>
-            </div> -->
-            <div *ngIf="examPaperLink?.includes('PAGE_UNAVAILABLE')">
+            </div> 
+            <div *ngIf="examPaperLink?.includes('/info/unavailable')"  class="unavail-container">
                 <a routerLink="/info/unavailable">Paper Unavailable <i class="fa fa-ban" aria-hidden="true"></i></a>
             </div>
-            <!-- <div [innerText]="[examPaperLink + '']"></div> -->
-            <!-- <a [routerLink]="[examPaperLink]">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a> -->
-            <!-- <a routerLink="/info/unavailable">Paper Unavailable <i class="fa fa-ban" aria-hidden="true"></i></a> -->
-        </div>
-    </div>
-
-    <ng-template #unavailable>
-        <div class="unavail-container col-sm-3">
-            <a routerLink="/info/unavailable">Paper Unavailable <i class="fa fa-ban" aria-hidden="true"></i></a>
-        </div>
-    </ng-template>
-
-   
+        </div>   
 </div>

@@ -16,10 +16,11 @@ export class ExamPaperDownloadLinkService {
   getBitstreamDownloadRoute(bitstream): Observable<string> {
     try 
     {
-      const url = new URLCombiner(getBitstreamModuleRoute(), bitstream.uuid, 'download');
+      console.log(bitstream);
+      const url = bitstream !== null && bitstream !== undefined ? new URLCombiner(getBitstreamModuleRoute(), bitstream.uuid, 'download').toString() :  '/info/unavailable';
       return new Observable(subscriber => {
-        subscriber.next(url?.toString() || 'PAGE_UNAVAILABLE');
-        subscriber.complete();
+        subscriber.next(url);
+        //subscriber.complete();
       });
     }
     catch
@@ -27,6 +28,7 @@ export class ExamPaperDownloadLinkService {
 
     }
   }
+
   
 
   // try{

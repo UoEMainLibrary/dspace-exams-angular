@@ -16,6 +16,7 @@ import { getBitstreamDownloadRoute } from '../../../../../../app-routing-paths';
 import { filter, map, Observable } from 'rxjs';
 import { ExamPaperDownloadLinkService } from 'src/app/exampaperlink/exam-paper-download-link.service';
 import { Console } from 'console';
+import { getFirstCompletedRemoteData } from 'src/app/core/shared/operators';
 
 @listableObjectComponent('PublicationSearchResult', ViewMode.ListElement)
 @listableObjectComponent(ItemSearchResult, ViewMode.ListElement)
@@ -77,18 +78,14 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
      */
     this.bitstreamDataService.findAllByItemAndBundleName(this.dso, 'ORIGINAL', { currentPage: 1, elementsPerPage: 1 })
       .pipe(
-        filter(response => !!response && !!response.payload),
-        map(response => response.payload),
-        filter(payload => !!payload.page && payload.page.length > 0)
+        getFirstCompletedRemoteData(),
       )
       .subscribe((bi) => {
-        // console.log("Paper found", bi);
-        this.examPaperLink$ = this.examPaperDownloadLinkService.getBitstreamDownloadRoute(bi.page[0])
+        this.examPaperLink$ = this.examPaperDownloadLinkService.getBitstreamDownloadRoute(bi.payload.page[0])
         .pipe(
           filter(response => !!response && response.length > 0),
           map(response => response)
         );
-        console.log(this.examPaperLink$.toString());
       });
       
       // Attempt to get item title and format queryString replacing/removing special characters
@@ -100,7 +97,7 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
         // do nothing if no title is found
       }
 
-      document.getElementById('myDiv').click();
+      // document.getElementById('myDiv').click();
   }
 
 //   triggerFalseClick() {
