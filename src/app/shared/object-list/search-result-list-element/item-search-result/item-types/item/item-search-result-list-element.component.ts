@@ -1,4 +1,4 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component } from '@angular/core';
 import { Item } from '../../../../../../core/shared/item.model';
 import { ViewMode } from '../../../../../../core/shared/view-mode.model';
 import { getItemPageRoute } from '../../../../../../item-page/item-page-routing-paths';
@@ -12,11 +12,13 @@ import { BitstreamDataService } from '../../../../../../core/data/bitstream-data
 import { DSONameService } from 'src/app/core/breadcrumbs/dso-name.service';
 import { TruncatableService } from 'src/app/shared/truncatable/truncatable.service';
 import { APP_CONFIG, AppConfig } from 'src/config/app-config.interface';
-import { getBitstreamDownloadRoute } from '../../../../../../app-routing-paths';
-import { filter, map, Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
 import { ExamPaperDownloadLinkService } from 'src/app/exampaperlink/exam-paper-download-link.service';
-import { Console } from 'console';
 import { getFirstCompletedRemoteData } from 'src/app/core/shared/operators';
+import { RemoteData } from 'src/app/core/data/remote-data';
+import { PaginatedList } from 'src/app/core/data/paginated-list.model';
+import { Bitstream } from 'src/app/core/shared/bitstream.model';
+import { hasValue } from 'src/app/shared/empty.util';
 
 @listableObjectComponent('PublicationSearchResult', ViewMode.ListElement)
 @listableObjectComponent(ItemSearchResult, ViewMode.ListElement)
@@ -37,13 +39,15 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
    */
   itemPageRoute: string;
 
-  /**
-   * Exam paper link.
-   */
-  examPaperLink$: Observable<string>;
-  examPaperLink2: string;
-  examPaperLinkReady: boolean = false;
-  examPaperPromise: any;
+  bitstreams$: BehaviorSubject<Bitstream[]>;
+
+  currentPage: number;
+
+  isLoading: boolean;
+
+  isLastPage: boolean;
+
+  pageSize: number;
 
   /**
    * Search strings to be used for 'all papers from this course title link
@@ -52,8 +56,6 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
    */
   searchString = '/search';
   queryString: string; 
-
-  // @ViewChild('myDiv') myDiv: ElementRef<HTMLElement>;
 
   /**
    * Constrctor added to initiate components required for download link
@@ -68,25 +70,33 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
 
   ngOnInit(): void {
     super.ngOnInit();
-    // this.triggerFalseClick();
     this.showThumbnails = this.showThumbnails ?? this.appConfig.browseBy.showThumbnails;
     this.itemPageRoute = getItemPageRoute(this.dso);
+
+    this.isLoading = true;
+    this.currentPage = 1;
+    this.bitstreams$ = new BehaviorSubject([]);
 
     /**
      * Attempt to get Bundle 'ORIGINAL' and use bitstream to generate download link
      * opperates under the assumption there is only ever one bitstream attached to an item
      */
-    this.bitstreamDataService.findAllByItemAndBundleName(this.dso, 'ORIGINAL', { currentPage: 1, elementsPerPage: 1 })
-      .pipe(
-        getFirstCompletedRemoteData(),
-      )
-      .subscribe((bi) => {
-        this.examPaperLink$ = this.examPaperDownloadLinkService.getBitstreamDownloadRoute(bi.payload.page[0])
+    try {
+      this.bitstreamDataService.findAllByItemAndBundleName(this.dso, 'ORIGINAL', { currentPage: 1, elementsPerPage: 1 })
         .pipe(
-          filter(response => !!response && response.length > 0),
-          map(response => response)
-        );
-      });
+          getFirstCompletedRemoteData(),
+        ).subscribe((bitstreamsRD: RemoteData<PaginatedList<Bitstream>>) => {
+        if (hasValue(bitstreamsRD.payload)) {
+            const current: Bitstream[] = this.bitstreams$.getValue();
+            this.bitstreams$.next([...current, ...bitstreamsRD.payload.page]);
+            this.isLoading = false;
+            this.isLastPage = this.currentPage === bitstreamsRD.payload.totalPages;
+          }
+        });
+      }
+      catch (error) {
+        // do nothing if no bitstream is found
+      }
       
       // Attempt to get item title and format queryString replacing/removing special characters
       try{
@@ -96,30 +106,6 @@ export class ItemSearchResultListElementComponent extends SearchResultListElemen
       catch (error) {
         // do nothing if no title is found
       }
-
-      // document.getElementById('myDiv').click();
   }
-
-//   triggerFalseClick() {
-//     let el: HTMLElement = this.myDiv.nativeElement;
-//     el.click();
-// }
-
-  // getExamPaperLink(){
-  //   try{
-  //     this.bitstreamDataService.findAllByItemAndBundleName(this.dso, 'ORIGINAL', { currentPage: 1, elementsPerPage: 1 })
-  //     .pipe(
-  //       filter(response => !!response && !!response.payload),
-  //       map(response => response.payload),
-  //       filter(payload => !!payload.page && payload.page.length > 0)
-  //     )
-  //       .subscribe((bi) => {
-  //         this.examPaperLink2 = getBitstreamDownloadRoute(bi.payload.page[0]);
-  //       });
-  //     } catch (error) {
-  //       // do nothing if no bitstreams are found
-  //     }
-  //     console.log(this.examPaperLink2);
-  //   }
 
 }
