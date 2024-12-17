@@ -34,9 +34,10 @@
         <div *ngVar="(examPaperLink$ | async) as examPaperLink" class=" col-sm-3">
             <div *ngIf="!examPaperLink?.includes('/info/unavailable')" class="dwnld-container">
                 <a [routerLink]="[examPaperLink]">Download Paper <i class="fa fa-download" aria-hidden="true"></i></a>
-            </div> 
+            </div>
             <div *ngIf="examPaperLink?.includes('/info/unavailable')"  class="unavail-container">
                 <a routerLink="/info/unavailable">Paper Unavailable <i class="fa fa-ban" aria-hidden="true"></i></a>
             </div>
+            <div [innerHTML]="[examPaperLink +'']"></div>
         </div>   
 </div>
