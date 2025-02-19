@@ -3,39 +3,44 @@
   <ng-container *ngIf="(site$ | async) as site">
     <ds-view-tracker [object]="site"></ds-view-tracker>
     </ng-container>
-    <ds-themed-search-form [inPlaceSearch]="false" [searchPlaceholder]="'home.search-form.placeholder' | translate"></ds-themed-search-form>
     <p class="homepage-header">
         <span class="emphasis">
-            Exam Papers Online provides access for staff and students of the University of Edinburgh to the collected degree examination papers of the University from 2004/05 onwards. They may be used by students as a study aid only.
+            Exam Papers Online provides access for staff and students of the University of Edinburgh to the collected degree examination papers of the University from 2004/05 onwards. They are for use by students as a study aid.
         </span>
     </p>
+    <ds-themed-search-form [inPlaceSearch]="false" [searchPlaceholder]="'home.search-form.placeholder' | translate"></ds-themed-search-form>
+
     <p>
-        These pages are updated periodically as papers become available. If you cannot find what you are looking for, try visiting again at a later date or email <a href="mailto:exam.papers&#64;ed.ac.uk">exam.papers&#64;ed.ac.uk</a>.
+        <span class="emphasis">
+            If you cannot find the paper you are looking for from a title search:
+        </span>
+    </p>
+    <ul>
+        <li>
+            try entering the course code. Course codes can change over time. Click the 'All papers from this course title' link in your search results to get full results for the course title.
+        </li>
+        <li>
+            try putting quotation marks (“…”) around your search term will return the most accurate results.        </li>
+        <li>
+            remove any punctuation, e.g. :,?
+        </li>
+    </ul>
+    <p>
+        If an academic year is not listed in your search results for a course, then it is likely that the course was not delivered in that year.
     </p>
     <div id="search-tip-box" class="ds-static-div">
-        <span class="emphasis">Marking Guides and Sample Solutions</span>
         <p class="ds-paragraph">
+            <span class="emphasis">Marking guides and sample solutions are not available here</span>
             Please contact your course organiser or the course secretary to find out if any have been created for your course and how to access them.
         </p>
     </div>
-    <span class="emphasis">Search Tips</span>
-    <ul id="test_list" class="ds-simple-list">
-        <li class="ds-simple-list-item">
-            If you cannot find the paper you are looking for from a title search, try entering the course code. Course codes can change over time. Click the 'All papers from this course title' link in your search results to get full results for the course title.
-        </li>
-        <li class="ds-simple-list-item">
-            Putting quotation marks (“…”) around your search term will return the most accurate results.
-        </li>
-        <li class="ds-simple-list-item">
-            If searching by course title, remove any punctuation, e.g. :,?
-        </li>
-        <li class="ds-simple-list-item">
-            If an academic year is not listed in your search results for a course, then it is likely that the course was not delivered in that year.
-        </li>
-    </ul>
-    <p class="ds-paragraph">
-        <span class="emphasis">Go to the </span> <a href="/info/faqs" title="Link to the FAQs page">FAQs Page</a> for answers to frequently asked questions for students, and administrative and teaching staff.
+    <p>
+        <span class="emphasis">
+            Go to the <a href="/info/faqs" title="Link to the FAQs page">FAQs Page</a> 
+        </span>
+        for answers to frequently asked questions for students, and administrative and teaching staff. Or contact us at:
     </p>
+    <p><a href="mailto:exam.papers@ed.ac.uk">exam.papers&#64;ed.ac.uk</a></p>
     <span class="emphasis">Alternative Formats</span>
     <p class="ds-paragraph"> 
          If you require an exam paper in an alternative format, such as large print or a coloured background, please contact the Exam Papers Online Team, by e-mail Exam Papers Online team, by email at <a href="mailto:exam.papers&#64;ed.ac.uk">exam.papers&#64;ed.ac.uk</a>.
