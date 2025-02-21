@@ -1,5 +1,5 @@
 header {
-    background-color: #176599;
+    background-color: #830065;
 }
 .navbar {
     padding: 0;
@@ -25,8 +25,9 @@ header {
     padding: 1rem;
 }
 .header-right li:hover {
-    background-color: #122538;
+    background-color: #6f0056;
     cursor: pointer;
+    text-decoration: underline;
 }
 
 .loginLink, .dropdownLogin, .logoutLink, .dropdownLogout {

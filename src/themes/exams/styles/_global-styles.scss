@@ -1,17 +1,32 @@
 // Add any global css for the theme here
 
-h1, h2, h3, h4, h5, span, a {
-    color: #186599;
+body {
+    font-family:"Source Sans Pro",sans-serif;
+}
+h1, h2, h3, h4, h5, span {
+    color: #830065;
+}
+a {
+    color: #346dbf;;
+}
+a:hover {
+    color: #690051;;
 }
 
 .btn-primary {
-    background-color: #186599;
-    border-color: #566b81;
+    background-color: #830065;
+    border-color: #830065;
+}
+button.btn.btn-secondary {
+    background-color: #830065;
+}
+.btn-primary:hover, .btn-secondary:hover{
+    background-color: #6f0056;
+    border-color: #6f0056;
+    text-decoration: underline;
 }
 
-button.btn.btn-secondary {
-    background-color: #186599;
-}
+
 button#save span, button#saveForLater span, button#deposit span {
     color: #fff;
 }
@@ -19,7 +34,7 @@ button.btn.btn-secondary.active,
 .btn-secondary:not(:disabled):not(.disabled):active, 
 .btn-secondary:not(:disabled):not(.disabled).active, 
 .show > .btn-secondary.dropdown-toggle {
-    background-color: #122538;
+    background-color: #690051;
 }
 span.fas.fa-list, span.fas.fa-th-large {
     color: #fff;
