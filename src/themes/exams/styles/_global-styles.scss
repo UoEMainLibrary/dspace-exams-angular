@@ -80,5 +80,11 @@ button.btn.btn-secondary.btn-sm.mb-2 {
     float: right;
 }
 
+.page-item.active .page-link {
+    background-color: #830065;
+    border-color: #830065;
+    color: #fff
+}
+
 // imports the base global style
 @import '../../../styles/_global-styles.scss';

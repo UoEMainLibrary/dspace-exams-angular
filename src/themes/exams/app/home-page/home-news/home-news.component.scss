@@ -2,7 +2,10 @@
     margin-bottom: var(--ds-content-spacing);
 }
 .uoe-logo img {
-    width: 50%;
+    width: 100%;
+    max-width: 20.75rem;
+    height: auto;
+    max-height: 4.9375rem;
 }
 .uoe-logo img:hover {
     opacity: .6;
