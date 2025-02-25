@@ -1,13 +1,94 @@
-.text-lg-start {
-    border-top: 1px solid #c6c8c9;
+.footer-subsite-content {
+    padding-top: calc(1.34375rem + .65625vw);
+    padding-bottom: .625rem;
+    color: #fff;
+    background-color: #747474;
+    --edgel-link-color: #fff;
+    --edgel-link-color-rgb: 255, 255, 255;
+    --edgel-link-hover-color: #fff;
+    --edgel-link-hover-color-rgb: 255, 255, 255;
 }
-footer .row {
-    margin-top: 1rem;
-    margin-bottom: 1.5rem;
+.branding-baton-holder {
+    width: 100%;
+    overflow-x: hidden;
 }
-.footer-left a {
-    margin-right: 1rem;
+.branding-baton {
+    height: 100px;
+    margin-left: 2rem;
 }
-.footer-right {
-    text-align: right;
+.btn-brand {
+    background-color: #830065;
+    color: #fff;
+}
+.btn-brand:hover{
+    background-color: #6f0056;
+    border-color: #6f0056;
+    text-decoration: underline;
+}
+.footer-discover {
+    background: #252525;
+}
+.footer-discover-heading {
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    max-width: 97.75rem;
+    margin-right: auto;
+    margin-left: auto;
+    font-size: calc(1.34375rem + .65625vw);
+    padding-top: 1.5rem;
+    padding-bottom: 1.3rem;
+    margin-bottom: 0;
+    font-family: "Crimson Text", serif;
+    font-weight: 400;
+    line-height: 1;
+    color: #b0b0b0;
+    text-transform: uppercase;
+}
+
+.footer {
+    padding: 1rem 0;
+    color: #d4d4d4;
+    background: linear-gradient(to bottom, #3a3a3a 0, #252525 100%) repeat scroll 0 0;
+    background-color: #3a3a3a;
+}
+.container-footer {
+    width: 100%;
+    padding-right: 1rem;
+    padding-left: 1rem;
+    max-width: 97.75rem;
+    margin-right: auto;
+    margin-left: auto;
+}
+.list-unstyled {
+    padding-left: 0;
+    list-style: none;
+}
+a {
+    color: #d4d4d4;
+    text-decoration: none;
+}
+a:hover {
+    text-decoration: underline;
+    color: #fff !important;
+    box-shadow: #830065 0px 0px inset;
+}
+
+.float-end {
+    float: right !important;
+}
+
+.container-footer-copyright {
+    width: 100%;
+    padding-top: 1rem;
+    padding-right: 1rem;
+    padding-bottom: 1rem;
+    padding-left: 1rem;
+    max-width: 97.75rem;
+    margin-right: auto;
+    margin-left: auto;
+    color: #747474;
+    background-color: #fff;
+    fill: #747474;
+    font-size: calc(.74375rem + .05625vw);
 }

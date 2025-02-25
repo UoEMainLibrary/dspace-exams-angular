@@ -25,7 +25,7 @@
   
   li.breadcrumb-item {
       a {
-          color: var(--ds-breadcrumb-link-color);
+          color: #3a3a3a;
       }
   }
   
@@ -35,6 +35,6 @@
   
   .breadcrumb-item+ .breadcrumb-item::before {
     display: block;
-    content: quote("•") !important;
+    content: ""!important;
   }
   
