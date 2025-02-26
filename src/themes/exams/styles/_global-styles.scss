@@ -116,5 +116,12 @@ button.btn.btn-secondary.btn-sm.mb-2 {
     color: #fff!important;
 }
 
+.filters .toggle-more-filters a {
+    color: #346dbf!important;
+}
+.filters .toggle-more-filters a:hover {
+    color: #690051!important;
+}
+
 // imports the base global style
 @import '../../../styles/_global-styles.scss';
