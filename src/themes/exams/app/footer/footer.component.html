@@ -46,29 +46,29 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="col-md-4 order-md-2">
+                    <div class="col-md-8 order-md-1">
+                        <p>
+                            The University of Edinburgh is a charitable body, registered in Scotland, with registration number SC005336, VAT Registration Number GB&nbsp;592&nbsp;9507&nbsp;00, and is acknowledged by the UK authorities as a “<a href="https://www.gov.uk/guidance/recognised-uk-degrees">Recognised body</a>” which has been granted degree awarding powers.
+                        </p>
+                    </div>
+                    <div class="col-md-4 order-md-2 footer-login-grid">
                         <p class="float-end">
                             <a class="btn btn-brand btn-sm" href="https://www.myed.ed.ac.uk/">
                             MyEd login <i class="fa-solid fa-chevron-right"></i>
                             </a>
                         </p>
                         <p *ngIf="!(isAuthenticated | async); else logOut" class="float-end">
-                            <a title="" alt="" href="/login">
-                                Admin Login <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                            <a class="btn btn-brand btn-sm" title="" alt="" href="/login">
+                                Admin Login <i class="fa-solid fa-chevron-right"></i>
                             </a>
                         </p>
                         <ng-template #logOut>
                             <p class="float-end">
-                                <a title="" alt="" href="/logout">
-                                    Admin Logout <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                                <a class="btn btn-brand btn-sm" title="" alt="" href="/logout">
+                                    Admin Logout <i class="fa-solid fa-chevron-left"></i>
                                 </a>
                             </p>
                         </ng-template>
-                    </div>
-                    <div class="col-md-8 order-md-1">
-                        <p>
-                            The University of Edinburgh is a charitable body, registered in Scotland, with registration number SC005336, VAT Registration Number GB&nbsp;592&nbsp;9507&nbsp;00, and is acknowledged by the UK authorities as a “<a href="https://www.gov.uk/guidance/recognised-uk-degrees">Recognised body</a>” which has been granted degree awarding powers.
-                        </p>
                     </div>
                 </div>
             </div>
