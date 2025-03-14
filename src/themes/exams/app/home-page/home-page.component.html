@@ -8,41 +8,49 @@
             Exam Papers Online provides access for staff and students of the University of Edinburgh to the collected degree examination papers of the University from 2004/05 onwards. They are for use by students as a study aid.
         </span>
     </p>
+    <p>
+        <span>Search for your paper here:</span>
+    </p>
     <ds-themed-search-form [inPlaceSearch]="false" [searchPlaceholder]="'home.search-form.placeholder' | translate"></ds-themed-search-form>
 
-    <p>
-        <span class="emphasis">
-            If you cannot find the paper you are looking for from a title search:
-        </span>
-    </p>
-    <ul>
-        <li>
-            try entering the course code. Course codes can change over time. Click the 'All papers from this course title' link in your search results to get full results for the course title.
-        </li>
-        <li>
-            try putting quotation marks (“…”) around your search term will return the most accurate results.        </li>
-        <li>
-            remove any punctuation, e.g. :,?
-        </li>
-    </ul>
-    <p>
-        If an academic year is not listed in your search results for a course, then it is likely that the course was not delivered in that year.
-    </p>
-    <div id="search-tip-box" class="ds-static-div">
-        <p class="ds-paragraph">
-            <span class="emphasis">Marking guides and sample solutions are not available here</span>
-            Please contact your course organiser or the course secretary to find out if any have been created for your course and how to access them.
-        </p>
+    <div>
+        <p>Search Tips</p>
     </div>
+    <div id="search-tip-box" class="ds-static-div">
+        <p>If you can't find the paper you are looking for from a title search, try:</p>
+        <ul>
+            <li>
+                try entering the course code. Course codes can change over time. Click the 'All papers from this course title' link in your search results to get full results for the course title.
+            </li>
+            <li>
+                try putting quotation marks (“…”) around your search term will return the most accurate results.        </li>
+            <li>
+                remove any punctuation, e.g. :,?
+            </li>
+        </ul>
+        <p>If your search results don't include a particular academic year, then the course may not have been delivered that year</p>
+    </div>
+
+    <div>
+        <p>Marking guides and sample solutions</p>
+    </div>
+    <div id="search-tip-box" class="ds-static-div">
+        <p>
+            <span class="emphasis">You won’t find marking guides or sample solutions on this site.</span> 
+            Please contact your course organiser or the course secretary to find out if any have been created for your course and how to access them.</p>
+    </div>
+    
+    <p>FAQs</p>
+    <p>Answers to frequently asked questions for students, and administrative and teaching staff can be found on our FAQs page.</p>
+    <a routerLink="/info/faqs" title="Link to the FAQs page">FAQs Page</a>
+
+    <p>Alternative Formats</p>
+    <p>If you require an exam paper in an alternative format, such as large print or a coloured background, please contact the Exam Papers Online team, by email at <a href="mailto:exam.papers@ed.ac.uk">exam.papers&#64;ed.ac.uk</a>.</p>
+    
+    <p>Contact Us</p>
     <p>
-        <span class="emphasis">
-            Go to the <a href="/info/faqs" title="Link to the FAQs page">FAQs Page</a> 
-        </span>
-        for answers to frequently asked questions for students, and administrative and teaching staff. Or contact us at:
+        <i class="fa-solid fa-envelope"></i>
+        email: <a href="mailto:exam.papers@ed.ac.uk">exam.papers&#64;ed.ac.uk</a>
     </p>
-    <p><a href="mailto:exam.papers@ed.ac.uk">exam.papers&#64;ed.ac.uk</a></p>
-    <span class="emphasis">Alternative Formats</span>
-    <p class="ds-paragraph"> 
-         If you require an exam paper in an alternative format, such as large print or a coloured background, please contact the Exam Papers Online Team, by e-mail Exam Papers Online team, by email at <a href="mailto:exam.papers&#64;ed.ac.uk">exam.papers&#64;ed.ac.uk</a>.
-    </p>
+    
 </div>
