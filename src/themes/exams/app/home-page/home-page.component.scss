@@ -10,11 +10,19 @@ p {
 #search-tip-box {
     background: #eeeeee;
     padding: 10px;
-    border-radius: 10px;
     margin-bottom: 1.5rem!important;
 }
 
 .emphasis {
     color: #212529;
     font-weight: bold;
+}
+
+.homepage-highlight {
+    background-color: #830065;
+}
+.homepage-highlight p {
+    margin: 0px!important;
+    padding: 0.5rem;
+    color: #fff!important;
 }
