@@ -52,6 +52,18 @@
                             MyEd login <i class="fa-solid fa-chevron-right"></i>
                             </a>
                         </p>
+                        <p *ngIf="!(isAuthenticated | async); else logOut" class="float-end">
+                            <a title="" alt="" href="/login">
+                                Admin Login <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                            </a>
+                        </p>
+                        <ng-template #logOut>
+                            <p class="float-end">
+                                <a title="" alt="" href="/logout">
+                                    Admin Logout <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
+                                </a>
+                            </p>
+                        </ng-template>
                     </div>
                     <div class="col-md-8 order-md-1">
                         <p>
@@ -64,17 +76,5 @@
         <div class="container-footer-copyright">
             Unless explicitly stated otherwise, all material is copyright © The University of Edinburgh 2024.
         </div>
-        <div *ngIf="!(isAuthenticated | async); else logOut" class="col-sm-4 footer-right">
-            <a title="" alt="" href="/login">
-                Admin Login <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
-            </a>
-        </div>
-        <ng-template #logOut>
-            <div class="col-sm-4 footer-right">
-                <a title="" alt="" href="/logout">
-                    Admin Logout <i id="" class="glyphicon glyphicon glyphicon-log-in" aria-hidden="true"></i>
-                </a>
-            </div>
-        </ng-template>
     </div>
 </footer>
