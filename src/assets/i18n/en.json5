@@ -3938,9 +3938,9 @@
 
   "sorting.dc.date.issued.DESC": "Date Issued Descending",
 
-  "sorting.dc.date.accessioned.ASC": "Accademic Year Oldest",
+  "sorting.dc.date.accessioned.ASC": "Academic Year Oldest",
 
-  "sorting.dc.date.accessioned.DESC": "Accademic Year Newest",
+  "sorting.dc.date.accessioned.DESC": "Academic Year Newest",
 
   "sorting.lastModified.ASC": "Last modified Ascending",
 
