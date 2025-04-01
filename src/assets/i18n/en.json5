@@ -3686,6 +3686,14 @@
 
   "search.filters.applied.f.withdrawn": "Withdrawn",
 
+  // custom
+
+  "search.filters.applied.f.datetemporal": "Year",
+
+  "search.filters.applied.f.title": "Title",
+
+  // custom end
+
   "search.filters.filter.author.head": "School",
 
   "search.filters.filter.author.placeholder": "School",

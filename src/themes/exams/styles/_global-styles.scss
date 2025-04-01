@@ -123,5 +123,12 @@ button.btn.btn-secondary.btn-sm.mb-2 {
     color: #690051!important;
 }
 
+a.badge-primary {
+    background-color: #830065
+}
+a.badge-primary:hover, a.badge-primary:focus {
+    background-color: #6f0056;
+}
+
 // imports the base global style
 @import '../../../styles/_global-styles.scss';
