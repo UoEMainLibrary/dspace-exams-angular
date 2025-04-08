@@ -1,5 +1,7 @@
-// Add any global css for the theme here
+// imports the base global style
+@import '../../../styles/_global-styles.scss';
 
+// Add any global css for the theme here
 body {
     font-family:"Source Sans Pro",sans-serif;
 }
@@ -130,5 +132,4 @@ a.badge-primary:hover, a.badge-primary:focus {
     background-color: #6f0056;
 }
 
-// imports the base global style
-@import '../../../styles/_global-styles.scss';
+
