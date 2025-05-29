@@ -14,4 +14,5 @@ import { RouterLink } from '@angular/router';
     imports: [RouterLink, NgIf, AsyncPipe]
 })
 export class FooterComponent extends BaseComponent {
+    currentYear: number = new Date().getFullYear();
 }
